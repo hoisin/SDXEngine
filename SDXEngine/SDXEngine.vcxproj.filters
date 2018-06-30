@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{aaf10fc2-db09-4c16-bd44-d97faa499de1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{f41cb464-a0cd-4058-baa2-9ced550cf526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx">
+      <UniqueIdentifier>{677d7d26-227f-46ab-a6ae-d416fd4aabaa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\DirectX">
+      <UniqueIdentifier>{4723bb1c-bd82-4199-af0d-0f09934ea9d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\Camera">
+      <UniqueIdentifier>{2fb42d34-e7b2-47e2-bb6a-def33f65b90d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\Renderer">
+      <UniqueIdentifier>{fdf8eb8e-1258-44d0-b113-2c92501663a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\Input">
+      <UniqueIdentifier>{e007cd44-51e6-4d7b-80e0-e5b9b62feacc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\Geometry">
+      <UniqueIdentifier>{8f7b6bbb-d014-4f33-a65a-fd9623e846e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\DirectX\Mesh">
+      <UniqueIdentifier>{4188aeec-d7e7-4b12-9ba2-aadad04cf25f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimer.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXBaseApp.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXDirectX.h">
+      <Filter>Gfx\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXGfx.h">
+      <Filter>Gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXLog.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXDirectXShaderCompiler.h">
+      <Filter>Gfx\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXUtility.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXRenderer.h">
+      <Filter>Gfx\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXCameraFP.h">
+      <Filter>Gfx\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXDirect2D.h">
+      <Filter>Gfx\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXKeyboard.h">
+      <Filter>App\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXErrors.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXInputHandler.h">
+      <Filter>App\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXMouse.h">
+      <Filter>App\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXSubMesh.h">
+      <Filter>Gfx\DirectX\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXMeshData.h">
+      <Filter>Gfx\Geometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CTimer.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXBaseApp.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXDirectX.cpp">
+      <Filter>Gfx\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXLog.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXDirectXShaderCompiler.cpp">
+      <Filter>Gfx\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXRenderer.cpp">
+      <Filter>Gfx\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXCameraFP.cpp">
+      <Filter>Gfx\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXDirect2D.cpp">
+      <Filter>Gfx\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXUtility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXKeyboard.cpp">
+      <Filter>App\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXInputHandler.cpp">
+      <Filter>App\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMouse.cpp">
+      <Filter>App\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXSubMesh.cpp">
+      <Filter>Gfx\DirectX\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMeshData.cpp">
+      <Filter>Gfx\Geometry</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

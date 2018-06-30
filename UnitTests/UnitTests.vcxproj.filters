@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="test.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="SDXDirectXUTest.cpp">
+      <Filter>Gfx\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXTestApp.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXRendererUTest.cpp">
+      <Filter>Gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXLogUTest.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXDirectXShaderCompilerUTest.cpp">
+      <Filter>Gfx\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXDirect2DUTest.cpp">
+      <Filter>Gfx\DirectX</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXKeyboardUTest.cpp">
+      <Filter>App\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMeshDataUTest.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="SDXDirectXUTest.h">
+      <Filter>Gfx\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXTestApp.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXRendererUTest.h">
+      <Filter>Gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXLogUTest.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXDirectXShaderCompilerUTest.h">
+      <Filter>Gfx\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXDirect2DUTest.h">
+      <Filter>Gfx\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXKeyboardUTest.h">
+      <Filter>App\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXMeshDataUTest.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="App">
+      <UniqueIdentifier>{8e8ab467-0cdd-412d-88cf-84f9230780a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx">
+      <UniqueIdentifier>{31820e64-0d35-43f3-aa2d-5030adb94284}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\DirectX">
+      <UniqueIdentifier>{97709071-4a2f-4aa9-9c3f-8dbf082ce62e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{c5efc2d1-0545-4ee4-adab-9b197b2bd8c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="App\Input">
+      <UniqueIdentifier>{d274b181-9c5d-44ad-a540-ddda60decf1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{71984bbd-e51e-4ae4-bf0c-d401d948154c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>
