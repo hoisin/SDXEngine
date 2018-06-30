@@ -45,3 +45,20 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# =========================
+# Directory ignores
+# =========================
+.vs/
+Debug/
+Release/
+x64/
+SDXEngine/SDXApp/Debug/
+SDXEngine/SDXApp/Release/
+SDXEngine/SDXApp/x64/
+SDXEngine/SDXEngine/Debug/
+SDXEngine/SDXEngine/Release/
+SDXEngine/SDXEngine/x64/
+SDXEngine/UnitTests/Debug/
+SDXEngine/UnitTests/Release/
+SDXEngine/UnitTests/x64/
