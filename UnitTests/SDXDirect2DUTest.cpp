@@ -111,7 +111,7 @@ TEST_F(SDXDirect2DUTest, CreateBitmapRenderTarget)
 	error = direct2D.CreateBitmapRenderTarget();
 	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid create";
 
-	//// Test already created?
+	// Test already created?
 	error = direct2D.CreateBitmapRenderTarget();
 	EXPECT_EQ(error, SDX_ERROR_DIRECT2D_BITMAPRENDERTARGET_ALREADY_CREATED) << "Unexpected error";
 }
