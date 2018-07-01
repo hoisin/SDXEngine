@@ -26,6 +26,14 @@ namespace SDXEngine
 		int GetVertexCount() const;
 		int GetIndexCount() const;
 
+		void SetMaterialID(const std::string& id);
+		const std::string& GetMaterialID() const;
+
+		void SetMinVertexPos(const XMFLOAT3& pos);
+		void SetMaxVertexPos(const XMFLOAT3& pos);
+		const XMFLOAT3& GetMinVertexPos() const;
+		const XMFLOAT3& GetMaxVertexPos() const;
+
 		void Destroy();
 
 	private:
@@ -36,5 +44,9 @@ namespace SDXEngine
 		int m_vertexCount;
 		int m_indexCount;
 		SDXVertexType m_vertexType;
+
+		std::string m_materialID;
+		XMFLOAT3 m_minVertexPos;
+		XMFLOAT3 m_maxVertexPos;
 	};
 }

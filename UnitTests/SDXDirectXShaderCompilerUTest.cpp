@@ -67,8 +67,8 @@ TEST_F(SDXDirectXShaderCompilerUTest, Compile)
 		testShader = nullptr;
 	}
 
-	// Test compiling invalid pixel shader
-	error = compiler.CompileShader(gInvalidPixelShader, gEntryPoint, gVsProfile, &testShader);
+	// Test compiling invalid vertex shader
+	error = compiler.CompileShader(gInvalidVertexShader, gEntryPoint, gVsProfile, &testShader);
 	EXPECT_EQ(error, SDX_ERROR_DXCOMPILER_COMPILE_FAILED) << "Expected error on invalid vertex shader compile";
 	if (testShader)
 	{

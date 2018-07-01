@@ -33,15 +33,15 @@ bool SDXEngine::SDXInputHandler::HandleMsg(HWND hWnd, UINT uiMsg, WPARAM wParam,
 	switch (uiMsg)
 	{
 	case WM_KEYDOWN:
-		if (!m_keyboard.IsKeyHeld(wParam))
+		if (!m_keyboard.IsKeyHeld(static_cast<int>(wParam)))
 		{
-			m_keyboard.SetKeyDown(wParam);
+			m_keyboard.SetKeyDown(static_cast<int>(wParam));
 			handled = true;
 		}
 		break;
 
 	case WM_KEYUP:
-		m_keyboard.SetKeyUp(wParam);
+		m_keyboard.SetKeyUp(static_cast<int>(wParam));
 		handled = true;
 		break;
 

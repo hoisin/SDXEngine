@@ -3,7 +3,8 @@
 
 using namespace SDXEngine;
 
-SDXMeshData::SDXMeshData() : m_vertexData(nullptr), m_indexData(nullptr), m_vertexCount(0), m_indexCount(0), m_vertexType(SDXVERTEX_TYPE_UNKNOWN)
+SDXMeshData::SDXMeshData() : m_vertexData(nullptr), m_indexData(nullptr), m_vertexCount(0), m_indexCount(0),
+	m_vertexType(SDXVERTEX_TYPE_UNKNOWN), m_materialID(""), m_minVertexPos(XMFLOAT3(0,0,0)), m_maxVertexPos(XMFLOAT3(0,0,0))
 {
 }
 
@@ -79,11 +80,44 @@ int SDXEngine::SDXMeshData::GetIndexCount() const
 	return m_indexCount;
 }
 
+void SDXEngine::SDXMeshData::SetMaterialID(const std::string & id)
+{
+	m_materialID = id;
+}
+
+const std::string & SDXEngine::SDXMeshData::GetMaterialID() const
+{
+	return m_materialID;
+}
+
+void SDXEngine::SDXMeshData::SetMinVertexPos(const XMFLOAT3 & pos)
+{
+	m_minVertexPos = pos;
+}
+
+void SDXEngine::SDXMeshData::SetMaxVertexPos(const XMFLOAT3 & pos)
+{
+	m_maxVertexPos = pos;
+}
+
+const XMFLOAT3 & SDXEngine::SDXMeshData::GetMinVertexPos() const
+{
+	return m_minVertexPos;
+}
+
+const XMFLOAT3 & SDXEngine::SDXMeshData::GetMaxVertexPos() const
+{
+	return m_maxVertexPos;
+}
+
 void SDXEngine::SDXMeshData::Destroy()
 {
 	m_vertexCount = 0;
 	m_indexCount = 0;
 	m_vertexType = SDXVERTEX_TYPE_UNKNOWN;
+	m_materialID = "";
+	m_minVertexPos = XMFLOAT3(0, 0, 0);
+	m_maxVertexPos = XMFLOAT3(0, 0, 0);
 
 	if (m_indexData)
 	{
