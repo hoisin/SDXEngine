@@ -154,7 +154,12 @@ SDXErrorId SDXEngine::SDXDirect2D::CreateBitmapRenderTarget()
 	m_context->GetTarget(&pImage);
 
 	if (pImage != nullptr)
+	{
+		// Relase! We're deferencing the counter and not deleting the it.
+		// Else check against m_targetBitmap and not bother with the GetTarget().
+		pImage->Release();
 		return SDX_ERROR_DIRECT2D_BITMAPRENDERTARGET_ALREADY_CREATED;
+	}
 
 	// Bitmap properties
 	D2D1_BITMAP_PROPERTIES1 bProps;
@@ -213,7 +218,7 @@ SDXErrorId SDXEngine::SDXDirect2D::RenderText(UINT x, UINT y, const std::string 
 
 	// Create text
 	std::wstring drawText = StringToWideString(text);
-	HRESULT result = m_writeFactory->CreateTextLayout(drawText.c_str(), drawText.size(), m_textFormat,
+	HRESULT result = m_writeFactory->CreateTextLayout(drawText.c_str(), static_cast<UINT32>(drawText.size()), m_textFormat,
 		static_cast<float>(m_directX->GetClientAreaWidth()), static_cast<float>(m_directX->GetClientAreaHeight()),
 			&m_textLayout);
 

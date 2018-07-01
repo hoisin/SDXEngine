@@ -53,25 +53,3 @@ TEST_F(SDXRendererUTest, Initialise)
 	error = renderer.Initialise(info);
 	EXPECT_EQ(error, SDX_ERROR_NONE);
 }
-
-TEST_F(SDXRendererUTest, CreateShaders)
-{
-	SDXDirectXInfo info;
-	SDXRenderer renderer;
-
-	// Test without initialise
-	SDXErrorId error = renderer.CreateShaders();
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected no device error when not initialised";
-
-	info.clientWidth = m_width;
-	info.clientHeight = m_height;
-	info.hwnd = m_testApp.GetHwndTest();
-
-	// Initalise renderer
-	error = renderer.Initialise(info);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Failed valid renderer initialise";
-
-	// Valid create test
-	error = renderer.CreateShaders();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Error on valid create";
-}
