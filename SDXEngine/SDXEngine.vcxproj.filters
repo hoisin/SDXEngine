@@ -32,6 +32,9 @@
     <Filter Include="Gfx\DirectX\Mesh">
       <UniqueIdentifier>{4188aeec-d7e7-4b12-9ba2-aadad04cf25f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gfx\DirectX\Buffers">
+      <UniqueIdentifier>{5f5cea46-09e5-4b76-948f-0039c5c3d48a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -88,6 +91,12 @@
     <ClInclude Include="SDXMeshData.h">
       <Filter>Gfx\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="SDXVertexBuffer.h">
+      <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXIndexBuffer.h">
+      <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -134,6 +143,12 @@
     </ClCompile>
     <ClCompile Include="SDXMeshData.cpp">
       <Filter>Gfx\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXVertexBuffer.cpp">
+      <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXIndexBuffer.cpp">
+      <Filter>Gfx\DirectX\Buffers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

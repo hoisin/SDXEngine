@@ -178,6 +178,7 @@
     <ClInclude Include="SDXDirectX.h" />
     <ClInclude Include="SDXDirectXShaderCompiler.h" />
     <ClInclude Include="SDXGfx.h" />
+    <ClInclude Include="SDXIndexBuffer.h" />
     <ClInclude Include="SDXInputHandler.h" />
     <ClInclude Include="SDXKeyboard.h" />
     <ClInclude Include="SDXLog.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="SDXRenderer.h" />
     <ClInclude Include="SDXSubMesh.h" />
     <ClInclude Include="SDXUtility.h" />
+    <ClInclude Include="SDXVertexBuffer.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -196,6 +198,7 @@
     <ClCompile Include="SDXDirect2D.cpp" />
     <ClCompile Include="SDXDirectX.cpp" />
     <ClCompile Include="SDXDirectXShaderCompiler.cpp" />
+    <ClCompile Include="SDXIndexBuffer.cpp" />
     <ClCompile Include="SDXInputHandler.cpp" />
     <ClCompile Include="SDXKeyboard.cpp" />
     <ClCompile Include="SDXLog.cpp" />
@@ -204,6 +207,7 @@
     <ClCompile Include="SDXRenderer.cpp" />
     <ClCompile Include="SDXSubMesh.cpp" />
     <ClCompile Include="SDXUtility.cpp" />
+    <ClCompile Include="SDXVertexBuffer.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
