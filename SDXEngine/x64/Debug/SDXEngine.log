@@ -1,0 +1,14 @@
+﻿  SDXBaseApp.cpp
+  SDXDirect2D.cpp
+  SDXDirectX.cpp
+  SDXDirectXShaderCompiler.cpp
+  SDXIndexBuffer.cpp
+  SDXInputHandler.cpp
+  SDXLog.cpp
+  SDXMeshData.cpp
+  SDXMeshGenerator.cpp
+  SDXRenderer.cpp
+  SDXSubMesh.cpp
+  SDXVertexBuffer.cpp
+  Generating Code...
+  SDXEngine.vcxproj -> C:\Users\Matthew\Desktop\Stuff\ActiveProjects\SDXEngine\x64\Debug\SDXEngine.lib

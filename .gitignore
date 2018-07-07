@@ -50,9 +50,9 @@ Temporary Items
 # Directory ignores
 # =========================
 .vs/
-Debug/
-Release/
-x64/
+/Debug/
+/Release/
+/x64/
 SDXEngine/SDXApp/Debug/
 SDXEngine/SDXApp/Release/
 SDXEngine/SDXApp/x64/
