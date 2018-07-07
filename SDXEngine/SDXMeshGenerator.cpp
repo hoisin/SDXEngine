@@ -14,8 +14,35 @@ SDXMeshGenerator::~SDXMeshGenerator()
 SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color)
 {
+	SDXErrorId error = SDX_ERROR_NONE;
 	SDXMeshData* mesh = new SDXMeshData;
 
+	float x = 0;
+	float y = 0;
+	float z = 0;
+
+	// Find total vertices
+	int verticesOnEdge = 2 + (subdivision - 1);
+	int totalVertices = verticesOnEdge * verticesOnEdge;
+
+	// Find total indices
+	int totalIndices = 6 * (subdivision * subdivision);
+
+	error = mesh->CreateVertexArray(type, totalVertices);
+	if (error != SDX_ERROR_NONE)
+	{
+		delete mesh;
+		mesh = nullptr;
+		return nullptr;
+	}
+
+	error = mesh->CreateIndexArray(totalIndices);
+	if (error != SDX_ERROR_NONE)
+	{
+		delete mesh;
+		mesh = nullptr;
+		return nullptr;
+	}
 
 	switch (type)
 	{
