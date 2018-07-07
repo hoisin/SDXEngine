@@ -49,6 +49,10 @@ Temporary Items
 # =========================
 # Directory ignores
 # =========================
+*.obj
+*.log
+*.pch
+*.tlog
 .vs/
 /Debug/
 /Release/

@@ -1,16 +1,1 @@
-﻿  SDXDirect2DUTest.cpp
-  Generating Code...
-  Compiling...
-  SDXTestApp.cpp
-  SDXRendererUTest.cpp
-  SDXMeshDataUTest.cpp
-  SDXLogUTest.cpp
-  SDXDirectXUTest.cpp
-  SDXDirectXShaderCompilerUTest.cpp
-  Generating Code...
-  UnitTests.vcxproj -> C:\Users\Matthew\Desktop\Stuff\ActiveProjects\SDXEngine\x64\Debug\UnitTests.exe
-  C:\Users\Matthew\Desktop\Stuff\ActiveProjects\SDXEngine\UTestData\Shaders\invalid.ps
-  C:\Users\Matthew\Desktop\Stuff\ActiveProjects\SDXEngine\UTestData\Shaders\invalid.vs
-  C:\Users\Matthew\Desktop\Stuff\ActiveProjects\SDXEngine\UTestData\Shaders\valid.ps
-  C:\Users\Matthew\Desktop\Stuff\ActiveProjects\SDXEngine\UTestData\Shaders\valid.vs
-  4 File(s) copied
+﻿
