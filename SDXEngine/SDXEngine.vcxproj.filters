@@ -97,6 +97,7 @@
     <ClInclude Include="SDXIndexBuffer.h">
       <Filter>Gfx\DirectX\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="SDXMeshGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -149,6 +150,9 @@
     </ClCompile>
     <ClCompile Include="SDXIndexBuffer.cpp">
       <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMeshGenerator.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
