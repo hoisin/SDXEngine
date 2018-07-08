@@ -11,15 +11,18 @@ SDXMeshGenerator::~SDXMeshGenerator()
 {
 }
 
+SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVertexType type, const XMFLOAT3 & color)
+{
+	return nullptr;
+}
+
 SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color)
 {
-	SDXErrorId error = SDX_ERROR_NONE;
-	SDXMeshData* mesh = new SDXMeshData;
+	if (type == SDXVERTEX_TYPE_UNKNOWN)
+		return nullptr;
 
-	float x = 0;
-	float y = 0;
-	float z = 0;
+	SDXMeshData* mesh = new SDXMeshData;
 
 	// Find total vertices
 	int verticesOnEdge = 2 + (subdivision - 1);
@@ -28,27 +31,55 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexTyp
 	// Find total indices
 	int totalIndices = 6 * (subdivision * subdivision);
 
-	error = mesh->CreateVertexArray(type, totalVertices);
-	if (error != SDX_ERROR_NONE)
+	if (mesh->CreateVertexArray(type, totalVertices) != SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDX_ERROR_NONE)
 	{
 		delete mesh;
 		mesh = nullptr;
 		return nullptr;
 	}
 
-	error = mesh->CreateIndexArray(totalIndices);
-	if (error != SDX_ERROR_NONE)
-	{
-		delete mesh;
-		mesh = nullptr;
-		return nullptr;
-	}
+	float pX = -(size / 2.f);
+	float pY = 0;
+	float pZ = (size / 2.f);
+	float stepSize = (float)(size / verticesOnEdge);
+	int vertexCounter = 0;
+	int indexCounter = 0;
 
 	switch (type)
 	{
 	case SDXVERTEX_TYPE_PC:
-		break;
+	{
+		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
+		int* pIndices = mesh->GetIndexData();
+		// Generate vertex data & index data
+		for (int z = 0; z < verticesOnEdge; z++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
 
+				pIndices[indexCounter] = vertexCounter;
+				pIndices[indexCounter+1] = vertexCounter + 1;
+				pIndices[indexCounter+2] = vertexCounter + verticesOnEdge;
+				
+				pIndices[indexCounter + 3] = vertexCounter;
+				pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+				pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+
+				pX += stepSize;
+				vertexCounter++;
+				indexCounter += 6;
+			}
+			pZ -= stepSize;
+			pX = -(size / 2.f);
+		}
+
+		break;
+	}
 	default:
 		delete mesh;
 		mesh = nullptr;
