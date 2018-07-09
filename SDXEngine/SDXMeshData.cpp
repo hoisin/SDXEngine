@@ -51,7 +51,7 @@ SDXErrorId SDXEngine::SDXMeshData::CreateIndexArray(UINT count)
 		return SDX_ERROR_MESHDATA_CREATE_INDEXARRAY_COUNT_ZERO;
 
 	m_indexCount = count;
-	m_indexData = new int[m_indexCount];
+	m_indexData = new unsigned int[m_indexCount];
 	return SDX_ERROR_NONE;
 }
 
@@ -60,7 +60,7 @@ SDXVertex * SDXEngine::SDXMeshData::GetVertexData() const
 	return m_vertexData;
 }
 
-int * SDXEngine::SDXMeshData::GetIndexData() const
+unsigned int * SDXEngine::SDXMeshData::GetIndexData() const
 {
 	return m_indexData;
 }

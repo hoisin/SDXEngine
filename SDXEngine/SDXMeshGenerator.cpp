@@ -13,7 +13,50 @@ SDXMeshGenerator::~SDXMeshGenerator()
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVertexType type, const XMFLOAT3 & color)
 {
-	return nullptr;
+	if (size <= 0)
+		return nullptr;
+
+	SDXMeshData* pMesh = new SDXMeshData;
+
+	XMFLOAT3 p1(-(size / 2), -(size / 2), 0);
+	XMFLOAT3 p2(0, (size / 2), 0);
+	XMFLOAT3 p3((size / 2), -(size / 2), 0);
+
+	switch (type)
+	{
+	case SDXVERTEX_TYPE_PC:
+	{
+		if (pMesh->CreateVertexArray(type, 3) != SDX_ERROR_NONE ||
+			pMesh->CreateIndexArray(3) != SDX_ERROR_NONE)
+		{
+			delete pMesh;
+			pMesh = nullptr;
+			return nullptr;
+		}
+
+		SDXVertexPC* pVertices = static_cast<SDXVertexPC*>(pMesh->GetVertexData());
+		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
+
+		pVertices[0].position = p1;
+		pVertices[1].position = p2;
+		pVertices[2].position = p3;
+
+		pVertices[0].color = color;
+		pVertices[1].color = color;
+		pVertices[2].color = color;
+
+		pIndices[0] = 0;
+		pIndices[1] = 1;
+		pIndices[2] = 2;
+		break;
+	}
+	default:
+		delete pMesh;
+		pMesh = nullptr;
+		break;
+	}
+
+	return pMesh;
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexType type, UINT subdivision,
@@ -51,7 +94,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexTyp
 	case SDXVERTEX_TYPE_PC:
 	{
 		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
-		int* pIndices = mesh->GetIndexData();
+		unsigned int* pIndices = mesh->GetIndexData();
 		// Generate vertex data & index data
 		for (int z = 0; z < verticesOnEdge; z++)
 		{
@@ -62,17 +105,21 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexTyp
 				pVertices[vertexCounter].position.z = pZ;
 				pVertices[vertexCounter].color = color;
 
-				pIndices[indexCounter] = vertexCounter;
-				pIndices[indexCounter+1] = vertexCounter + 1;
-				pIndices[indexCounter+2] = vertexCounter + verticesOnEdge;
-				
-				pIndices[indexCounter + 3] = vertexCounter;
-				pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
-				pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
 
 				pX += stepSize;
 				vertexCounter++;
-				indexCounter += 6;
 			}
 			pZ -= stepSize;
 			pX = -(size / 2.f);

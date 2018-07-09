@@ -3,6 +3,8 @@
 #include "SDXRenderer.h"
 #include "SDXDirectXShaderCompiler.h"
 
+#include "SDXMeshGenerator.h"
+
 using namespace SDXEngine;
 
 SDXRenderer::SDXRenderer()
@@ -192,29 +194,19 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 	if (!device)
 		return SDX_ERROR_DEVICE_NOT_CREATED;
 
-	// Create cube geometry.
-	SDXVertexPC cubeVertices[] =
-	{
-		{ DirectX::XMFLOAT3(-0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(0,   0,   0), },
-		{ DirectX::XMFLOAT3(-0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(0,   0,   1), },
-		{ DirectX::XMFLOAT3(-0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(0,   1,   0), },
-		{ DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(0,   1,   1), },
-
-		{ DirectX::XMFLOAT3(0.5f,-0.5f,-0.5f), DirectX::XMFLOAT3(1,   0,   0), },
-		{ DirectX::XMFLOAT3(0.5f,-0.5f, 0.5f), DirectX::XMFLOAT3(1,   0,   1), },
-		{ DirectX::XMFLOAT3(0.5f, 0.5f,-0.5f), DirectX::XMFLOAT3(1,   1,   0), },
-		{ DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f), DirectX::XMFLOAT3(1,   1,   1), },
-	};
+	SDXMeshGenerator generator;
+	SDXMeshData* pMesh = generator.GeneratePlane(24, SDXVERTEX_TYPE_PC, 8, XMFLOAT3(0, 1, 0));
+	int bytes = pMesh->GetVertexCount() * GetSizeOfVertexType(pMesh->GetVertexType());
 
 	// Create vertex buffer:
 	CD3D11_BUFFER_DESC vDesc(
-		sizeof(cubeVertices),
+		bytes,
 		D3D11_BIND_VERTEX_BUFFER
 	);
 
 	D3D11_SUBRESOURCE_DATA  vData;
 	ZeroMemory(&vData, sizeof(D3D11_SUBRESOURCE_DATA));
-	vData.pSysMem = cubeVertices;
+	vData.pSysMem = pMesh->GetVertexData();
 	vData.SysMemPitch = 0;
 	vData.SysMemSlicePitch = 0;
 
@@ -224,38 +216,16 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 		&m_vertexBuffer
 	);
 
-	// Create index buffer:
-	unsigned short cubeIndices[] =
-	{
-		0,2,1, // -x
-		1,2,3,
-
-		4,5,6, // +x
-		5,7,6,
-
-		0,1,5, // -y
-		0,5,4,
-
-		2,6,7, // +y
-		2,7,3,
-
-		0,4,6, // -z
-		0,6,2,
-
-		1,3,7, // +z
-		1,7,5,
-	};
-
-	m_indexCount = ARRAYSIZE(cubeIndices);
+	m_indexCount = pMesh->GetIndexCount();//RRAYSIZE(cubeIndices);
 
 	CD3D11_BUFFER_DESC iDesc(
-		sizeof(cubeIndices),
+		pMesh->GetIndexCount() * sizeof(unsigned int),
 		D3D11_BIND_INDEX_BUFFER
 	);
 
 	D3D11_SUBRESOURCE_DATA iData;
 	ZeroMemory(&iData, sizeof(D3D11_SUBRESOURCE_DATA));
-	iData.pSysMem = cubeIndices;
+	iData.pSysMem = pMesh->GetIndexData();
 	iData.SysMemPitch = 0;
 	iData.SysMemSlicePitch = 0;
 
@@ -352,7 +322,7 @@ void SDXEngine::SDXRenderer::RenderCube()
 
 	context->IASetIndexBuffer(
 		m_indexBuffer,
-		DXGI_FORMAT_R16_UINT,
+		DXGI_FORMAT_R32_UINT,
 		0
 	);
 
