@@ -20,7 +20,7 @@ namespace SDXEngine
 		SDXErrorId CreateIndexArray(UINT count);
 
 		SDXVertex* GetVertexData() const;
-		int* GetIndexData() const;
+		unsigned int* GetIndexData() const;
 
 		SDXVertexType GetVertexType() const;
 		int GetVertexCount() const;
@@ -39,7 +39,7 @@ namespace SDXEngine
 	private:
 		// Array pointers
 		SDXVertex * m_vertexData;
-		int* m_indexData;
+		unsigned int* m_indexData;
 
 		int m_vertexCount;
 		int m_indexCount;
