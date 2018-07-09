@@ -239,9 +239,6 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 	state.bWireFrame = true;
 	m_directX.SetRasterState(state);
 
-	delete pMesh;
-	pMesh = nullptr;
-
 	return SDX_ERROR_NONE;
 }
 
