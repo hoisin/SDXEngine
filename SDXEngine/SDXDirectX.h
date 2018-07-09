@@ -54,6 +54,8 @@ namespace SDXEngine
 		UINT GetClientAreaWidth() const;
 		UINT GetClientAreaHeight() const;
 
+		SDXErrorId SetRasterState(const SDXRasterState& state);
+
 		void ShutDown();
 
 	private:
