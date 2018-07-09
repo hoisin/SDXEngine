@@ -457,3 +457,20 @@ TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 	EXPECT_EQ(width, testDirectX.GetClientAreaWidth()) << "Unexpected returned client area width after set";
 	EXPECT_EQ(height, testDirectX.GetClientAreaHeight()) << "Unexpected returned client area height after set";
 }
+
+
+TEST_F(SDXDirectXUTest, SetRasterTest)
+{
+	SDXDirectX testDirectX;
+	SDXRasterState state;
+
+	// Test without device
+	SDXErrorId error = SDX_ERROR_NONE;
+	error = testDirectX.SetRasterState(state);
+	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error on raster state set without device";
+
+	// Valid call
+	testDirectX.CreateDevice();
+	error = testDirectX.SetRasterState(state);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid raster state set";
+}

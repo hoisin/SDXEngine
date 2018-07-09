@@ -355,8 +355,11 @@ UINT SDXEngine::SDXDirectX::GetClientAreaHeight() const
 	return m_height;
 }
 
-void SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState & state)
+SDXErrorId SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState& state)
 {
+	if (!m_d3d11Device || !m_d3d11ImmediateContext)
+		return SDX_ERROR_DEVICE_NOT_CREATED;
+
 	ID3D11RasterizerState * rasterState;;
 
 	D3D11_RASTERIZER_DESC rasterizerState;
@@ -375,6 +378,8 @@ void SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState & state)
 	m_d3d11ImmediateContext->RSSetState(rasterState);
 
 	rasterState->Release();
+
+	return SDX_ERROR_NONE;
 }
 
 void SDXEngine::SDXDirectX::ShutDown()
