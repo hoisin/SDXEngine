@@ -18,9 +18,9 @@ namespace SDXEngine
 		~SDXMeshGenerator();
 
 		SDXMeshData* GenerateTriangle(float size, SDXVertexType type, const XMFLOAT3& color = XMFLOAT3(0, 0, 0));
-		SDXMeshData* GeneratePlane(UINT size, SDXVertexType type, UINT subdivision = 1, const XMFLOAT3& color = XMFLOAT3(0, 0, 0));
-		SDXMeshData* GenerateQuad();
-		SDXMeshData* GenerateCube(UINT size, SDXVertexType type, UINT subdivision = 1, const XMFLOAT3& color = XMFLOAT3(0,0,0));
+		SDXMeshData* GeneratePlane(float size, SDXVertexType type, UINT subdivision = 1, const XMFLOAT3& color = XMFLOAT3(0, 0, 0));
+		SDXMeshData* GenerateQuad(float size, SDXVertexType type, UINT subdivision, const XMFLOAT3& color = XMFLOAT3(0, 0, 0));
+		SDXMeshData* GenerateCube(float size, SDXVertexType type, UINT subdivision = 1, const XMFLOAT3& color = XMFLOAT3(0,0,0));
 		SDXMeshData* GenerateSphere();
 	};
 }

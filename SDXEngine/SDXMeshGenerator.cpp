@@ -59,7 +59,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 	return pMesh;
 }
 
-SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexType type, UINT subdivision,
+SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color)
 {
 	if (type == SDXVERTEX_TYPE_UNKNOWN)
@@ -115,7 +115,6 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexTyp
 					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
 					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
 					indexCounter += 6;
-
 				}
 
 				pX += stepSize;
@@ -136,74 +135,327 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(UINT size, SDXVertexTyp
 	return mesh;
 }
 
-SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad()
-{
-	return nullptr;
-}
-
-SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(UINT size, SDXVertexType type, UINT subdivision,
+SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color)
 {
-	//SDXMeshData* pMesh = new SDXMeshData;
+	if (type == SDXVERTEX_TYPE_UNKNOWN)
+		return nullptr;
 
-	//int vertexRow = (subdivision - 1) + 2;
-	//int verticesInFace = (vertexRow * vertexRow);
-	//int vertexCount = verticesInFace * 6;
-	//int indexCount = (subdivision * subdivision * 6) * 6;
+	SDXMeshData* mesh = new SDXMeshData;
 
-	//switch (type)
-	//{
-	//case SDXVERTEX_TYPE_PC:
-	//	pMesh->CreateVertexArray(type, vertexCount);
-	//	pMesh->CreateIndexArray(indexCount);
+	// Find total vertices
+	int verticesOnEdge = 2 + (subdivision - 1);
+	int totalVertices = verticesOnEdge * verticesOnEdge;
 
-	//	float stepSize = size / subdivision;
-	//	SDXVertexPC* vertices = static_cast<SDXVertexPC*>(pMesh->GetVertexData());
-	//	int counter = 0;
-	//	int rowCount = 1;
+	// Find total indices
+	int totalIndices = 6 * (subdivision * subdivision);
 
-	//	// Front 
-	//	float x = -(size / 2);
-	//	float y = (size / 2);
-	//	float z = -(size / 2);
+	if (mesh->CreateVertexArray(type, totalVertices) != SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDX_ERROR_NONE)
+	{
+		delete mesh;
+		mesh = nullptr;
+		return nullptr;
+	}
 
-	//	for (; counter < verticesInFace; counter++)
-	//	{
-	//		vertices[counter].position.x = x;
-	//		vertices[counter].position.y = y;
-	//		vertices[counter].position.z = z;
-	//		vertices[counter].color.x = color.x;
-	//		vertices[counter].color.y = color.y;
-	//		vertices[counter].color.z = color.z;
+	float pX = -(size / 2.f);
+	float pY = (size / 2.f);
+	float pZ = 0;
+	float stepSize = (float)(size / verticesOnEdge);
+	int vertexCounter = 0;
+	int indexCounter = 0;
 
-	//		x += stepSize;
-	//		if (rowCount >= vertexRow)
-	//		{
-	//			x = -(size / 2);
-	//			y -= stepSize;
-	//			rowCount = 1;
-	//		}
-	//		else
-	//			rowCount++;
-	//	}
+	switch (type)
+	{
+	case SDXVERTEX_TYPE_PC:
+	{
+		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+		// Generate vertex data & index data
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
 
+				if (x < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
 
-	//	// Right
-	//	// Back
-	//	// Left
-	//	// Top
-	//	// Bottom
-	//	break;
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
 
-	//default:
-	//	delete pMesh;
-	//	pMesh = nullptr;
-	//	break;
-	//}
+				}
 
-	//return pMesh;
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pX = -(size / 2.f);
+		}
 
-	return nullptr;
+		break;
+	}
+	default:
+		delete mesh;
+		mesh = nullptr;
+		break;
+	}
+
+	return mesh;
+}
+
+SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexType type, UINT subdivision,
+	const XMFLOAT3& color)
+{
+	if (type == SDXVERTEX_TYPE_UNKNOWN)
+		return nullptr;
+
+	SDXMeshData* mesh = new SDXMeshData;
+
+	// Find total vertices
+	int verticesOnEdge = 2 + (subdivision - 1);
+	int totalFaceVertices = verticesOnEdge * verticesOnEdge;
+	int totalVertices = totalFaceVertices * 6;
+
+	// Find total indices
+	int totalIndices = 6 * 6 * (subdivision * subdivision);
+
+	if (mesh->CreateVertexArray(type, totalVertices) != SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDX_ERROR_NONE)
+	{
+		delete mesh;
+		mesh = nullptr;
+		return nullptr;
+	}
+
+	float pX = 0;
+	float pY = 0;
+	float pZ = 0;
+	float stepSize = (float)(size / subdivision);
+	int vertexCounter = 0;
+	int indexCounter = 0;
+
+	switch (type)
+	{
+	case SDXVERTEX_TYPE_PC:
+	{
+		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+		
+		// Front face 
+		pX = -(size / 2.f);
+		pY = (size / 2.f);
+		pZ = -(size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pX = -(size / 2.f);
+		}
+
+		// Right face
+		pX = (size / 2.f);
+		pY = (size / 2.f);
+		pZ = -(size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int z = 0; z < verticesOnEdge; z++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (z < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pZ += stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pZ = -(size / 2.f);
+		}
+
+		// Back face 
+		pX = (size / 2.f);
+		pY = (size / 2.f);
+		pZ = (size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX -= stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pX = (size / 2.f);
+		}
+
+		// Left face
+		pX = -(size / 2.f);
+		pY = (size / 2.f);
+		pZ = (size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int z = 0; z < verticesOnEdge; z++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (z < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pZ -= stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pZ = (size / 2.f);
+		}
+
+		// Top face
+		pX = -(size / 2.f);
+		pY = (size / 2.f);
+		pZ = (size / 2.f);
+		for (int z = 0; z < verticesOnEdge; z++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pZ -= stepSize;
+			pX = -(size / 2.f);
+		}
+
+		// Bottom face
+		pX = -(size / 2.f);
+		pY = -(size / 2.f);
+		pZ = -(size / 2.f);
+		for (int z = 0; z < verticesOnEdge; z++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pZ += stepSize;
+			pX = -(size / 2.f);
+		}
+		break;
+	}
+	default:
+		delete mesh;
+		mesh = nullptr;
+		break;
+	}
+
+	return mesh;
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateSphere()
