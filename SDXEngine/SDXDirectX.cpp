@@ -355,6 +355,28 @@ UINT SDXEngine::SDXDirectX::GetClientAreaHeight() const
 	return m_height;
 }
 
+void SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState & state)
+{
+	ID3D11RasterizerState * rasterState;;
+
+	D3D11_RASTERIZER_DESC rasterizerState;
+	rasterizerState.FillMode = state.bWireFrame ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID;
+	rasterizerState.CullMode = state.bCullFront ? D3D11_CULL_BACK : D3D11_CULL_NONE;
+	rasterizerState.FrontCounterClockwise = false;
+	rasterizerState.DepthBias = false;
+	rasterizerState.DepthBiasClamp = 0;
+	rasterizerState.SlopeScaledDepthBias = 0;
+	rasterizerState.DepthClipEnable = true;
+	rasterizerState.ScissorEnable = false;
+	rasterizerState.MultisampleEnable = false;
+	rasterizerState.AntialiasedLineEnable = false;
+
+	m_d3d11Device->CreateRasterizerState(&rasterizerState, &rasterState);
+	m_d3d11ImmediateContext->RSSetState(rasterState);
+
+	rasterState->Release();
+}
+
 void SDXEngine::SDXDirectX::ShutDown()
 {
 	if (m_depthStencilView)
