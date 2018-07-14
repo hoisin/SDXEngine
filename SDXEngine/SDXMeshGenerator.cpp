@@ -457,8 +457,3 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexTyp
 
 	return mesh;
 }
-
-SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateSphere()
-{
-	return nullptr;
-}

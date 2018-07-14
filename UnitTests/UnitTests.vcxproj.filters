@@ -27,6 +27,9 @@
     <ClCompile Include="SDXMeshDataUTest.cpp">
       <Filter>Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="SDXMeshGeneratorUTest.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -52,6 +55,9 @@
       <Filter>App\Input</Filter>
     </ClInclude>
     <ClInclude Include="SDXMeshDataUTest.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXMeshGeneratorUTest.h">
       <Filter>Geometry</Filter>
     </ClInclude>
   </ItemGroup>
