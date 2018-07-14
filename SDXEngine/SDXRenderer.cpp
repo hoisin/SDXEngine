@@ -195,7 +195,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 		return SDX_ERROR_DEVICE_NOT_CREATED;
 
 	SDXMeshGenerator generator;
-	SDXMeshData* pMesh = generator.GeneratePlane(24, SDXVERTEX_TYPE_PC, 8, XMFLOAT3(0, 1, 0));
+	SDXMeshData* pMesh = generator.GenerateCube(11, SDXVERTEX_TYPE_PC, 50, XMFLOAT3(0, 1, 0));
 	int bytes = pMesh->GetVertexCount() * GetSizeOfVertexType(pMesh->GetVertexType());
 
 	// Create vertex buffer:
