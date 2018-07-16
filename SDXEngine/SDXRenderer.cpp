@@ -2,6 +2,7 @@
 #include "SDXGfx.h"
 #include "SDXRenderer.h"
 #include "SDXDirectXShaderCompiler.h"
+#include "SDXRasterState.h"
 
 #include "SDXMeshGenerator.h"
 
@@ -236,7 +237,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 	);
 
 	SDXRasterState state;
-	state.bWireFrame = true;
+	state.SetWireFrame(true);
 	m_directX.SetRasterState(state);
 
 	delete pMesh;

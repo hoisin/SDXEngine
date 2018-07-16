@@ -13,6 +13,7 @@
 #include <d3d11.h>
 #include "SDXGfx.h"
 #include "SDXErrors.h"
+#include "SDXRasterState.h"
 
 namespace SDXEngine
 {

@@ -78,17 +78,4 @@ namespace SDXEngine
 
 		return size;
 	}
-
-	struct SDXRasterState
-	{
-		bool bWireFrame;
-		bool bCullFront;
-
-		SDXRasterState()
-		{
-			// Defaults
-			bWireFrame = false;
-			bCullFront = true;
-		}
-	};
 }       
