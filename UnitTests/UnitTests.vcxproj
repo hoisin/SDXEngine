@@ -58,6 +58,7 @@
     <ClInclude Include="SDXMeshDataUTest.h" />
     <ClInclude Include="SDXMeshGeneratorUTest.h" />
     <ClInclude Include="SDXRendererUTest.h" />
+    <ClInclude Include="SDXRasterStateUTest.h" />
     <ClInclude Include="SDXTestApp.h" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +70,7 @@
     <ClCompile Include="SDXMeshDataUTest.cpp" />
     <ClCompile Include="SDXMeshGeneratorUTest.cpp" />
     <ClCompile Include="SDXRendererUTest.cpp" />
+    <ClCompile Include="SDXRasterStateUTest.cpp" />
     <ClCompile Include="SDXTestApp.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp">

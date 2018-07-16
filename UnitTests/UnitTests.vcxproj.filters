@@ -9,9 +9,6 @@
     <ClCompile Include="SDXTestApp.cpp">
       <Filter>App</Filter>
     </ClCompile>
-    <ClCompile Include="SDXRendererUTest.cpp">
-      <Filter>Gfx</Filter>
-    </ClCompile>
     <ClCompile Include="SDXLogUTest.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
@@ -30,6 +27,12 @@
     <ClCompile Include="SDXMeshGeneratorUTest.cpp">
       <Filter>Geometry</Filter>
     </ClCompile>
+    <ClCompile Include="SDXRendererUTest.cpp">
+      <Filter>Gfx\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXRasterStateUTest.cpp">
+      <Filter>Gfx\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -38,9 +41,6 @@
     </ClInclude>
     <ClInclude Include="SDXTestApp.h">
       <Filter>App</Filter>
-    </ClInclude>
-    <ClInclude Include="SDXRendererUTest.h">
-      <Filter>Gfx</Filter>
     </ClInclude>
     <ClInclude Include="SDXLogUTest.h">
       <Filter>Utility</Filter>
@@ -59,6 +59,12 @@
     </ClInclude>
     <ClInclude Include="SDXMeshGeneratorUTest.h">
       <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXRendererUTest.h">
+      <Filter>Gfx\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXRasterStateUTest.h">
+      <Filter>Gfx\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +85,9 @@
     </Filter>
     <Filter Include="Geometry">
       <UniqueIdentifier>{71984bbd-e51e-4ae4-bf0c-d401d948154c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\Renderer">
+      <UniqueIdentifier>{b895bf75-083c-4504-a144-fd8f828bfe57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
