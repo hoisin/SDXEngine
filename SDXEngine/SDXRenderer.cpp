@@ -236,9 +236,9 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 		&m_indexBuffer
 	);
 
-	SDXRasterState state;
-	state.SetWireFrame(true);
-	m_directX.SetRasterState(state);
+	m_fillState;
+	m_wireFrame.SetWireFrame(true);
+	m_directX.SetRasterState(m_fillState);
 
 	delete pMesh;
 	pMesh = nullptr;
@@ -363,6 +363,14 @@ void SDXEngine::SDXRenderer::RenderCube()
 		0,
 		0
 	);
+}
+
+void SDXEngine::SDXRenderer::EnableWireFrame(bool bEnable)
+{
+	if (bEnable)
+		m_directX.SetRasterState(m_wireFrame);
+	else
+		m_directX.SetRasterState(m_fillState);
 }
 
 SDXErrorId SDXEngine::SDXRenderer::CreateVertexShader()

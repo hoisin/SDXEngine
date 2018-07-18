@@ -9,6 +9,8 @@
 #include "SDXDirect2D.h"
 #include "SDXCameraFP.h"
 
+#include "SDXRasterState.h"
+
 namespace SDXEngine
 {
 	struct SDXDirectXInfo
@@ -64,12 +66,7 @@ namespace SDXEngine
 		void UpdateTest();
 		void RenderCube();
 
-		// Delete this
-		typedef struct _constantBufferStruct {
-			DirectX::XMFLOAT4X4 world;
-			DirectX::XMFLOAT4X4 view;
-			DirectX::XMFLOAT4X4 projection;
-		} ConstantBufferStruct;
+		void EnableWireFrame(bool bEnable);
 
 	private:
 		SDXErrorId CreateVertexShader();
@@ -92,6 +89,9 @@ namespace SDXEngine
 
 		ConstantBufferStruct    m_worldViewProj;
 		int						m_testFrameCount;
+
+		SDXRasterState m_fillState;
+		SDXRasterState m_wireFrame;
 	};
 }
 
