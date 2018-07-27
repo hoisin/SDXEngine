@@ -26,6 +26,7 @@ namespace SDXEngine
 	{
 	};
 
+	// Position and color
 	struct SDXVertexPC : public SDXVertex
 	{
 		XMFLOAT3 position;
@@ -41,6 +42,25 @@ namespace SDXEngine
 		}
 	};
 
+	// Position, normal and color
+	struct SDXVertexPNC : public SDXVertex
+	{
+		XMFLOAT3 position;
+		XMFLOAT3 normal;
+		XMFLOAT3 color;
+
+		SDXVertexPNC(const XMFLOAT3& pos, const XMFLOAT3& norm,
+			const XMFLOAT3& col) :
+			position(pos), normal(norm), color(col)
+		{
+		}
+
+		SDXVertexPNC() : position(XMFLOAT3(0, 0, 0)), normal(XMFLOAT3(0, 0, 0)), color(XMFLOAT3(0, 0, 0))
+		{
+		}
+	};
+
+	// Position, normal texture
 	struct SDXVertexPNT : public SDXVertex
 	{
 		XMFLOAT3 position;
@@ -66,6 +86,10 @@ namespace SDXEngine
 		{
 		case SDXVERTEX_TYPE_PC:
 			size = sizeof(SDXVertexPC);
+			break;
+
+		case SDXVERTEX_TYPE_PNC:
+			size = sizeof(SDXVertexPNC);
 			break;
 
 		case SDXVERTEX_TYPE_PNT:
