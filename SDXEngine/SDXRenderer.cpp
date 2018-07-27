@@ -196,7 +196,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 		return SDX_ERROR_DEVICE_NOT_CREATED;
 
 	SDXMeshGenerator generator;
-	SDXMeshData* pMesh = generator.GenerateCube(11, SDXVERTEX_TYPE_PC, 50, XMFLOAT3(0, 1, 0));
+	SDXMeshData* pMesh = generator.GenerateCube(11, SDXVERTEX_TYPE_PNC, 2, XMFLOAT3(0, 1, 0));
 	int bytes = pMesh->GetVertexCount() * GetSizeOfVertexType(pMesh->GetVertexType());
 
 	// Create vertex buffer:
@@ -314,7 +314,7 @@ void SDXEngine::SDXRenderer::RenderCube()
 	//);
 
 	// Set up the IA stage by setting the input topology and layout.
-	UINT stride = GetSizeOfVertexType(SDXVERTEX_TYPE_PC);
+	UINT stride = GetSizeOfVertexType(SDXVERTEX_TYPE_PNC);
 	UINT offset = 0;
 
 	context->IASetVertexBuffers(
@@ -383,7 +383,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateVertexShader()
 	SDXDirectXShaderCompiler compiler;
 	ID3DBlob* shaderBlob = nullptr;
 	// Attempt to compile the vertex shader
-	SDXErrorId error = compiler.CompileShader("..\\Assets\\Shaders\\basic.vs",
+	SDXErrorId error = compiler.CompileShader("..\\Assets\\Shaders\\dirPNC.vs",
 		"Main", "vs_5_0", &shaderBlob);
 
 	// If failed
@@ -417,8 +417,11 @@ SDXErrorId SDXEngine::SDXRenderer::CreateVertexShader()
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
 		0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 
-	{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-	0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+		0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	// Attempt to create the input layout
@@ -452,7 +455,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreatePixelShader()
 	SDXDirectXShaderCompiler compiler;
 	ID3DBlob* shaderBlob = nullptr;
 	// Attempt to compile the vertex shader
-	SDXErrorId error = compiler.CompileShader("..\\Assets\\Shaders\\basic.ps",
+	SDXErrorId error = compiler.CompileShader("..\\Assets\\Shaders\\dirPNC.ps",
 		"Main", "ps_5_0", &shaderBlob);
 
 	// If failed

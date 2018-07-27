@@ -28,6 +28,10 @@ SDXErrorId SDXEngine::SDXMeshData::CreateVertexArray(SDXVertexType type, UINT co
 		m_vertexData = new SDXVertexPC[count];
 		break;
 
+	case SDXVERTEX_TYPE_PNC:
+		m_vertexData = new SDXVertexPNC[count];
+		break;
+
 	case SDXVERTEX_TYPE_PNT:
 		m_vertexData = new SDXVertexPNT[count];
 		break;

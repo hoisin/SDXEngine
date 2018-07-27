@@ -9,7 +9,7 @@
 struct PSInput
 {
     float4 position : SV_POSITION;
-	float3 normal : SV_NORMAL;
+	float3 normal : TEXCOORD1;
     float4 color : COLOR;
 };
 
@@ -20,21 +20,23 @@ float3 lightDir;
 ////////////////////////////////////////////////////////////////////////////////
 float4 Main(PSInput input) : SV_TARGET
 {
-	float3 normal = normalize(norm);
-	float3 lightDir = lightDir - position.xyz;
+	float3 normal = normalize(input.normal);
 	
-	float length = length(lightDir);
+	float3 lightDir = float3(0, 0.6, -0.2);
+	float len = length(lightDir);
 	lightDir = normalize(lightDir);
 	
-	float lamb = max(dot(normal, lightDir), 0.0) * 0.5;
+	float lamb = max(dot(normal, lightDir), 0);
 	
 	// Cumulate lighting
-	colour += lamb * texture( diffuseTextureSampler, UV ).rgb; // * light colour
+	float3 color = lamb * input.color;
 
 	// add ambient colour last
-	color = float3(0.1,0,0) + colour;
+	color = float3(0.1,0,0) + color;
 	
-	return input.color;
+	float4 pix = float4(color.x, color.y, color.z, 0);
+	
+	return pix;
 }
 
 
