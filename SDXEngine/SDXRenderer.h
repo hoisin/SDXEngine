@@ -11,8 +11,19 @@
 
 #include "SDXRasterState.h"
 
+#include "SDXSubMesh.h"
+
 namespace SDXEngine
 {
+	struct SDXDrawItem
+	{
+		XMFLOAT3 worldPos;
+		XMFLOAT3 rotation;
+
+		SDXSubMesh* submesh;
+	};
+
+	// DirectX info setup
 	struct SDXDirectXInfo
 	{
 		UINT clientWidth;

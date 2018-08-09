@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClInclude Include="SDXBaseApp.h" />
     <ClInclude Include="CTimer.h" />
+    <ClInclude Include="SDXBufferMGR.h" />
     <ClInclude Include="SDXErrors.h" />
     <ClInclude Include="SDXCameraFP.h" />
     <ClInclude Include="SDXDirect2D.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="SDXInputHandler.h" />
     <ClInclude Include="SDXKeyboard.h" />
     <ClInclude Include="SDXLog.h" />
+    <ClInclude Include="SDXMesh.h" />
     <ClInclude Include="SDXMeshData.h" />
     <ClInclude Include="SDXMeshGenerator.h" />
     <ClInclude Include="SDXMouse.h" />
@@ -196,6 +198,7 @@
   <ItemGroup>
     <ClCompile Include="SDXBaseApp.cpp" />
     <ClCompile Include="CTimer.cpp" />
+    <ClCompile Include="SDXBufferMGR.cpp" />
     <ClCompile Include="SDXCameraFP.cpp" />
     <ClCompile Include="SDXDirect2D.cpp" />
     <ClCompile Include="SDXDirectX.cpp" />
@@ -204,6 +207,7 @@
     <ClCompile Include="SDXInputHandler.cpp" />
     <ClCompile Include="SDXKeyboard.cpp" />
     <ClCompile Include="SDXLog.cpp" />
+    <ClCompile Include="SDXMesh.cpp" />
     <ClCompile Include="SDXMeshData.cpp" />
     <ClCompile Include="SDXMeshGenerator.cpp" />
     <ClCompile Include="SDXMouse.cpp" />

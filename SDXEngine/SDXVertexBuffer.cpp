@@ -13,7 +13,7 @@ SDXVertexBuffer::~SDXVertexBuffer()
 	Release();
 }
 
-SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXVertexType type, SDXDirectX* inDirectX)
+SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXDirectX* inDirectX)
 {
 	if (inDirectX == nullptr)
 		return SDX_ERROR_VERTEXBUFFER_DIRECTX_NULL;
@@ -27,7 +27,7 @@ SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXVerte
 		return SDX_ERROR_VERTEXBUFFER_ALREADY_LOADED;
 		
 	// Unknown vertex type
-	if (type == SDXVERTEX_TYPE_UNKNOWN)
+	if (meshData->GetVertexType() == SDXVERTEX_TYPE_UNKNOWN)
 		return SDX_ERROR_VERTEXBUFFER_UNKNOWN_VERTEXTYPE;
 
 	ID3D11Device* device = inDirectX->GetDevice();
@@ -36,7 +36,7 @@ SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXVerte
 		return SDX_ERROR_DEVICE_NOT_CREATED;
 	
 	// Create and load vertex buffer data
-	CD3D11_BUFFER_DESC vDesc(meshData->GetVertexCount() * GetSizeOfVertexType(type), D3D11_BIND_VERTEX_BUFFER);
+	CD3D11_BUFFER_DESC vDesc(meshData->GetVertexCount() * GetSizeOfVertexType(meshData->GetVertexType()), D3D11_BIND_VERTEX_BUFFER);
 
 	D3D11_SUBRESOURCE_DATA vData;
 	ZeroMemory(&vData, sizeof(D3D11_SUBRESOURCE_DATA));
@@ -48,7 +48,7 @@ SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXVerte
 	if (FAILED(result))
 		return SDX_ERROR_VERTEXBUFFER_CREATE_FAILED;
 
-	m_type = type;
+	m_type = meshData->GetVertexType();
 	m_count = meshData->GetVertexCount();
 
 	// No error
