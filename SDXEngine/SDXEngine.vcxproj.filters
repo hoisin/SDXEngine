@@ -103,9 +103,6 @@
     <ClInclude Include="SDXRasterState.h">
       <Filter>Gfx\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="SDXBufferMGR.h">
-      <Filter>Gfx\DirectX\Buffers</Filter>
-    </ClInclude>
     <ClInclude Include="SDXMesh.h">
       <Filter>Gfx\DirectX\Mesh</Filter>
     </ClInclude>
@@ -167,9 +164,6 @@
     </ClCompile>
     <ClCompile Include="SDXRasterState.cpp">
       <Filter>Gfx\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="SDXBufferMGR.cpp">
-      <Filter>Gfx\DirectX\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="SDXMesh.cpp">
       <Filter>Gfx\DirectX\Mesh</Filter>

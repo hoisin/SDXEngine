@@ -33,6 +33,9 @@
     <ClCompile Include="SDXRasterStateUTest.cpp">
       <Filter>Gfx\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="SDXVertexBufferUTest.cpp">
+      <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -66,6 +69,9 @@
     <ClInclude Include="SDXRasterStateUTest.h">
       <Filter>Gfx\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="SDXVertexBufferUTest.h">
+      <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -88,6 +94,9 @@
     </Filter>
     <Filter Include="Gfx\Renderer">
       <UniqueIdentifier>{b895bf75-083c-4504-a144-fd8f828bfe57}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\DirectX\Buffers">
+      <UniqueIdentifier>{a8d2107e-1185-40df-9853-eb57f2ab9a45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

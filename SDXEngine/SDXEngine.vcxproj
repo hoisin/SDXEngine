@@ -172,7 +172,6 @@
   <ItemGroup>
     <ClInclude Include="SDXBaseApp.h" />
     <ClInclude Include="CTimer.h" />
-    <ClInclude Include="SDXBufferMGR.h" />
     <ClInclude Include="SDXErrors.h" />
     <ClInclude Include="SDXCameraFP.h" />
     <ClInclude Include="SDXDirect2D.h" />
@@ -198,7 +197,6 @@
   <ItemGroup>
     <ClCompile Include="SDXBaseApp.cpp" />
     <ClCompile Include="CTimer.cpp" />
-    <ClCompile Include="SDXBufferMGR.cpp" />
     <ClCompile Include="SDXCameraFP.cpp" />
     <ClCompile Include="SDXDirect2D.cpp" />
     <ClCompile Include="SDXDirectX.cpp" />

@@ -24,7 +24,6 @@ protected:
 	SDXErrorId OnDraw(double deltaT) override;
 
 	void OnShutDown() override;
-	
+
 	bool OnEvent(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam);
 };
-

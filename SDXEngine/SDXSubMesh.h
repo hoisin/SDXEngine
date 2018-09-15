@@ -18,10 +18,10 @@ namespace SDXEngine
 		SDXSubMesh();
 		~SDXSubMesh();
 
+		SDXErrorId LoadMeshData(SDXEngine::SDXMeshData* data, SDXDirectX* directX);
+
 		void SetMaterialID(const std::string& materialID);
-
 		const std::string& GetMaterialID() const;
-
 		SDXVertexBuffer* GetVertexBuffer();
 		SDXIndexBuffer* GetIndexBuffer();
 
