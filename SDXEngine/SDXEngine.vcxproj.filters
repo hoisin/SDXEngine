@@ -168,5 +168,8 @@
     <ClCompile Include="SDXMesh.cpp">
       <Filter>Gfx\DirectX\Mesh</Filter>
     </ClCompile>
+    <ClCompile Include="SDXErrors.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

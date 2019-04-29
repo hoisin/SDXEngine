@@ -31,309 +31,189 @@ void SDXDirectXUTest::TearDown()
 // --------------------------------------------------------------------------------
 // Class fixture testing
 // --------------------------------------------------------------------------------
-TEST_F(SDXDirectXUTest, CreateDevice)
+TEST_F(SDXDirectXUTest, Initialise)
 {
 	SDXDirectX directX;
 	SDXErrorId error = SDX_ERROR_NONE;
-
-	// Create test
-	error = directX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// Create again
-	error = directX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_ALREADY_EXIST) << "Unexpected error when attempting to create a device when already one existing";
-
-	// Shut down and attempt to re-create
-	directX.ShutDown();
-	error = directX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when re-creating device after shutdown";
-
-	directX.ShutDown();
-}
-
-TEST_F(SDXDirectXUTest, CreateSwapChain)
-{
-	// Setup directX device
-	SDXDirectX testDirectX;
-	SDXErrorId error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// Create without setting the output window
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_SWAPCHAIN_NO_SET_OUTPUTWINDOW) << "Unexpected error when creating swapchain without setting output window";
-
-	UINT clientWidth = 800;
-	UINT clientHeight = 600;
-	UINT refreshRate = 60;
-	bool bWindow = true;
-	bool useMsaa = false;
-
-	// Create after setup
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
-
-	// Create again
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_SWAPCHAIN_ALREADY_EXIST) << "Unexpected error when attempting to create swapchain when one already exist";
-
-	// Shutdown and recreate swapchain
-	testDirectX.ShutDown();
-	error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when re-creating device after shutdown";
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
-
-	// Free resources
-	testDirectX.ShutDown();
-
-	// Attempt to create without creating device
-	SDXDirectX noDevice;
-	error = noDevice.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error when attempting to create swapchain without device";
-}
-
-
-TEST_F(SDXDirectXUTest, CheckMSAAQuality)
-{
-	// Setup directX device
-	SDXDirectX testDirectX;
-	SDXErrorId error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// Test MSAA quality check
-	UINT quality = 0;
-	error = testDirectX.Check4XMSAAQuality(quality);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error querying 4X MSAA quality";
-	EXPECT_NE(quality, 0) << "4X MSAA should not be 0";
-
-	// Free resources
-	testDirectX.ShutDown();
-
-	// Attempt to query without device
-	SDXDirectX noDevice;
-	quality = 0;
-	error = noDevice.Check4XMSAAQuality(quality);
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error querying 4x MSAA with no device created";
-	EXPECT_EQ(quality, 0) << "Quality should be 0 when checking 4X MSAA without creating a device";
-}
-
-TEST_F(SDXDirectXUTest, CreateTargetRenderView)
-{
-	// Setup directX device
-	SDXDirectX testDirectX;
-	SDXErrorId error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	UINT clientWidth = 800;
-	UINT clientHeight = 600;
-	UINT refreshRate = 60;
-	bool bWindow = true;
-	bool useMsaa = false;
-
-	// Setup swap chain
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
-
-	// Create render target view
-	error = testDirectX.CreateRenderTargetView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error creating render target view";
-
-	// Attempt to create again
-	error = testDirectX.CreateRenderTargetView();
-	EXPECT_EQ(error, SDX_ERROR_RENDERTARGETVIEW_ALREADY_EXIST) << "Unexpected error when attempting to create render target view when one already exist";
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
 	
-	// Attempt to re-create after shutdown
-	testDirectX.ShutDown();
-	error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
+	// Invalid tests
+	SDXDirectXInfo wrongSetup;
+	wrongSetup = validSetup;
 
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
+	wrongSetup.clientWidth = 0;
+	error = directX.Initialise(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
-	error = testDirectX.CreateRenderTargetView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error creating render target view";
+	wrongSetup = validSetup;
+	wrongSetup.clientHeight = 0;
+	error = directX.Initialise(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
-	// Free resource
-	testDirectX.ShutDown();
+	wrongSetup = validSetup;
+	wrongSetup.hwnd = nullptr;
+	error = directX.Initialise(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
-	// Attempt to create without device
-	SDXDirectX noDevice;
-	error = noDevice.CreateRenderTargetView();
-	EXPECT_EQ(error, SDX_ERROR_SWAPCHAIN_NOT_CREATED) << "Unexpected error when attempting to create render target view without device/swap chain";
+	wrongSetup = validSetup;
+	wrongSetup.refreshRate = 0;
+	error = directX.Initialise(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+
+	// Valid test
+	error = directX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error from valid setup info";
+
+	// Try Reinitialsing
+	error = directX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_DEVICE_ALREADY_EXIST) << "Expected device already exist error";
 }
 
-TEST_F(SDXDirectXUTest, CreateDepthStencilBufferView)
+TEST_F(SDXDirectXUTest, ReInitWindowDependentResources)
 {
-	// Setup directX device
-	SDXDirectX testDirectX;
-	SDXErrorId error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
+	SDXDirectX directX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
 
-	// Valid create test
-	error = testDirectX.CreateDepthStencilBufferView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating depth/stencil buffer/view";
+	// Invalid tests
 
-	// Attempt to create again
-	error = testDirectX.CreateDepthStencilBufferView();
-	EXPECT_EQ(error, SDX_ERROR_DEPTHSTENCIL_ALREADY_EXIST) << "Unexpected error when attetmping to create depth/stencil buffer/view with one already created";
+	// Reinit without first running intialise
+	error = directX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
 
-	// Free resource
-	testDirectX.ShutDown();
+	// Initialise
+	error = directX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error";
 
-	// Attempt create with no device
-	SDXDirectX noDevice;
-	error = noDevice.CreateDepthStencilBufferView();
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error when attempting to create depth/stencil buffer/view without device";
+	// Invalid input
+	SDXDirectXInfo wrongSetup;
+	wrongSetup = validSetup;
+
+	wrongSetup.clientWidth = 0;
+	error = directX.ReInitWindowDependentResources(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+
+	wrongSetup = validSetup;
+	wrongSetup.clientHeight = 0;
+	error = directX.ReInitWindowDependentResources(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+
+	wrongSetup = validSetup;
+	wrongSetup.hwnd = nullptr;
+	error = directX.ReInitWindowDependentResources(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+
+	wrongSetup = validSetup;
+	wrongSetup.refreshRate = 0;
+	error = directX.ReInitWindowDependentResources(wrongSetup);
+	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+
+	// Valid test
+	error = directX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error from valid setup info";
+
+	// Run again
+	error = directX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error from running Reinit again";
 }
-
-TEST_F(SDXDirectXUTest, BindOutputMerger)
-{
-	// Setup directX device
-	SDXDirectX testDirectX;
-
-	// Attempt to bind OM without device
-	SDXErrorId error = testDirectX.BindOutputMerger();
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error when running bind OM without device";
-
-	// Create device
-	error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// Don't need to test after device create.
-	// Bind OM not swap chain dependent
-
-	UINT clientWidth = 800;
-	UINT clientHeight = 600;
-	UINT refreshRate = 60;
-	bool bWindow = true;
-	bool useMsaa = false;
-
-	// Setup swap chain
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
-
-	// Attempt to bind OM without creating render target
-	error = testDirectX.BindOutputMerger();
-	EXPECT_EQ(error, SDX_ERROR_RENDERTARGETVIEW_NOT_CREATED) << "Unexpected error when running bind OM without render target view";
-
-	// Create render target view
-	error = testDirectX.CreateRenderTargetView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error creating render target view";
-
-	// Attempt to bind OM without creating depth/stencil view
-	error = testDirectX.BindOutputMerger();
-	EXPECT_EQ(error, SDX_ERROR_DEPTHSTENCIL_NOT_CREATED) << "Unexpected error when running bind OM without depth/stencil view";
-
-	// Create depth/stencil
-	error = testDirectX.CreateDepthStencilBufferView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating depth/stencil buffer/view";
-
-	// Valid test call for bind OM
-	error = testDirectX.BindOutputMerger();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when running valid bind OM";
-}
-
 
 TEST_F(SDXDirectXUTest, SwapChainPresent)
 {
 	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
 
-	// Attempt to present without swap chain
-	SDXErrorId error = testDirectX.SwapChainPresent();
-	EXPECT_EQ(error, SDX_ERROR_SWAPCHAIN_NOT_CREATED) << "Unexpected error on swap chain present without swap chain";
-
-	UINT clientWidth = 800;
-	UINT clientHeight = 600;
-	UINT refreshRate = 60;
-	bool bWindow = true;
-	bool useMsaa = false;
+	// Test running without initialising 
+	error = testDirectX.SwapChainPresent();
+	EXPECT_EQ(error, SDX_ERROR_SWAPCHAIN_NOT_CREATED) << "Expected swap chain not created error";
 
 	// Initialise device and context
-	error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// Create after setup
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when initialising DirectX";
 
 	// Test swapchain present
 	error = testDirectX.SwapChainPresent();
 	EXPECT_EQ(error, SDX_ERROR_NONE) << "Valid swap chain present failed";
+
+	// Run Reinit
+	error = testDirectX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error running Reinit";
+
+	// Test swapchain again
+	error = testDirectX.SwapChainPresent();
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error";
 }
 
 
 TEST_F(SDXDirectXUTest, GetDevice)
 {
 	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
 	// Test without creating 
-	ID3D11Device* device = testDirectX.GetDevice();
+	ID3D11Device* device = testDirectX.GetDevice().Get();
 	EXPECT_EQ(device, nullptr) << "Expected to return nullptr when device not created";
 
 	// Test after created
-	testDirectX.CreateDevice();
-	device = testDirectX.GetDevice();
-	EXPECT_NE(device, nullptr) << "Device ptr should not be nullptr after create";
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on initialise DirectX";
 
-	// test on shutdown
-	testDirectX.ShutDown();
-	device = testDirectX.GetDevice();
-	EXPECT_EQ(device, nullptr) << "Expected nullptr after shutdown";
+	device = testDirectX.GetDevice().Get();
+	EXPECT_NE(device, nullptr) << "Device ptr should not be nullptr after create";
 }
 
 
 TEST_F(SDXDirectXUTest, GetContext)
 {
 	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
 	// Test without creating
-	ID3D11DeviceContext* context = testDirectX.GetContext();
+	ID3D11DeviceContext* context = testDirectX.GetContext().Get();
 	EXPECT_EQ(context, nullptr) << "Expected to return nullptr when context not created";
 
 	// Test after created
-	testDirectX.CreateDevice();
-	context = testDirectX.GetContext();
-	EXPECT_NE(context, nullptr) << "Context ptr should not be nullptr after create";
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on initialise DirectX";
 
-	// Test on shutdown
-	testDirectX.ShutDown();
-	context = testDirectX.GetContext();
-	EXPECT_EQ(context, nullptr) << "Expected nullptr after shutdown";
+	context = testDirectX.GetContext().Get();
+	EXPECT_NE(context, nullptr) << "Context ptr should not be nullptr after create";
 }
 
 
 TEST_F(SDXDirectXUTest, GetAspectRatio)
 {
 	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
 
 	// Testing without setting anything
 	//
@@ -349,45 +229,47 @@ TEST_F(SDXDirectXUTest, GetAspectRatio)
 	testWidth = 1600;
 	testHeight = 1200;
 	expectedAspectRatio = (static_cast<float>(testWidth) / static_cast<float>(testHeight));
-	// Set directX
-	testDirectX.SetClientArea(testWidth, testHeight);
-	testRatio = testDirectX.GetAspectRatio();
-	EXPECT_EQ(testRatio, expectedAspectRatio);
 
+	validSetup.clientWidth = testWidth;
+	validSetup.clientHeight = testHeight;
+
+	// Setup directX
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+
+	// Check aspect ratio
+	testRatio = testDirectX.GetAspectRatio();
+	EXPECT_EQ(testRatio, expectedAspectRatio) << "Unexpected aspect ratio";
 }
 
 
 TEST_F(SDXDirectXUTest, GetRenderTargetView)
 {
-	// nullptr tests
 	SDXDirectX testDirectX;
-	ID3D11RenderTargetView* target = testDirectX.GetRenderTargetView();
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
+	// nullptr tests
+	ID3D11RenderTargetView* target = testDirectX.GetRenderTargetView().Get();
 	EXPECT_EQ(target, nullptr) << "Expected null when not created render target view";
 
-	SDXErrorId error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	UINT clientWidth = 800;
-	UINT clientHeight = 600;
-	UINT refreshRate = 60;
-	bool bWindow = true;
-	bool useMsaa = false;
-
-	// Setup swap chain
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
-
-	// Create render target view
-	error = testDirectX.CreateRenderTargetView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error creating render target view";
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Test valid get
-	target = testDirectX.GetRenderTargetView();
+	target = testDirectX.GetRenderTargetView().Get();
+	EXPECT_NE(target, nullptr) << "Failed on valid get";
+
+	// Test with Re-init
+	error = testDirectX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on reinit";
+
+	target = testDirectX.GetRenderTargetView().Get();
 	EXPECT_NE(target, nullptr) << "Failed on valid get";
 }
 
@@ -396,18 +278,29 @@ TEST_F(SDXDirectXUTest, GetDepthStencilView)
 {
 	// nullptr tests
 	SDXDirectX testDirectX;
-	ID3D11DepthStencilView* depthStencil = testDirectX.GetDepthStencilView();
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
+	ID3D11DepthStencilView* depthStencil = testDirectX.GetDepthStencilView().Get();
 	EXPECT_EQ(depthStencil, nullptr) << "Expected nullptr when not created depth stencil view";
 
-	SDXErrorId error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// Create depth stencil view
-	error = testDirectX.CreateDepthStencilBufferView();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating depth/stencil buffer/view";
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Valid get test
-	depthStencil = testDirectX.GetDepthStencilView();
+	depthStencil = testDirectX.GetDepthStencilView().Get();
+	EXPECT_NE(depthStencil, nullptr) << "Failed on valid get test";
+
+	// Test with Re-init
+	error = testDirectX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on reinit";
+
+	depthStencil = testDirectX.GetDepthStencilView().Get();
 	EXPECT_NE(depthStencil, nullptr) << "Failed on valid get test";
 }
 
@@ -416,28 +309,29 @@ TEST_F(SDXDirectXUTest, GetSwapChain)
 {
 	// null check
 	SDXDirectX testDirectX;
-	IDXGISwapChain* swapChain = testDirectX.GetSwapChain();
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
+	IDXGISwapChain* swapChain = testDirectX.GetSwapChain().Get();
 	EXPECT_EQ(swapChain, nullptr) << "Expected nullptr when not created swap chain";
 
-	SDXErrorId  error = testDirectX.CreateDevice();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when creating device";
-
-	// create the swap chain
-	UINT clientWidth = 800;
-	UINT clientHeight = 600;
-	UINT refreshRate = 60;
-	bool bWindow = true;
-	bool useMsaa = false;
-	testDirectX.SetOutputWindow(m_testApp.GetHwndTest());
-	testDirectX.SetClientArea(clientWidth, clientHeight);
-	testDirectX.SetRefreshRate(refreshRate);
-	testDirectX.SetWindowed(bWindow);
-	testDirectX.SetUse4XMSAA(useMsaa);
-	error = testDirectX.CreateSwapChain();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when attempting to create swapchain";
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Test get
-	swapChain = testDirectX.GetSwapChain();
+	swapChain = testDirectX.GetSwapChain().Get();
+	EXPECT_NE(swapChain, nullptr) << "Unexpected nullptr on swap chain get";
+
+	// Test with Re-init
+	error = testDirectX.ReInitWindowDependentResources(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on reinit";
+
+	swapChain = testDirectX.GetSwapChain().Get();
 	EXPECT_NE(swapChain, nullptr) << "Unexpected nullptr on swap chain get";
 }
 
@@ -445,6 +339,13 @@ TEST_F(SDXDirectXUTest, GetSwapChain)
 TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 {
 	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
 
 	// Default tests
 	EXPECT_EQ(testDirectX.GetClientAreaWidth(), 800) << "Unexpected client area width";
@@ -453,7 +354,12 @@ TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 	// Test case
 	UINT width = 1024;
 	UINT height = 764;
-	testDirectX.SetClientArea(width, height);
+	validSetup.clientWidth = width;
+	validSetup.clientHeight = height;
+
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+
 	EXPECT_EQ(width, testDirectX.GetClientAreaWidth()) << "Unexpected returned client area width after set";
 	EXPECT_EQ(height, testDirectX.GetClientAreaHeight()) << "Unexpected returned client area height after set";
 }
@@ -462,15 +368,93 @@ TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 TEST_F(SDXDirectXUTest, SetRasterTest)
 {
 	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
 	SDXRasterState state;
 
 	// Test without device
-	SDXErrorId error = SDX_ERROR_NONE;
 	error = testDirectX.SetRasterState(state);
 	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error on raster state set without device";
 
 	// Valid call
-	testDirectX.CreateDevice();
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+
 	error = testDirectX.SetRasterState(state);
 	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid raster state set";
+}
+
+
+TEST_F(SDXDirectXUTest, SetDepthStencilState)
+{
+	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+	// Set up the description of the stencil state.
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilReadMask = 0xFF;
+	depthStencilDesc.StencilWriteMask = 0xFF;
+
+	// Stencil operations if pixel is front-facing.
+	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Stencil operations if pixel is back-facing.
+	depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Try set without initialising
+	error = testDirectX.SetDepthStencilState(depthStencilDesc);
+	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
+
+	// Valid test
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+
+	error = testDirectX.SetDepthStencilState(depthStencilDesc);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Failed to set valid depth stencil state";
+}
+
+
+TEST_F(SDXDirectXUTest, ShutDown)
+{
+	SDXDirectX testDirectX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	validSetup.windowed = true;
+	validSetup.refreshRate = 60;
+
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+
+	testDirectX.ShutDown();
+
+	error = testDirectX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 }

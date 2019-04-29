@@ -42,16 +42,16 @@ namespace SDXEngine
 		float GetSlopeScaledDepthBias() const;
 
 	private:
-		bool m_bWireFrame;
-		bool m_bFrontCounterClockwise;
-		bool m_bDepthClip;
-		bool m_bScissor;
-		bool m_bMultiSample;
-		bool m_bAntialisedLine;
+		bool m_bWireFrame = false;
+		bool m_bFrontCounterClockwise = false;
+		bool m_bDepthClip = true;
+		bool m_bScissor = false;
+		bool m_bMultiSample = false;
+		bool m_bAntialisedLine = false;
 
-		SDXCullMode m_cullMode;
-		float m_depthBiasClamp;
-		float m_slopeScaledDepthBias;
+		SDXCullMode m_cullMode = SDX_CULL_BACK;
+		float m_depthBiasClamp = 0.f;
+		float m_slopeScaledDepthBias = 0.f;
 	};
 
 }

@@ -13,6 +13,8 @@
 #include "..\SDXEngine\SDXRenderer.h"
 #include "..\SDXEngine\SDXCameraFP.h"
 
+
+
 using namespace SDXEngine;
 
 class SDXApp : public SDXEngine::SDXBaseApp

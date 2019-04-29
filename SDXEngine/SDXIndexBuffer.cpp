@@ -22,7 +22,7 @@ SDXErrorId SDXIndexBuffer::LoadData(SDXMeshData* meshData, SDXDirectX* inDirectX
 	if (inDirectX == nullptr)
 		return SDX_ERROR_INDEXBUFFER_DIRECTX_NULL;
 
-	ID3D11Device* device = inDirectX->GetDevice();
+	ID3D11Device* device = inDirectX->GetDevice().Get();
 
 	if (device == nullptr)
 		return SDX_ERROR_DEVICE_NOT_CREATED;

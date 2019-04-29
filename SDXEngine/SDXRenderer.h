@@ -23,30 +23,6 @@ namespace SDXEngine
 		SDXSubMesh* submesh;
 	};
 
-	// DirectX info setup
-	struct SDXDirectXInfo
-	{
-		UINT clientWidth;
-		UINT clientHeight;
-		HWND hwnd;
-		UINT refreshRate;
-		bool windowed;
-		bool useMsaa;
-
-		SDXDirectXInfo()
-		{
-			// Client must set these
-			clientWidth = 0;
-			clientHeight = 0;
-			hwnd = nullptr;
-
-			// Optional, set as defaults
-			refreshRate = 60;
-			windowed = true;
-			useMsaa = false;
-		}
-	};
-
 	// Testing for vertex shader uniform
 	typedef struct _constantBufferStruct {
 		DirectX::XMFLOAT4X4 world;

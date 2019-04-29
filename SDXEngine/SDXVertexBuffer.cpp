@@ -3,7 +3,6 @@
 
 using namespace SDXEngine;
 
-
 SDXVertexBuffer::SDXVertexBuffer() : m_buffer(nullptr), m_count(0), m_type(SDXVERTEX_TYPE_UNKNOWN)
 {
 }
@@ -30,7 +29,7 @@ SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXDirec
 	if (meshData->GetVertexType() == SDXVERTEX_TYPE_UNKNOWN)
 		return SDX_ERROR_VERTEXBUFFER_UNKNOWN_VERTEXTYPE;
 
-	ID3D11Device* device = inDirectX->GetDevice();
+	ID3D11Device* device = inDirectX->GetDevice().Get();
 
 	if (device == nullptr)
 		return SDX_ERROR_DEVICE_NOT_CREATED;
