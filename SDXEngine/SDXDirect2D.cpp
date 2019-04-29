@@ -3,77 +3,154 @@
 
 using namespace SDXEngine;
 
-SDXDirect2D::SDXDirect2D() : m_directX(nullptr), m_writeFactory(nullptr), m_device(nullptr), m_context(nullptr), m_yellowBrush(nullptr),
-	m_whiteBrush(nullptr), m_blackBrush(nullptr), m_textFormat(nullptr), m_textLayout(nullptr), m_targetBitmap(nullptr)
+SDXDirect2D::SDXDirect2D() : m_directX(nullptr), 
+	m_writeFactory(nullptr), 
+	m_device(nullptr), 
+	m_context(nullptr), 
+	m_textFormat(nullptr), 
+	m_textLayout(nullptr), 
+	m_targetBitmap(nullptr)
 {
 }
-
 
 SDXDirect2D::~SDXDirect2D()
 {
-	if (m_targetBitmap)
-	{
-		m_targetBitmap->Release();
-		m_targetBitmap = nullptr;
-	}
-
-	if (m_textLayout)
-	{
-		m_textLayout->Release();
-		m_textLayout = nullptr;
-	}
-
-	if (m_textFormat)
-	{
-		m_textFormat->Release();
-		m_textFormat = nullptr;
-	}
-
-	if (m_blackBrush)
-	{
-		m_blackBrush->Release();
-		m_blackBrush = nullptr;
-	}
-
-	if (m_whiteBrush)
-	{
-		m_whiteBrush->Release();
-		m_whiteBrush = nullptr;
-	}
-
-	if (m_yellowBrush)
-	{
-		m_yellowBrush->Release();
-		m_yellowBrush = nullptr;
-	}
-
-	if (m_context)
-	{
-		m_context->Release();
-		m_context = nullptr;
-	}
-
-	if (m_device)
-	{
-		m_device->Release();
-		m_device = nullptr;
-	}
-
-	if (m_writeFactory)
-	{
-		m_writeFactory->Release();
-		m_writeFactory = nullptr;
-	}
 }
 
-SDXErrorId SDXDirect2D::SetSDXDirectX(SDXDirectX * directX)
+SDXErrorId SDXEngine::SDXDirect2D::Initialise(SDXDirectX* pDX)
 {
-	if (directX)
+	if (pDX == nullptr)
+		return SDX_ERROR_DIRECT2D_NULLPTR_SET;
+
+	m_directX = pDX;
+	SDXErrorId error = SDX_ERROR_NONE;
+	error = CreateDevice();
+	if (IsError(error))
+		return error;
+
+	error = CreateBitmapRenderTarget();
+	if (IsError(error))
+		return error;
+
+	error = InitialiseTextFormats();
+	if (IsError(error))
+		return error;
+
+	m_bInit = true;
+	return error;
+}
+
+SDXErrorId SDXEngine::SDXDirect2D::RenderText(UINT x, UINT y, const std::string & text)
+{
+	if (!m_bInit)
+		return SDX_ERROR_DIRECT2D_NOT_INITIALISED;
+
+	if (m_context == nullptr)
+		return SDX_ERROR_DIRECT2D_DEVICE_NOT_CREATED;
+
+	// Default brush colour yellow, expand for other colours later
+	if (m_textFormat == nullptr || m_colorBrush == nullptr)
+		return SDX_ERROR_DIRECT2D_TEXTFORMAT_NOT_SETUP;
+
+	HRESULT result = S_OK;
+	if (text != m_textToDraw)
 	{
-		m_directX = directX;
-		return SDX_ERROR_NONE;
+		// Create text
+		std::wstring drawText = StringToWideString(text);
+		result = m_writeFactory->CreateTextLayout(drawText.c_str(), static_cast<UINT32>(drawText.size()), m_textFormat.Get(),
+			static_cast<float>(m_directX->GetClientAreaWidth()), static_cast<float>(m_directX->GetClientAreaHeight()),
+			&m_textLayout);
+
+		if (SUCCEEDED(result))
+		{
+			m_textLayout->GetMetrics(&m_textMetrics);
+			m_textToDraw = text;
+		}
 	}
-	return SDX_ERROR_DIRECT2D_NULLPTR_SET;
+
+	if (SUCCEEDED(result))
+	{
+		// Draw the text
+		m_context->BeginDraw();
+		m_context->DrawTextLayout(D2D1::Point2F(static_cast<float>(x), static_cast<float>(y)), m_textLayout.Get(), m_colorBrush.Get());
+		m_context->EndDraw();
+		if (SUCCEEDED(result))
+			return SDX_ERROR_NONE;
+	}
+
+	return SDX_ERROR_DIRECT2D_DRAWTEXT_FAILED;
+}
+
+SDXErrorId SDXEngine::SDXDirect2D::SetRenderText(const std::string text)
+{
+	SDXErrorId error = SDX_ERROR_NONE;
+
+	if (!m_bInit)
+		return SDX_ERROR_DIRECT2D_NOT_INITIALISED;
+
+	if (m_context == nullptr)
+		return SDX_ERROR_DIRECT2D_DEVICE_NOT_CREATED;
+
+	// Default brush colour yellow, expand for other colours later
+	if (m_textFormat == nullptr || m_colorBrush == nullptr)
+		return SDX_ERROR_DIRECT2D_TEXTFORMAT_NOT_SETUP;
+
+	HRESULT result = S_OK;
+	if (text != m_textToDraw)
+	{
+		// Create text
+		std::wstring drawText = std::wstring(text.begin(), text.end());
+		HRESULT result = m_writeFactory->CreateTextLayout(drawText.c_str(), static_cast<UINT32>(drawText.size()), m_textFormat.Get(),
+			static_cast<float>(m_directX->GetClientAreaWidth()), static_cast<float>(m_directX->GetClientAreaHeight()),
+			m_textLayout.ReleaseAndGetAddressOf());
+
+		if (SUCCEEDED(result))
+		{
+			m_textLayout->GetMetrics(&m_textMetrics);
+			m_textToDraw = text;
+			return SDX_ERROR_NONE;
+		}
+	}
+
+	return SDX_ERROR_DIRECT2D_SETUPTEXTFORMAT_FAILED;
+}
+
+SDXErrorId SDXEngine::SDXDirect2D::RenderText(UINT x, UINT y)
+{
+	if (!m_bInit)
+		return SDX_ERROR_DIRECT2D_NOT_INITIALISED;
+
+	if (m_textLayout.Get())
+	{
+		// Draw the text
+		m_context->BeginDraw();
+		m_context->DrawTextLayout(D2D1::Point2F(static_cast<float>(x), static_cast<float>(y)), m_textLayout.Get(), m_colorBrush.Get());
+		HRESULT result = m_context->EndDraw();
+		if (SUCCEEDED(result))
+			return SDX_ERROR_NONE;
+	}
+
+	return SDX_ERROR_DIRECT2D_DRAWTEXT_FAILED;
+}
+
+float SDXEngine::SDXDirect2D::GetRenderTextWidth() const
+{
+	return m_textMetrics.width;
+}
+
+float SDXEngine::SDXDirect2D::GetRenderTextHeight() const
+{
+	return m_textMetrics.height;
+}
+
+void SDXEngine::SDXDirect2D::ShutDown()
+{
+	m_targetBitmap = nullptr;
+	m_textLayout = nullptr;
+	m_colorBrush = nullptr;
+	m_context = nullptr;
+	m_device = nullptr;
+	m_writeFactory = nullptr;
 }
 
 SDXErrorId SDXEngine::SDXDirect2D::CreateDevice()
@@ -90,72 +167,59 @@ SDXErrorId SDXEngine::SDXDirect2D::CreateDevice()
 
 	// Create the DWrite factory
 	HRESULT result = DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
-		reinterpret_cast<IUnknown**>(&m_writeFactory));
+		reinterpret_cast<IUnknown * *>(m_writeFactory.ReleaseAndGetAddressOf()));
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_DEVICE_CREATE_FAILED;
 
-	if (SUCCEEDED(result))
-	{
-		// Get the dxgi device
-		IDXGIDevice* dxgiDevice = nullptr;
-		result = m_directX->GetDevice()->QueryInterface(__uuidof(IDXGIDevice),
-			reinterpret_cast<void**>(&dxgiDevice));
+	// Get the dxgi device
+	ComPtr<IDXGIDevice> dxgiDevice = nullptr;
+	result = m_directX->GetDevice()->QueryInterface(__uuidof(IDXGIDevice),
+		reinterpret_cast<void**>(dxgiDevice.ReleaseAndGetAddressOf()));
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_DEVICE_CREATE_FAILED;
 
-		if (SUCCEEDED(result))
-		{
-			// Create the Direct2D factory
-			D2D1_FACTORY_OPTIONS options;
+	// Create the Direct2D factory
+	D2D1_FACTORY_OPTIONS options;
 #if defined (DEBUG) | defined(_DEBUG)
-			options.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
+	options.debugLevel = D2D1_DEBUG_LEVEL_INFORMATION;
 #else
-			options.debugLevel = D2D1_DEBUG_LEVEL_NONE;
+	options.debugLevel = D2D1_DEBUG_LEVEL_NONE;
 #endif
-			ID2D1Factory2* factory = nullptr;
-			result = D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, __uuidof(ID2D1Factory2),
-				&options, reinterpret_cast<void**>(&factory));
+	ComPtr<ID2D1Factory2> factory = nullptr;
+	result = D2D1CreateFactory(D2D1_FACTORY_TYPE_MULTI_THREADED, __uuidof(ID2D1Factory2),
+		&options, reinterpret_cast<void**>(factory.ReleaseAndGetAddressOf()));
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_DEVICE_CREATE_FAILED;
 
-			if (SUCCEEDED(result))
-			{
-				// Create Direct2D device
-				// Can fail if directX device not set to support D3D11_CREATE_DEVICE_BGRA_SUPPORT (SDXDirectX)
-				result = factory->CreateDevice(dxgiDevice, &m_device);
+	// Create Direct2D device
+	// Can fail if directX device not set to support D3D11_CREATE_DEVICE_BGRA_SUPPORT (SDXDirectX)
+	result = factory->CreateDevice(dxgiDevice.Get(), m_device.ReleaseAndGetAddressOf());
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_DEVICE_CREATE_FAILED;
 
-				if (SUCCEEDED(result))
-				{
-					// Create the context
-					result = m_device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_ENABLE_MULTITHREADED_OPTIMIZATIONS,
-						&m_context);
-					
-					if (SUCCEEDED(result))
-					{
-						// Relase un-needed factories/dxgiDevice
-						dxgiDevice->Release();
-						factory->Release();
-						return SDX_ERROR_NONE;
-					}
-				}
-				factory->Release();
-			}
-			dxgiDevice->Release();
-		}
-	}
+	// Create the context
+	result = m_device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_ENABLE_MULTITHREADED_OPTIMIZATIONS,
+		&m_context);
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_DEVICE_CREATE_FAILED;
 
-	return SDX_ERROR_DIRECT2D_DEVICE_CREATE_FAILED;
+	return SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXEngine::SDXDirect2D::CreateBitmapRenderTarget()
 {
-	ID2D1Image* pImage = nullptr;
-
 	if (m_directX == nullptr)
 		return SDX_ERROR_DIRECT2D_NOT_SET_DIRECTX;
 
 	if (m_context == nullptr)
 		return SDX_ERROR_DIRECT2D_DEVICE_NOT_CREATED;
 
+	ID2D1Image * pImage = nullptr;
 	m_context->GetTarget(&pImage);
 
 	if (pImage != nullptr)
 	{
-		// Relase! We're deferencing the counter and not deleting the it.
+		// Release! We're deferencing the counter and not deleting the it.
 		// Else check against m_targetBitmap and not bother with the GetTarget().
 		pImage->Release();
 		return SDX_ERROR_DIRECT2D_BITMAPRENDERTARGET_ALREADY_CREATED;
@@ -171,115 +235,47 @@ SDXErrorId SDXEngine::SDXDirect2D::CreateBitmapRenderTarget()
 	bProps.colorContext = nullptr;
 
 	// Get DXGI version of the backbuffer for Direct2D
-	IDXGISurface* dxgiBuffer = nullptr;
-	IDXGISwapChain* swapChain = m_directX->GetSwapChain();
+	ComPtr<IDXGISurface> dxgiBuffer = nullptr;
+	ComPtr<IDXGISwapChain> swapChain = m_directX->GetSwapChain();
 	if (swapChain == nullptr)
 		return SDX_ERROR_SWAPCHAIN_NOT_CREATED;
 
-	HRESULT result = swapChain->GetBuffer(0, __uuidof(IDXGISurface), reinterpret_cast<void**>(&dxgiBuffer));
+	HRESULT result = swapChain->GetBuffer(0, __uuidof(IDXGISurface), reinterpret_cast<void**>(dxgiBuffer.ReleaseAndGetAddressOf()));
 
 	if (SUCCEEDED(result))
 	{
 		// Create the bitmap
-		result = m_context->CreateBitmapFromDxgiSurface(dxgiBuffer, &bProps, &m_targetBitmap);
+		result = m_context->CreateBitmapFromDxgiSurface(dxgiBuffer.Get(), &bProps, m_targetBitmap.ReleaseAndGetAddressOf());
 		if (SUCCEEDED(result))
 		{
 			// Set newly created bitmap as render target
-			m_context->SetTarget(m_targetBitmap);
-			dxgiBuffer->Release();
+			m_context->SetTarget(m_targetBitmap.Get());
 			return SDX_ERROR_NONE;
 		}
-		dxgiBuffer->Release();
 	}
-	
+
 	return SDX_ERROR_DIRECT2D_BITMAPRENDERTARGET_CREATE_FAILED;
 }
 
 SDXErrorId SDXEngine::SDXDirect2D::InitialiseTextFormats()
 {
-	SDXErrorId error = CreateBrushes();
+	HRESULT result;
+	result = m_context->CreateSolidColorBrush(D2D1::ColorF(0, 255, 0), m_colorBrush.ReleaseAndGetAddressOf());
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_CREATEBURSHES_FAILED;
 
-	if (error == SDX_ERROR_NONE)
-	{
-		error = SetupTextFormat();
-	}
+	result = m_writeFactory->CreateTextFormat(L"Lucudia Console", nullptr, DWRITE_FONT_WEIGHT_LIGHT,
+		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 14.0f, L"en-GB", m_textFormat.ReleaseAndGetAddressOf());
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_SETUPTEXTFORMAT_FAILED;
 
-	return error;
+	result = m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_SETUPTEXTFORMAT_FAILED;
+
+	result = m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+	if (FAILED(result))
+		return SDX_ERROR_DIRECT2D_SETUPTEXTFORMAT_FAILED;
+
+	return SDX_ERROR_NONE;
 }
-
-SDXErrorId SDXEngine::SDXDirect2D::RenderText(UINT x, UINT y, const std::string & text)
-{
-	if (m_context == nullptr)
-		return SDX_ERROR_DIRECT2D_DEVICE_NOT_CREATED;
-
-	// Default brush colour yellow, expand for other colours later
-	if (m_textFormat == nullptr || m_yellowBrush == nullptr)
-		return SDX_ERROR_DIRECT2D_TEXTFORMAT_NOT_SETUP;
-
-	// Create text
-	std::wstring drawText = StringToWideString(text);
-	HRESULT result = m_writeFactory->CreateTextLayout(drawText.c_str(), static_cast<UINT32>(drawText.size()), m_textFormat,
-		static_cast<float>(m_directX->GetClientAreaWidth()), static_cast<float>(m_directX->GetClientAreaHeight()),
-			&m_textLayout);
-
-	if (SUCCEEDED(result))
-	{
-		// Draw the text
-		m_context->BeginDraw();
-		m_context->DrawTextLayout(D2D1::Point2F(static_cast<float>(x), static_cast<float>(y)), m_textLayout, m_yellowBrush);
-		result = m_context->EndDraw();
-		if (SUCCEEDED(result))
-			return SDX_ERROR_NONE;
-	}
-
-	return SDX_ERROR_DIRECT2D_DRAWTEXT_FAILED;
-}
-
-SDXErrorId SDXEngine::SDXDirect2D::CreateBrushes()
-{
-	if (m_context == nullptr)
-		return SDX_ERROR_DIRECT2D_DEVICE_NOT_CREATED;
-
-	// Create standard brushes
-	HRESULT result = m_context->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow), &m_yellowBrush);
-	if (SUCCEEDED(result))
-	{
-		result = m_context->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_blackBrush);
-		if (SUCCEEDED(result))
-		{
-			result = m_context->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White), &m_whiteBrush);
-			if(SUCCEEDED(result))
-			{
-				return SDX_ERROR_NONE;
-			}
-		}
-	}
-
-	return SDX_ERROR_DIRECT2D_CREATEBURSHES_FAILED;
-}
-
-SDXErrorId SDXEngine::SDXDirect2D::SetupTextFormat()
-{
-	if (m_writeFactory == nullptr)
-		return SDX_ERROR_DIRECT2D_DEVICE_NOT_CREATED;
-		
-	HRESULT result = m_writeFactory->CreateTextFormat(L"Lucudia Console", nullptr, DWRITE_FONT_WEIGHT_LIGHT,
-		DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, 12.0f, L"en-GB", &m_textFormat);
-
-	if (SUCCEEDED(result))
-	{
-		result = m_textFormat->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_LEADING);
-		if(SUCCEEDED(result))
-		{
-			result = m_textFormat->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
-			if (SUCCEEDED(result))
-			{
-				return SDX_ERROR_NONE;
-			}
-		}
-	}
-
-	return SDX_ERROR_DIRECT2D_SETUPTEXTFORMAT_FAILED;
-}
-
-

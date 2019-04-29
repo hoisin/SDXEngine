@@ -11,29 +11,16 @@
 
 #include "SDXRasterState.h"
 
+#include "SDXSubMesh.h"
+
 namespace SDXEngine
 {
-	struct SDXDirectXInfo
+	struct SDXDrawItem
 	{
-		UINT clientWidth;
-		UINT clientHeight;
-		HWND hwnd;
-		UINT refreshRate;
-		bool windowed;
-		bool useMsaa;
+		XMFLOAT3 worldPos;
+		XMFLOAT3 rotation;
 
-		SDXDirectXInfo()
-		{
-			// Client must set these
-			clientWidth = 0;
-			clientHeight = 0;
-			hwnd = nullptr;
-
-			// Optional, set as defaults
-			refreshRate = 60;
-			windowed = true;
-			useMsaa = false;
-		}
+		SDXSubMesh* submesh;
 	};
 
 	// Testing for vertex shader uniform

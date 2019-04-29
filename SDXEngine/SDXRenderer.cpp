@@ -20,6 +20,7 @@ SDXRenderer::SDXRenderer()
 	m_indexCount = 0;
 
 	m_testFrameCount = 0;
+	m_worldViewProj = ConstantBufferStruct();
 }
 
 SDXRenderer::~SDXRenderer()
@@ -70,57 +71,12 @@ SDXErrorId SDXEngine::SDXRenderer::Initialise(const SDXDirectXInfo & info)
 	if (info.hwnd == nullptr)
 		return SDX_ERROR_RENDERER_OUTPUTWINDOW_NOT_SET;
 		
-	// Create device
-	SDXErrorId error = m_directX.CreateDevice();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	// Setup directX
-	m_directX.SetClientArea(info.clientWidth, info.clientHeight);
-	m_directX.SetOutputWindow(info.hwnd);
-	m_directX.SetRefreshRate(info.refreshRate);
-	m_directX.SetWindowed(info.windowed);
-
-	// Check MSAA quality and set
-	UINT quality = 0;
-	error = m_directX.Check4XMSAAQuality(quality);
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	m_directX.SetUse4XMSAA(info.useMsaa, quality);
-
-	// Create the swap chain
-	error = m_directX.CreateSwapChain();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	// Create the render target view
-	error = m_directX.CreateRenderTargetView();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	// Create the depth/stencil view
-	error = m_directX.CreateDepthStencilBufferView();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	// Bind the output merger
-	error = m_directX.BindOutputMerger();
-	if (error != SDX_ERROR_NONE)
-		return error;
+	SDXErrorId error = SDX_ERROR_NONE;
+	error = m_directX.Initialise(info);
 
 	// Setup direct2D stuff
-	m_direct2D.SetSDXDirectX(&m_directX);
-	error = m_direct2D.CreateDevice();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	error = m_direct2D.CreateBitmapRenderTarget();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	error = m_direct2D.InitialiseTextFormats();
-	if (error != SDX_ERROR_NONE)
+	error = m_direct2D.Initialise(&m_directX);
+	if (IsError(error))
 		return error;
 
 	return SDX_ERROR_NONE;
@@ -191,7 +147,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateShaders()
 //
 SDXErrorId SDXEngine::SDXRenderer::CreateCube()
 {
-	ID3D11Device* device = m_directX.GetDevice();
+	ID3D11Device* device = m_directX.GetDevice().Get();
 	if (!device)
 		return SDX_ERROR_DEVICE_NOT_CREATED;
 
@@ -288,10 +244,10 @@ void SDXEngine::SDXRenderer::UpdateTest()
 void SDXEngine::SDXRenderer::RenderCube()
 {
 	// Use the Direct3D device context to draw.
-	ID3D11DeviceContext* context = m_directX.GetContext();
+	ID3D11DeviceContext* context = m_directX.GetContext().Get();
 
-	ID3D11RenderTargetView* renderTarget = m_directX.GetRenderTargetView();
-	ID3D11DepthStencilView* depthStencil = m_directX.GetDepthStencilView();
+	ID3D11RenderTargetView* renderTarget = m_directX.GetRenderTargetView().Get();
+	ID3D11DepthStencilView* depthStencil = m_directX.GetDepthStencilView().Get();
 
 	context->UpdateSubresource(
 		m_constantBuffer,
@@ -375,7 +331,7 @@ void SDXEngine::SDXRenderer::EnableWireFrame(bool bEnable)
 
 SDXErrorId SDXEngine::SDXRenderer::CreateVertexShader()
 {
-	ID3D11Device* device = m_directX.GetDevice();
+	ID3D11Device* device = m_directX.GetDevice().Get();
 
 	if (!device)
 		return SDX_ERROR_DEVICE_NOT_CREATED;
@@ -447,7 +403,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateVertexShader()
 
 SDXErrorId SDXEngine::SDXRenderer::CreatePixelShader()
 {
-	ID3D11Device* device = m_directX.GetDevice();
+	ID3D11Device* device = m_directX.GetDevice().Get();
 
 	if (!device)
 		return SDX_ERROR_DEVICE_NOT_CREATED;
@@ -491,7 +447,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreatePixelShader()
 
 SDXErrorId SDXEngine::SDXRenderer::BindConstants()
 {
-	ID3D11Device* device = m_directX.GetDevice();
+	ID3D11Device* device = m_directX.GetDevice().Get();
 
 	if (!device)
 		return SDX_ERROR_DEVICE_NOT_CREATED;

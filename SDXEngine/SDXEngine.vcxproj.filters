@@ -103,6 +103,9 @@
     <ClInclude Include="SDXRasterState.h">
       <Filter>Gfx\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="SDXMesh.h">
+      <Filter>Gfx\DirectX\Mesh</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -161,6 +164,12 @@
     </ClCompile>
     <ClCompile Include="SDXRasterState.cpp">
       <Filter>Gfx\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMesh.cpp">
+      <Filter>Gfx\DirectX\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXErrors.cpp">
+      <Filter>App</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
