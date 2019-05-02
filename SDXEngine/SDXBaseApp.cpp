@@ -86,20 +86,20 @@ void SDXBaseApp::Run()
 		}
 		else
 		{
+			m_timer.Tick();
+
 			// Run loop only when the app is active
 			if (m_bAppActive)
 			{
-				OnUpdate(m_timer.DeltaTime());
-				OnDraw(m_timer.DeltaTime());
-				CalculateFrameStats(m_timer.DeltaTime());
+				OnUpdate(m_timer.DeltaTimeSecs());
+				OnDraw(m_timer.DeltaTimeSecs());
+				CalculateFrameStats(m_timer.DeltaTimeSecs());
 			}
 			else
 			{
 				// Avoid hogging resources if not active
 				Sleep(200);
 			}
-
-			m_timer.Tick();
 		}
 	}
 

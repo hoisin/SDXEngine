@@ -50,15 +50,6 @@ namespace SDXEngine
 		SDXErrorId Initialise(const SDXDirectXInfo& setupInfo);
 		SDXErrorId ReInitWindowDependentResources(const SDXDirectXInfo& setupInfo);
 
-		// Likely to remove these
-		// ------------------------------------------------
-		void SetClientArea(UINT width, UINT height);
-		void SetRefreshRate(UINT rate);
-		void SetOutputWindow(HWND hWnd);
-		void SetWindowed(bool IsWindowed);
-		void SetUse4XMSAA(bool bUse, UINT quality = 0);
-		// ------------------------------------------------
-
 		// Render functions
 		void ClearRenderTargetView(float red = 0, float green = 0, float blue = 0);
 		void ClearDepthStencilView();

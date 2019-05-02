@@ -36,6 +36,9 @@
     <ClCompile Include="SDXVertexBufferUTest.cpp">
       <Filter>Gfx\DirectX\Buffers</Filter>
     </ClCompile>
+    <ClCompile Include="CTimerUTest.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="SDXVertexBufferUTest.h">
       <Filter>Gfx\DirectX\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimerUTest.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

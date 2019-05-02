@@ -78,33 +78,6 @@ SDXErrorId SDXEngine::SDXDirectX::ReInitWindowDependentResources(const SDXDirect
 	return error;
 }
 
-void SDXEngine::SDXDirectX::SetClientArea(UINT width, UINT height)
-{
-	m_width = width;
-	m_height = height;
-}
-
-void SDXEngine::SDXDirectX::SetRefreshRate(UINT rate)
-{
-	m_refreshRate = rate;
-}
-
-void SDXEngine::SDXDirectX::SetOutputWindow(HWND hWnd)
-{
-	m_hWnd = hWnd;
-}
-
-void SDXEngine::SDXDirectX::SetWindowed(bool IsWindowed)
-{
-	m_windowed = IsWindowed;
-}
-
-void SDXEngine::SDXDirectX::SetUse4XMSAA(bool bUse, UINT quality)
-{
-	m_UseMsaa = bUse;
-	m_msaaQuality = quality;
-}
-
 void SDXEngine::SDXDirectX::ClearRenderTargetView(float red, float green, float blue)
 {
 	if (m_d3d11Context.Get())

@@ -49,6 +49,7 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClInclude Include="CTimerUTest.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SDXDirect2DUTest.h" />
     <ClInclude Include="SDXDirectXShaderCompilerUTest.h" />
@@ -63,6 +64,7 @@
     <ClInclude Include="SDXVertexBufferUTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CTimerUTest.cpp" />
     <ClCompile Include="SDXDirect2DUTest.cpp" />
     <ClCompile Include="SDXDirectXShaderCompilerUTest.cpp" />
     <ClCompile Include="SDXDirectXUTest.cpp" />
