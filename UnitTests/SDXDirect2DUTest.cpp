@@ -93,3 +93,24 @@ TEST_F(SDXDirect2DUTest, RenderText)
 	direct2D.ShutDown();
 	testDirectX.ShutDown();
 } 
+
+TEST_F(SDXDirect2DUTest, ShutDown)
+{
+	// Valid set 
+	SDXDirectX directX;
+	SDXDirectXInfo validSetup;
+	validSetup.clientWidth = 800;
+	validSetup.clientHeight = 600;
+	validSetup.hwnd = m_testApp.GetHwndTest();
+	SDXErrorId error = directX.Initialise(validSetup);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initalise";
+
+	SDXDirect2D direct2D;
+	error = direct2D.Initialise(&directX);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on Direct2D initialise";
+
+	direct2D.ShutDown();
+
+	error = direct2D.Initialise(&directX);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on Direct2D initialise after shutdown";
+}

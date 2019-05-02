@@ -1,69 +1,69 @@
 #include "stdafx.h"
 #include "CTimer.h"
 
-CTimer::CTimer(void) :
-	m_secondsPerCount(0.0),
-	m_deltaTime(-1.0),
-	m_currentTime(0),
-	m_prevTime(0),
-	m_stopTime(0),
-	m_pauseTime(0),
-	m_baseTime(0),
-	m_bStopped(false)
+CTimer::CTimer()
 {
-	__int64 countsPerSecond;
-
-	// Grab number of clock counts per second
-	QueryPerformanceFrequency((LARGE_INTEGER*) &countsPerSecond);
-
-	// Flip so we don't need to "/" for values later on
-	m_secondsPerCount = 1.0 / (double)countsPerSecond;
-
 	// Initialise the timer 
 	Reset();
 }
 
 
+CTimer::~CTimer()
+{
+}
+
 double CTimer::Time(void) const
 {
-	if(m_bStopped)
-		return (double)(((m_stopTime - m_pauseTime) - m_baseTime) * m_secondsPerCount);
+	if (m_bStopped)
+	{
+		std::chrono::time_point<std::chrono::steady_clock> t1(m_stopPoint - m_pauseDuration);
+		auto getTime = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - m_base);
+		return getTime.count() * 0.001;
+	}
 	else
-		return (double)(((m_currentTime - m_pauseTime) - m_baseTime) * m_secondsPerCount);
+	{
+		std::chrono::time_point<std::chrono::steady_clock> t1(m_current - m_pauseDuration);
+		auto getTime = std::chrono::duration_cast<std::chrono::milliseconds>(t1 - m_base);
+		return getTime.count() * 0.001;
+	}
 }
 
 
-double CTimer::DeltaTime(void) const
+double CTimer::DeltaTimeMicro() const
 {
 	return m_deltaTime;
 }
 
+double CTimer::DeltaTimeMilli() const
+{
+	return m_deltaTime * 0.001;
+}
+
+double CTimer::DeltaTimeSecs() const
+{
+	return m_deltaTime * 0.000001;
+}
 
 void CTimer::Reset(void)
 {
-	__int64 currentTime;
-	QueryPerformanceCounter((LARGE_INTEGER*) &currentTime);
-
-	m_currentTime = currentTime;
-	m_baseTime = currentTime;
-	m_prevTime = currentTime;
-	m_stopTime = currentTime;
-	m_pauseTime = 0;
+	m_current = m_timer.now();
+	m_previous = m_current;
+	m_stopPoint = m_current;
+	m_base = m_current;
+	m_pauseDuration = {};
 }
 
 
 void CTimer::Start(void)
 {
-	__int64 startTime;
-	QueryPerformanceCounter((LARGE_INTEGER*)&startTime);
-
-	if(m_bStopped)
+	auto start = m_timer.now();
+	if (m_bStopped)
 	{
-		m_pauseTime += (startTime - m_stopTime);
+		m_pauseDuration += (start - m_stopPoint);
 
-		m_prevTime = startTime;
+		m_previous = start;
 
-		m_stopTime = startTime;
+		m_stopPoint = start;
 		m_bStopped = false;
 	}
 }
@@ -71,12 +71,9 @@ void CTimer::Start(void)
 
 void CTimer::Stop(void)
 {
-	if(!m_bStopped)
+	if (!m_bStopped)
 	{
-		__int64 currentTime;
-		QueryPerformanceCounter((LARGE_INTEGER*)&currentTime);
-
-		m_stopTime = currentTime;
+		m_stopPoint = m_current;
 		m_bStopped = true;
 	}
 }
@@ -84,22 +81,21 @@ void CTimer::Stop(void)
 
 void CTimer::Tick(void)
 {
-	if(m_bStopped)
+	// Delta time 0 when stopped
+	if (m_bStopped)
 	{
 		m_deltaTime = 0.0;
 		return;
 	}
 
-	__int64 currentTime;
+	m_current = m_timer.now();
+	auto delta = std::chrono::duration_cast<std::chrono::microseconds>(
+		m_current - m_previous);
 
-	QueryPerformanceCounter((LARGE_INTEGER*) &currentTime);
-	m_currentTime = currentTime;
+	m_deltaTime = static_cast<double>(delta.count());
 
-	m_deltaTime = (m_currentTime - m_prevTime) * m_secondsPerCount;
+	m_previous = m_current;
 
-	m_prevTime = m_currentTime;
-
-	if(m_deltaTime < 0.0)
+	if (m_deltaTime < 0.0)
 		m_deltaTime = 0.0;
-
 }
