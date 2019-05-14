@@ -35,6 +35,9 @@
     <Filter Include="Gfx\DirectX\Buffers">
       <UniqueIdentifier>{5f5cea46-09e5-4b76-948f-0039c5c3d48a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gfx\DirectX\Shader">
+      <UniqueIdentifier>{26369dec-2120-4dce-8886-84a12396880d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -106,6 +109,12 @@
     <ClInclude Include="SDXMesh.h">
       <Filter>Gfx\DirectX\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="SDXShaderMGR.h">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXShaderLoader.h">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -170,6 +179,12 @@
     </ClCompile>
     <ClCompile Include="SDXErrors.cpp">
       <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXShaderMGR.cpp">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXShaderLoader.cpp">
+      <Filter>Gfx\DirectX\Shader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

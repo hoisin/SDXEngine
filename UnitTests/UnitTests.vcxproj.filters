@@ -39,6 +39,9 @@
     <ClCompile Include="CTimerUTest.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
+    <ClCompile Include="CShaderLoaderUTest.cpp">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -78,6 +81,9 @@
     <ClInclude Include="CTimerUTest.h">
       <Filter>Utility</Filter>
     </ClInclude>
+    <ClInclude Include="CShaderLoaderUTest.h">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="App">
@@ -103,6 +109,9 @@
     </Filter>
     <Filter Include="Gfx\DirectX\Buffers">
       <UniqueIdentifier>{a8d2107e-1185-40df-9853-eb57f2ab9a45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\DirectX\Shader">
+      <UniqueIdentifier>{55d331aa-11e4-47c7-9067-b52afcd091c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

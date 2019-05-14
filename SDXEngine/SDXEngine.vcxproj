@@ -188,6 +188,8 @@
     <ClInclude Include="SDXMouse.h" />
     <ClInclude Include="SDXRenderer.h" />
     <ClInclude Include="SDXRasterState.h" />
+    <ClInclude Include="SDXShaderLoader.h" />
+    <ClInclude Include="SDXShaderMGR.h" />
     <ClInclude Include="SDXSubMesh.h" />
     <ClInclude Include="SDXUtility.h" />
     <ClInclude Include="SDXVertexBuffer.h" />
@@ -212,6 +214,8 @@
     <ClCompile Include="SDXMouse.cpp" />
     <ClCompile Include="SDXRenderer.cpp" />
     <ClCompile Include="SDXRasterState.cpp" />
+    <ClCompile Include="SDXShaderLoader.cpp" />
+    <ClCompile Include="SDXShaderMGR.cpp" />
     <ClCompile Include="SDXSubMesh.cpp" />
     <ClCompile Include="SDXUtility.cpp" />
     <ClCompile Include="SDXVertexBuffer.cpp" />
