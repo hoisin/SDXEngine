@@ -28,7 +28,8 @@ namespace SDXEngine
 
 		SDXErrorId Initialise(SDXDirectX* pDX);
 
-		SDXErrorId LoadShader();
+		SDXErrorId LoadShader(const std::string& vertexShaderFile, const std::string& pixelShaderFile,
+			D3D11_INPUT_ELEMENT_DESC* desc, int inputElements, const std::string& assignID);
 
 		SDXErrorId BindConstant();
 
@@ -45,5 +46,7 @@ namespace SDXEngine
 
 	private:
 		SDXShaderLoader m_loadHelper;
+
+		SDXDirectX* m_pDX = nullptr;
 	};
 };
