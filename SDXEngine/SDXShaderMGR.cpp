@@ -29,3 +29,26 @@ SDXErrorId SDXEngine::SDXShaderMGR::LoadShader(const std::string& vertexShaderFi
 
 	return SDX_ERROR_NONE;
 }
+
+SDXErrorId SDXEngine::SDXShaderMGR::BindConstant(const std::string& id, CD3D11_BUFFER_DESC* desc)
+{
+	// Existing search
+	for (int i = 0; i < static_cast<int>(m_cBuffers.size()); i++)
+	{
+		if (m_cBuffers[i].id == id)
+			return SDX_ERROR_SHADERMGR_BIND_CONSTANT_ID_ALREADY_EXIST;
+	}
+
+	m_cBuffers.push_back(SCBuffer());
+	SCBuffer* pBuffer = &m_cBuffers.back();
+	pBuffer->id = id;
+
+	HRESULT result = m_pDX->GetDevice()->CreateBuffer(desc, nullptr, pBuffer->cBuffer.ReleaseAndGetAddressOf());
+	if (FAILED(result))
+	{
+		m_cBuffers.pop_back();
+		return SDX_ERROR_SHADERMGR_BIND_CONSTANT_FAILED;
+	}
+
+	return SDX_ERROR_NONE;
+}
