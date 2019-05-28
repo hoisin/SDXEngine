@@ -96,4 +96,14 @@ ComPtr<ID3D11Buffer> SDXEngine::SDXShaderMGR::GetCBuffer(const std::string& id)
 	return nullptr;
 }
 
+SDXErrorId SDXEngine::SDXShaderMGR::LoadVertexShader()
+{
+	return SDXErrorId();
+}
+
+SDXErrorId SDXEngine::SDXShaderMGR::LoadPixelShader()
+{
+	return SDXErrorId();
+}
+
 
