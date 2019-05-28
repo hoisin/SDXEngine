@@ -34,9 +34,9 @@ namespace SDXEngine
 		SDXErrorId BindConstant(const std::string& id, CD3D11_BUFFER_DESC* desc);
 
 		SShader* GetShader(UINT handle);
-		SShader* GetShader(const std::string* id);
+		SShader* GetShader(const std::string& id);
 
-		ComPtr<ID3D11Buffer> GetCBuffer(UINT hangle);
+		ComPtr<ID3D11Buffer> GetCBuffer(UINT handle);
 		ComPtr<ID3D11Buffer> GetCBuffer(const std::string& id);
 
 	private:

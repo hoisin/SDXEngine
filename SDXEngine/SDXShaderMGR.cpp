@@ -52,3 +52,48 @@ SDXErrorId SDXEngine::SDXShaderMGR::BindConstant(const std::string& id, CD3D11_B
 
 	return SDX_ERROR_NONE;
 }
+
+SShader* SDXEngine::SDXShaderMGR::GetShader(UINT handle)
+{
+	if(handle > static_cast<UINT>(m_shaders.size()))
+		return nullptr;
+
+	return &m_shaders[handle];
+}
+
+SShader* SDXEngine::SDXShaderMGR::GetShader(const std::string& id)
+{
+	// Search for matching ID
+	for (UINT i = 0; i < static_cast<UINT>(m_shaders.size()); i++)
+	{
+		// If match found, return the shader
+		if (m_shaders[i].id == id)
+			return &m_shaders[i];
+	}
+
+	// else failed to find
+	return nullptr;
+}
+
+ComPtr<ID3D11Buffer> SDXEngine::SDXShaderMGR::GetCBuffer(UINT handle)
+{
+	if (handle > static_cast<UINT>(m_cBuffers.size()))
+		return nullptr;
+
+	return m_cBuffers[handle].cBuffer;
+}
+
+ComPtr<ID3D11Buffer> SDXEngine::SDXShaderMGR::GetCBuffer(const std::string& id)
+{
+	// Search for matching ID
+	for (UINT i = 0; i < static_cast<UINT>(m_cBuffers.size()); i++)
+	{
+		if (m_cBuffers[i].id == id)
+			return m_cBuffers[i].cBuffer;
+	}
+
+	// else failed to find
+	return nullptr;
+}
+
+
