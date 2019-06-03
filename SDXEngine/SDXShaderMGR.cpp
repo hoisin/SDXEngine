@@ -27,11 +27,36 @@ SDXErrorId SDXEngine::SDXShaderMGR::LoadShader(const std::string& vertexShaderFi
 	if (m_pDX == nullptr)
 		return SDX_ERROR_SHADERMGR_DIRECTX_NOTSET;
 
+	m_shaders.push_back(SShader());
+	SShader* newShader = &m_shaders.back();
+	newShader->id = assignID;
+
+	SDXErrorId error = m_loadHelper.LoadVertexShader(m_pDX, vertexShaderFile, desc, inputElements, "Main", "vs_5_0", newShader->vertexShader.ReleaseAndGetAddressOf(),
+		newShader->inputLayout.ReleaseAndGetAddressOf());
+	if (IsError(error))
+	{
+		m_shaders.pop_back();
+		return error;
+	}
+
+	error = m_loadHelper.LoadPixelShader(m_pDX, pixelShaderFile, "Main", "ps_5_0", newShader->pixelShader.ReleaseAndGetAddressOf());
+	if (IsError(error))
+	{
+		m_shaders.pop_back();
+		return error;
+	}
+
 	return SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXEngine::SDXShaderMGR::BindConstant(const std::string& id, CD3D11_BUFFER_DESC* desc)
 {
+	if (m_pDX == nullptr)
+		return SDX_ERROR_SHADERMGR_DIRECTX_NOTSET;
+
+	if (id.empty())
+		return SDX_ERROR_SHADERMGR_NULL_ID;
+
 	// Existing search
 	for (int i = 0; i < static_cast<int>(m_cBuffers.size()); i++)
 	{
@@ -95,15 +120,3 @@ ComPtr<ID3D11Buffer> SDXEngine::SDXShaderMGR::GetCBuffer(const std::string& id)
 	// else failed to find
 	return nullptr;
 }
-
-SDXErrorId SDXEngine::SDXShaderMGR::LoadVertexShader()
-{
-	return SDXErrorId();
-}
-
-SDXErrorId SDXEngine::SDXShaderMGR::LoadPixelShader()
-{
-	return SDXErrorId();
-}
-
-

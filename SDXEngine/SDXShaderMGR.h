@@ -40,11 +40,6 @@ namespace SDXEngine
 		ComPtr<ID3D11Buffer> GetCBuffer(const std::string& id);
 
 	private:
-		SDXErrorId LoadVertexShader();
-
-		SDXErrorId LoadPixelShader();
-
-	private:
 		SDXShaderLoader m_loadHelper;
 		std::vector<SShader> m_shaders;
 		std::vector<SCBuffer> m_cBuffers;

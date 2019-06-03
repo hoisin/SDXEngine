@@ -42,6 +42,9 @@
     <ClCompile Include="CShaderLoaderUTest.cpp">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="CShaderMGRUTest.cpp">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -82,6 +85,9 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="CShaderLoaderUTest.h">
+      <Filter>Gfx\DirectX\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="CShaderMGRUTest.h">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClInclude>
   </ItemGroup>
