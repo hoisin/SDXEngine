@@ -4,11 +4,11 @@
 #include "SDXTestApp.h"
 #include "..\SDXEngine\SDXShaderLoader.h"
 
-class CShaderLoaderUTest : public ::testing::Test
+class SDXShaderLoaderUTest : public ::testing::Test
 {
 public:
-	CShaderLoaderUTest();
-	~CShaderLoaderUTest();
+	SDXShaderLoaderUTest();
+	~SDXShaderLoaderUTest();
 
 	void SetUp() override;
 	void TearDown() override;

@@ -80,7 +80,8 @@ SDXErrorId SDXEngine::SDXShaderMGR::BindConstant(const std::string& id, CD3D11_B
 
 SShader* SDXEngine::SDXShaderMGR::GetShader(UINT handle)
 {
-	if(handle > static_cast<UINT>(m_shaders.size()))
+	if(handle > static_cast<UINT>(m_shaders.size()) ||
+		static_cast<UINT>(m_shaders.size() == 0))
 		return nullptr;
 
 	return &m_shaders[handle];
@@ -102,7 +103,8 @@ SShader* SDXEngine::SDXShaderMGR::GetShader(const std::string& id)
 
 ComPtr<ID3D11Buffer> SDXEngine::SDXShaderMGR::GetCBuffer(UINT handle)
 {
-	if (handle > static_cast<UINT>(m_cBuffers.size()))
+	if (handle > static_cast<UINT>(m_cBuffers.size()) ||
+		static_cast<UINT>(m_cBuffers.size()) == 0)
 		return nullptr;
 
 	return m_cBuffers[handle].cBuffer;

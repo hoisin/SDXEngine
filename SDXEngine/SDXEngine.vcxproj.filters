@@ -38,6 +38,9 @@
     <Filter Include="Gfx\DirectX\Shader">
       <UniqueIdentifier>{26369dec-2120-4dce-8886-84a12396880d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gfx\Material">
+      <UniqueIdentifier>{e1aa9b6b-622a-4b17-b3b6-8eade9213d4c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -115,6 +118,9 @@
     <ClInclude Include="SDXShaderLoader.h">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClInclude>
+    <ClInclude Include="SDXMaterialMGR.h">
+      <Filter>Gfx\Material</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -185,6 +191,9 @@
     </ClCompile>
     <ClCompile Include="SDXShaderLoader.cpp">
       <Filter>Gfx\DirectX\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMaterialMGR.cpp">
+      <Filter>Gfx\Material</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

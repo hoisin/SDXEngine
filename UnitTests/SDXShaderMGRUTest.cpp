@@ -1,17 +1,17 @@
 #include "pch.h"
-#include "CShaderMGRUTest.h"
+#include "SDXShaderMGRUTest.h"
 
 #include "..\SDXEngine\SDXDirectX.h"
 
-CShaderMGRUTest::CShaderMGRUTest()
+SDXShaderMGRUTest::SDXShaderMGRUTest()
 {
 }
 
-CShaderMGRUTest::~CShaderMGRUTest()
+SDXShaderMGRUTest::~SDXShaderMGRUTest()
 {
 }
 
-void CShaderMGRUTest::SetUp()
+void SDXShaderMGRUTest::SetUp()
 {
 	std::string testTitle = "TestWindow";
 	UINT width = 800;
@@ -19,7 +19,7 @@ void CShaderMGRUTest::SetUp()
 	m_appInit = m_testApp.Initialise(testTitle, width, height);
 }
 
-void CShaderMGRUTest::TearDown()
+void SDXShaderMGRUTest::TearDown()
 {
 	// Set to run and just quit
 	m_testApp.Run();
@@ -56,7 +56,7 @@ TestBuffer g_testBuffer;
 // --------------------------------------------------------------------------------
 // Class fixture testing
 // --------------------------------------------------------------------------------
-TEST_F(CShaderMGRUTest, Initialise)
+TEST_F(SDXShaderMGRUTest, Initialise)
 {
 	// Create directX
 	SDXDirectX directX;
@@ -78,7 +78,7 @@ TEST_F(CShaderMGRUTest, Initialise)
 	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid initialise";
 }
 
-TEST_F(CShaderMGRUTest, LoadShader)
+TEST_F(SDXShaderMGRUTest, LoadShader)
 {
 	// Create directX
 	SDXDirectX directX;
@@ -102,7 +102,7 @@ TEST_F(CShaderMGRUTest, LoadShader)
 
 	std::string validShader = "validShader";
 	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
-		ARRAYSIZE(validDesc), "validShader");
+		ARRAYSIZE(validDesc), validShader);
 	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid shader load";
 
 	// Invalid load using null file name strings
@@ -112,7 +112,7 @@ TEST_F(CShaderMGRUTest, LoadShader)
 	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected an error on invalid load";
 }
 
-TEST_F(CShaderMGRUTest, BindConstant)
+TEST_F(SDXShaderMGRUTest, BindConstant)
 {
 	// Create directX
 	SDXDirectX directX;
@@ -152,7 +152,7 @@ TEST_F(CShaderMGRUTest, BindConstant)
 	EXPECT_EQ(error, SDX_ERROR_SHADERMGR_BIND_CONSTANT_ID_ALREADY_EXIST) << "Expected bind constant ID already exist error";
 }
 
-TEST_F(CShaderMGRUTest, GetTests)
+TEST_F(SDXShaderMGRUTest, GetTests)
 {
 	// Create directX
 	SDXDirectX directX;
@@ -162,4 +162,83 @@ TEST_F(CShaderMGRUTest, GetTests)
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
 	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+
+	SDXShaderMGR mgr;
+
+	// Init shader manager
+	error = mgr.Initialise(&directX);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Failed to initialise shader manager";
+
+	std::string validShader = "validShader";
+	std::string validShader_2 = "validShader2";
+
+	// Test non-existing shader get
+	SShader* pResult = mgr.GetShader(0);
+	EXPECT_EQ(pResult, nullptr) << "Expected nullptr on get shader with no shaders";
+
+	pResult = mgr.GetShader(validShader);
+	EXPECT_EQ(pResult, nullptr) << "Expected nullptr on get shader with no shader";
+
+	// Load test shaders in
+	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
+		ARRAYSIZE(validDesc), validShader);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid shader load";
+
+	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
+		ARRAYSIZE(validDesc), validShader_2);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid shader load";
+
+	// Valid get shader tests
+	pResult = mgr.GetShader(0);
+	EXPECT_NE(pResult, nullptr) << "Result should not be nullptr";
+
+	pResult = mgr.GetShader(1);
+	EXPECT_NE(pResult, nullptr) << "Result should not be nullptr";
+
+	pResult = mgr.GetShader(validShader);
+	EXPECT_NE(pResult, nullptr) << "Result should not be nullptr";
+	
+	pResult = mgr.GetShader(validShader_2);
+	EXPECT_NE(pResult, nullptr) << "Result should not be nullptr";
+
+	// Test bind constant test data
+	std::string bufferID_1 = "TestBuffer1";
+	std::string bufferID_2 = "TestBuffer2";
+
+	CD3D11_BUFFER_DESC bufferDesc1(
+		sizeof(TestBuffer),
+		D3D11_BIND_CONSTANT_BUFFER
+	);
+	CD3D11_BUFFER_DESC bufferDesc2(
+		sizeof(TestBuffer),
+		D3D11_BIND_CONSTANT_BUFFER
+	);
+
+	// Invalid tests
+	ComPtr<ID3D11Buffer> pReturn;
+	pReturn = mgr.GetCBuffer(0);
+	EXPECT_EQ(pReturn.Get(), nullptr) << "Expected nullptr on no constant buffers";
+
+	pReturn = mgr.GetCBuffer(bufferID_1);
+	EXPECT_EQ(pReturn.Get(), nullptr) << "Expected nullptr on no constant buffers";
+
+	// Bind test constant buffers
+	error = mgr.BindConstant(bufferID_1, &bufferDesc1);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid bind";
+
+	error = mgr.BindConstant(bufferID_2, &bufferDesc2);
+	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid bind";
+
+	// Valid tests
+	pReturn = mgr.GetCBuffer(0);
+	EXPECT_NE(pReturn.Get(), nullptr) << "Unexpected nullptr on valid return";
+
+	pReturn = mgr.GetCBuffer(1);;
+	EXPECT_NE(pReturn.Get(), nullptr) << "Unexpected nullptr on valid return";
+
+	pReturn = mgr.GetCBuffer(bufferID_1);
+	EXPECT_NE(pReturn.Get(), nullptr) << "Unexpected nullptr on valid return";
+
+	pReturn = mgr.GetCBuffer(bufferID_2);
+	EXPECT_NE(pReturn.Get(), nullptr) << "Unexpected nullptr on valid return";
 }

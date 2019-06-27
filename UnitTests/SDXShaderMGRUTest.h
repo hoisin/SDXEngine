@@ -4,11 +4,11 @@
 #include "SDXTestApp.h"
 #include "..\SDXEngine\SDXShaderMGR.h"
 
-class CShaderMGRUTest : public ::testing::Test
+class SDXShaderMGRUTest : public ::testing::Test
 {
 public:
-	CShaderMGRUTest();
-	~CShaderMGRUTest();
+	SDXShaderMGRUTest();
+	~SDXShaderMGRUTest();
 
 	void SetUp() override;
 	void TearDown() override;

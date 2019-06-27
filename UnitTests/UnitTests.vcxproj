@@ -49,8 +49,8 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
-    <ClInclude Include="CShaderLoaderUTest.h" />
-    <ClInclude Include="CShaderMGRUTest.h" />
+    <ClInclude Include="SDXShaderLoaderUTest.h" />
+    <ClInclude Include="SDXShaderMGRUTest.h" />
     <ClInclude Include="CTimerUTest.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SDXDirect2DUTest.h" />
@@ -66,8 +66,8 @@
     <ClInclude Include="SDXVertexBufferUTest.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CShaderLoaderUTest.cpp" />
-    <ClCompile Include="CShaderMGRUTest.cpp" />
+    <ClCompile Include="SDXShaderLoaderUTest.cpp" />
+    <ClCompile Include="SDXShaderMGRUTest.cpp" />
     <ClCompile Include="CTimerUTest.cpp" />
     <ClCompile Include="SDXDirect2DUTest.cpp" />
     <ClCompile Include="SDXDirectXShaderCompilerUTest.cpp" />

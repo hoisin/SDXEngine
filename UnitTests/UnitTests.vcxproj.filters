@@ -39,10 +39,10 @@
     <ClCompile Include="CTimerUTest.cpp">
       <Filter>Utility</Filter>
     </ClCompile>
-    <ClCompile Include="CShaderLoaderUTest.cpp">
+    <ClCompile Include="SDXShaderMGRUTest.cpp">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClCompile>
-    <ClCompile Include="CShaderMGRUTest.cpp">
+    <ClCompile Include="SDXShaderLoaderUTest.cpp">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClCompile>
   </ItemGroup>
@@ -84,10 +84,10 @@
     <ClInclude Include="CTimerUTest.h">
       <Filter>Utility</Filter>
     </ClInclude>
-    <ClInclude Include="CShaderLoaderUTest.h">
+    <ClInclude Include="SDXShaderMGRUTest.h">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClInclude>
-    <ClInclude Include="CShaderMGRUTest.h">
+    <ClInclude Include="SDXShaderLoaderUTest.h">
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClInclude>
   </ItemGroup>

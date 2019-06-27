@@ -1,18 +1,18 @@
 #include "pch.h"
-#include "CShaderLoaderUTest.h"
+#include "SDXShaderLoaderUTest.h"
 
 #include "..\SDXEngine\SDXDirectX.h"
 #include <d3dcompiler.h>
 
-CShaderLoaderUTest::CShaderLoaderUTest()
+SDXShaderLoaderUTest::SDXShaderLoaderUTest()
 {
 }
 
-CShaderLoaderUTest::~CShaderLoaderUTest()
+SDXShaderLoaderUTest::~SDXShaderLoaderUTest()
 {
 }
 
-void CShaderLoaderUTest::SetUp()
+void SDXShaderLoaderUTest::SetUp()
 {
 	std::string testTitle = "TestWindow";
 	UINT width = 800;
@@ -20,7 +20,7 @@ void CShaderLoaderUTest::SetUp()
 	m_appInit = m_testApp.Initialise(testTitle, width, height);
 }
 
-void CShaderLoaderUTest::TearDown()
+void SDXShaderLoaderUTest::TearDown()
 {
 	// Set to run and just quit
 	m_testApp.Run();
@@ -31,7 +31,7 @@ const std::string testDataDir = "..\\UTestData\\Shaders\\";
 // --------------------------------------------------------------------------------
 // Class fixture testing
 // --------------------------------------------------------------------------------
-TEST_F(CShaderLoaderUTest, LoadVertexShader)
+TEST_F(SDXShaderLoaderUTest, LoadVertexShader)
 {
 	std::string validVertexShaderFile = testDataDir + "valid.vs";
 	std::string invalidVertexShaderFile = testDataDir + "invalid.vs";
@@ -102,7 +102,7 @@ TEST_F(CShaderLoaderUTest, LoadVertexShader)
 }
 
 
-TEST_F(CShaderLoaderUTest, LoadPixelShader)
+TEST_F(SDXShaderLoaderUTest, LoadPixelShader)
 {
 	std::string validPixelShaderFile = testDataDir + "valid.ps";
 	std::string invalidPixelShaderFile = testDataDir + "invalid.ps";

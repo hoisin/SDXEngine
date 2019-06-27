@@ -182,6 +182,7 @@
     <ClInclude Include="SDXInputHandler.h" />
     <ClInclude Include="SDXKeyboard.h" />
     <ClInclude Include="SDXLog.h" />
+    <ClInclude Include="SDXMaterialMGR.h" />
     <ClInclude Include="SDXMesh.h" />
     <ClInclude Include="SDXMeshData.h" />
     <ClInclude Include="SDXMeshGenerator.h" />
@@ -208,6 +209,7 @@
     <ClCompile Include="SDXInputHandler.cpp" />
     <ClCompile Include="SDXKeyboard.cpp" />
     <ClCompile Include="SDXLog.cpp" />
+    <ClCompile Include="SDXMaterialMGR.cpp" />
     <ClCompile Include="SDXMesh.cpp" />
     <ClCompile Include="SDXMeshData.cpp" />
     <ClCompile Include="SDXMeshGenerator.cpp" />
