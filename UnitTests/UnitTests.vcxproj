@@ -49,6 +49,8 @@
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemGroup>
+    <ClInclude Include="SDXShaderLoaderUTest.h" />
+    <ClInclude Include="SDXShaderMGRUTest.h" />
     <ClInclude Include="CTimerUTest.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="SDXDirect2DUTest.h" />
@@ -64,6 +66,8 @@
     <ClInclude Include="SDXVertexBufferUTest.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SDXShaderLoaderUTest.cpp" />
+    <ClCompile Include="SDXShaderMGRUTest.cpp" />
     <ClCompile Include="CTimerUTest.cpp" />
     <ClCompile Include="SDXDirect2DUTest.cpp" />
     <ClCompile Include="SDXDirectXShaderCompilerUTest.cpp" />
@@ -124,6 +128,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>26495;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

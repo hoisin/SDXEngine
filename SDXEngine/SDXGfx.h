@@ -97,9 +97,30 @@ namespace SDXEngine
 			break;
 
 		default:
+
 			break;
 		}
 
 		return size;
 	}
+
+	struct SMaterial
+	{
+		std::string diffuseTextureID;
+		std::string shaderID;
+		
+		// Could include rasterstate but not required yet.
+		// Probably shift rasterstate to a MGR and refer to as ID when needed.
+
+		// To add more params when required such as...
+		//
+		// Material light params:
+		// - specular val, col
+		// - diffuse col?
+		// - bump/normal texture
+		// - displacement texture
+		// - shadowmap?
+		// - cubemap?
+		// - ambient??
+	};
 }       
