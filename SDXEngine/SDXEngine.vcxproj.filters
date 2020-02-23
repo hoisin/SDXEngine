@@ -41,6 +41,9 @@
     <Filter Include="Gfx\Material">
       <UniqueIdentifier>{e1aa9b6b-622a-4b17-b3b6-8eade9213d4c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{1bb4e66d-6017-4f3e-9425-d44baa870a46}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -121,6 +124,12 @@
     <ClInclude Include="SDXMaterialMGR.h">
       <Filter>Gfx\Material</Filter>
     </ClInclude>
+    <ClInclude Include="SDXMeshMGR.h">
+      <Filter>Gfx\DirectX\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXAssetMGR.h">
+      <Filter>Asset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -194,6 +203,12 @@
     </ClCompile>
     <ClCompile Include="SDXMaterialMGR.cpp">
       <Filter>Gfx\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXMeshMGR.cpp">
+      <Filter>Gfx\DirectX\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXAssetMGR.cpp">
+      <Filter>Asset</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

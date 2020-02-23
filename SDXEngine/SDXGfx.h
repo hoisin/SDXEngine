@@ -106,8 +106,8 @@ namespace SDXEngine
 
 	struct SMaterial
 	{
-		std::string diffuseTextureID;
-		std::string shaderID;
+		std::string diffuseTextureID = "";
+		std::string shaderID = "";
 		
 		// Could include rasterstate but not required yet.
 		// Probably shift rasterstate to a MGR and refer to as ID when needed.
@@ -122,5 +122,15 @@ namespace SDXEngine
 		// - shadowmap?
 		// - cubemap?
 		// - ambient??
+
+		SMaterial()
+		{
+		}
+
+		void operator=(const SMaterial& other)
+		{
+			diffuseTextureID = other.diffuseTextureID;
+			shaderID = other.shaderID;
+		}
 	};
 }       
