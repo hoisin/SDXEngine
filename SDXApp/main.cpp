@@ -8,7 +8,7 @@ int main()
 {
 	SDXApp app;
 
-	if (app.Initialise("MyWindow", 800, 600))
+	if (app.Initialise("Test Window", 800, 600))
 		app.Run();
 
 	//system("PAUSE");

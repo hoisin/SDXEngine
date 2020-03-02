@@ -6,15 +6,12 @@
 
 #include "SDXMeshGenerator.h"
 
+#include "SDXAssetMGR.h"
+
 using namespace SDXEngine;
 
 SDXRenderer::SDXRenderer()
 {
-	m_vertexShader = nullptr;
-	m_pixelShader = nullptr;
-	m_inputLayout = nullptr;
-	m_constantBuffer = nullptr;
-
 	m_vertexBuffer = nullptr;
 	m_indexBuffer = nullptr;
 	m_indexCount = 0;
@@ -35,30 +32,6 @@ SDXRenderer::~SDXRenderer()
 	{
 		m_vertexBuffer->Release();
 		m_vertexBuffer = nullptr;
-	}
-
-	if (m_constantBuffer)
-	{
-		m_constantBuffer->Release();
-		m_constantBuffer = nullptr;
-	}
-
-	if (m_inputLayout)
-	{
-		m_inputLayout->Release();
-		m_inputLayout = nullptr;
-	}
-
-	if (m_pixelShader)
-	{
-		m_pixelShader->Release();
-		m_pixelShader = nullptr;
-	}
-
-	if (m_vertexShader)
-	{
-		m_vertexShader->Release();
-		m_vertexShader = nullptr;
 	}
 }
 
@@ -110,31 +83,6 @@ void SDXEngine::SDXRenderer::RenderText(UINT x, UINT y, const std::string & text
 {
 	// If error, should be logged.
 	m_direct2D.RenderText(x, y, text);
-}
-
-// Note:
-//
-// This code has hard coded crap!!!!!!!!!!
-// For testing purposes. REMEMBER TO REFACTOR THIS
-//
-// This is likely to be ported out to a resource hanlder.
-// Since this is resource creation/management
-//
-SDXErrorId SDXEngine::SDXRenderer::CreateShaders()
-{
-	SDXErrorId error = CreateVertexShader();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	error = CreatePixelShader();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	error = BindConstants();
-	if (error != SDX_ERROR_NONE)
-		return error;
-
-	return SDX_ERROR_NONE;
 }
 
 // Note:
@@ -249,8 +197,11 @@ void SDXEngine::SDXRenderer::RenderCube()
 	ID3D11RenderTargetView* renderTarget = m_directX.GetRenderTargetView().Get();
 	ID3D11DepthStencilView* depthStencil = m_directX.GetDepthStencilView().Get();
 
+	SDXAssetMGR* pAssetMgr = ASSETMGR->GetInstance();
+
+	std::string cbufferID = "worldViewProj";
 	context->UpdateSubresource(
-		m_constantBuffer,
+		pAssetMgr->GetCBuffer(cbufferID).Get(),
 		0,
 		nullptr,
 		&m_worldViewProj,
@@ -268,6 +219,9 @@ void SDXEngine::SDXRenderer::RenderCube()
 	//	&renderTarget,
 	//	depthStencil
 	//);
+	
+	// Vertex/pixel buffer stuff
+	//===================================================================================
 
 	// Set up the IA stage by setting the input topology and layout.
 	UINT stride = GetSizeOfVertexType(SDXVERTEX_TYPE_PNC);
@@ -291,24 +245,33 @@ void SDXEngine::SDXRenderer::RenderCube()
 		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
 	);
 
-	context->IASetInputLayout(m_inputLayout);
+	// ============================================================================================
+
+	// Shader stuff
+	//
+	// Get the shader
+	SShader* pShader = pAssetMgr->GetShader("basic_shader");
+
+	// Input layout set
+	context->IASetInputLayout(pShader->inputLayout.Get());
 
 	// Set up the vertex shader stage.
 	context->VSSetShader(
-		m_vertexShader,
+		pShader->vertexShader.Get(),
 		nullptr,
 		0
 	);
 
+	// Constant buffer/s
 	context->VSSetConstantBuffers(
 		0,
 		1,
-		&m_constantBuffer
+		pAssetMgr->GetCBuffer(cbufferID).GetAddressOf()
 	);
 
 	// Set up the pixel shader stage.
 	context->PSSetShader(
-		m_pixelShader,
+		pShader->pixelShader.Get(),
 		nullptr,
 		0
 	);
@@ -329,142 +292,7 @@ void SDXEngine::SDXRenderer::EnableWireFrame(bool bEnable)
 		m_directX.SetRasterState(m_fillState);
 }
 
-SDXErrorId SDXEngine::SDXRenderer::CreateVertexShader()
+SDXDirectX* SDXEngine::SDXRenderer::GetDirectX()
 {
-	ID3D11Device* device = m_directX.GetDevice().Get();
-
-	if (!device)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
-
-	SDXDirectXShaderCompiler compiler;
-	ID3DBlob* shaderBlob = nullptr;
-	// Attempt to compile the vertex shader
-	SDXErrorId error = compiler.CompileShader("..\\Assets\\Shaders\\dirPNC.vs",
-		"Main", "vs_5_0", &shaderBlob);
-
-	// If failed
-	if (error != SDX_ERROR_NONE)
-	{
-		if (shaderBlob)
-		{
-			shaderBlob->Release();
-			shaderBlob = nullptr;
-		}
-		return SDX_ERROR_RENDERER_VERTEXSHADER_CREATE_FAILED;
-	}
-
-	// Attempt to create the vertex shader
-	HRESULT result = device->CreateVertexShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(),
-		nullptr, &m_vertexShader);
-
-	if (FAILED(result))
-	{
-		if (shaderBlob)
-		{
-			shaderBlob->Release();
-			shaderBlob = nullptr;
-		}
-		return SDX_ERROR_RENDERER_VERTEXSHADER_CREATE_FAILED;
-	}
-
-	// Create the input layout
-	D3D11_INPUT_ELEMENT_DESC inDesc[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-		0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-
-		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-		0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-		0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	// Attempt to create the input layout
-	result = device->CreateInputLayout(inDesc, ARRAYSIZE(inDesc),
-		shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), &m_inputLayout);
-
-	if (FAILED(result))
-	{
-		if (shaderBlob)
-		{
-			shaderBlob->Release();
-			shaderBlob = nullptr;
-		}
-		return SDX_ERROR_RENDERER_INPUTLAYOUT_CREATE_FAILED;
-	}
-
-	// Finished with shaderBlob for vertex buffer
-	shaderBlob->Release();
-	shaderBlob = nullptr;
-
-	return SDX_ERROR_NONE;
-}
-
-SDXErrorId SDXEngine::SDXRenderer::CreatePixelShader()
-{
-	ID3D11Device* device = m_directX.GetDevice().Get();
-
-	if (!device)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
-
-	SDXDirectXShaderCompiler compiler;
-	ID3DBlob* shaderBlob = nullptr;
-	// Attempt to compile the vertex shader
-	SDXErrorId error = compiler.CompileShader("..\\Assets\\Shaders\\dirPNC.ps",
-		"Main", "ps_5_0", &shaderBlob);
-
-	// If failed
-	if (error != SDX_ERROR_NONE)
-	{
-		if (shaderBlob)
-		{
-			shaderBlob->Release();
-			shaderBlob = nullptr;
-		}
-		return SDX_ERROR_RENDERER_PIXELSHADER_CREATE_FAILED;
-	}
-
-	HRESULT result = device->CreatePixelShader(shaderBlob->GetBufferPointer(),
-		shaderBlob->GetBufferSize(), nullptr, &m_pixelShader);
-
-	if (FAILED(result))
-	{
-		if (shaderBlob)
-		{
-			shaderBlob->Release();
-			shaderBlob = nullptr;
-		}
-		return SDX_ERROR_RENDERER_PIXELSHADER_CREATE_FAILED;
-	}
-
-	// Finished with the compiled shader blob
-	shaderBlob->Release();
-	shaderBlob = nullptr;
-
-	return SDX_ERROR_NONE;
-}
-
-SDXErrorId SDXEngine::SDXRenderer::BindConstants()
-{
-	ID3D11Device* device = m_directX.GetDevice().Get();
-
-	if (!device)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
-
-	// Map the constant buffer uniform
-	CD3D11_BUFFER_DESC cbDesc(
-		sizeof(ConstantBufferStruct),
-		D3D11_BIND_CONSTANT_BUFFER
-	);
-
-	HRESULT result = device->CreateBuffer(
-		&cbDesc,
-		nullptr,
-		&m_constantBuffer);
-
-	if (FAILED(result))
-		return SDX_ERROR_RENDERER_CONSTANTBUFFER_BIND_FAILED;
-
-	return SDX_ERROR_NONE;
+	return &m_directX;
 }

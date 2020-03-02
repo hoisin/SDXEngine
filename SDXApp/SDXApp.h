@@ -9,6 +9,8 @@
 #include "..\SDXEngine\SDXBaseApp.h"
 #include "..\SDXEngine\SDXInputHandler.h"
 
+#include "..\SDXEngine\SDXAssetMGR.h"
+
 // Testing
 #include "..\SDXEngine\SDXRenderer.h"
 #include "..\SDXEngine\SDXCameraFP.h"
@@ -33,6 +35,8 @@ protected:
 	void DrawDebugText();
 
 private:
+	SDXAssetMGR* m_pAssetMgr;
+
 	SDXRenderer m_renderer;
 	SDXCameraFP m_camera;
 

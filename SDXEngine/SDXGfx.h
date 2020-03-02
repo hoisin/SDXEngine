@@ -133,4 +133,12 @@ namespace SDXEngine
 			shaderID = other.shaderID;
 		}
 	};
+
+	// CBuffer definitions
+	// Testing for vertex shader uniform
+	typedef struct _constantBufferStruct {
+		DirectX::XMFLOAT4X4 world;
+		DirectX::XMFLOAT4X4 view;
+		DirectX::XMFLOAT4X4 projection;
+	} ConstantBufferStruct;
 }       
