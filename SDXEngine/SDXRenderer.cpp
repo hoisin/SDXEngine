@@ -52,6 +52,8 @@ SDXErrorId SDXEngine::SDXRenderer::Initialise(const SDXDirectXInfo & info)
 	if (IsError(error))
 		return error;
 
+	m_wireFrame.SetWireFrame(true);
+
 	return SDX_ERROR_NONE;
 }
 
@@ -83,71 +85,6 @@ void SDXEngine::SDXRenderer::RenderText(UINT x, UINT y, const std::string & text
 {
 	// If error, should be logged.
 	m_direct2D.RenderText(x, y, text);
-}
-
-// Note:
-//
-// This code has hard coded crap!!!!!!!!!!
-// For testing purposes. REMEMBER TO REFACTOR THIS
-//
-// This is likely to be ported out to a resource hanlder.
-// Since this is resource creation/management
-//
-SDXErrorId SDXEngine::SDXRenderer::CreateCube()
-{
-	ID3D11Device* device = m_directX.GetDevice().Get();
-	if (!device)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
-
-	SDXMeshGenerator generator;
-	SDXMeshData* pMesh = generator.GenerateCube(11, SDXVERTEX_TYPE_PNC, 2, XMFLOAT3(0, 1, 0));
-	int bytes = pMesh->GetVertexCount() * GetSizeOfVertexType(pMesh->GetVertexType());
-
-	// Create vertex buffer:
-	CD3D11_BUFFER_DESC vDesc(
-		bytes,
-		D3D11_BIND_VERTEX_BUFFER
-	);
-
-	D3D11_SUBRESOURCE_DATA  vData;
-	ZeroMemory(&vData, sizeof(D3D11_SUBRESOURCE_DATA));
-	vData.pSysMem = pMesh->GetVertexData();
-	vData.SysMemPitch = 0;
-	vData.SysMemSlicePitch = 0;
-
-	HRESULT result = device->CreateBuffer(
-		&vDesc,
-		&vData,
-		&m_vertexBuffer
-	);
-
-	m_indexCount = pMesh->GetIndexCount();//RRAYSIZE(cubeIndices);
-
-	CD3D11_BUFFER_DESC iDesc(
-		pMesh->GetIndexCount() * sizeof(unsigned int),
-		D3D11_BIND_INDEX_BUFFER
-	);
-
-	D3D11_SUBRESOURCE_DATA iData;
-	ZeroMemory(&iData, sizeof(D3D11_SUBRESOURCE_DATA));
-	iData.pSysMem = pMesh->GetIndexData();
-	iData.SysMemPitch = 0;
-	iData.SysMemSlicePitch = 0;
-
-	result = device->CreateBuffer(
-		&iDesc,
-		&iData,
-		&m_indexBuffer
-	);
-
-	m_fillState;
-	m_wireFrame.SetWireFrame(true);
-	m_directX.SetRasterState(m_fillState);
-
-	delete pMesh;
-	pMesh = nullptr;
-
-	return SDX_ERROR_NONE;
 }
 
 // Note:
@@ -198,16 +135,7 @@ void SDXEngine::SDXRenderer::RenderCube()
 	ID3D11DepthStencilView* depthStencil = m_directX.GetDepthStencilView().Get();
 
 	SDXAssetMGR* pAssetMgr = ASSETMGR->GetInstance();
-
 	std::string cbufferID = "worldViewProj";
-	context->UpdateSubresource(
-		pAssetMgr->GetCBuffer(cbufferID).Get(),
-		0,
-		nullptr,
-		&m_worldViewProj,
-		0,
-		0
-	);
 
 	//// Set the render target.
 	//
@@ -222,66 +150,91 @@ void SDXEngine::SDXRenderer::RenderCube()
 	
 	// Vertex/pixel buffer stuff
 	//===================================================================================
+	//for (int i = 0; i < pAssetMgr->GetMeshCount(); i++)
+	//{
+		context->UpdateSubresource(
+			pAssetMgr->GetCBuffer(cbufferID).Get(),
+			0,
+			nullptr,
+			&m_worldViewProj,
+			0,
+			0
+		);
 
-	// Set up the IA stage by setting the input topology and layout.
-	UINT stride = GetSizeOfVertexType(SDXVERTEX_TYPE_PNC);
-	UINT offset = 0;
+		// Get mesh
+		SDXMesh* pMesh = pAssetMgr->GetMesh("cube_1");
+		// Only 1 sub mesh (testing)
+		SDXSubMesh* pSubMesh = pMesh->GetSubMesh(0);
 
-	context->IASetVertexBuffers(
-		0,
-		1,
-		&m_vertexBuffer,
-		&stride,
-		&offset
-	);
+		// Set up the IA stage by setting the input topology and layout.
+		//UINT stride = GetSizeOfVertexType(SDXVERTEX_TYPE_PNC);
+		UINT stride = GetSizeOfVertexType(pSubMesh->GetVertexBuffer()->GetType());
+		UINT offset = 0;
 
-	context->IASetIndexBuffer(
-		m_indexBuffer,
-		DXGI_FORMAT_R32_UINT,
-		0
-	);
+		ID3D11Buffer* vertexBuf = pSubMesh->GetVertexBuffer()->GetBuffer();
+		context->IASetVertexBuffers(
+			0,
+			1,
+			//&m_vertexBuffer,
+			&vertexBuf,
+			&stride,
+			&offset
+		);
 
-	context->IASetPrimitiveTopology(
-		D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
-	);
+		ID3D11Buffer* indexBuf = pSubMesh->GetIndexBuffer()->GetBuffer();
+		context->IASetIndexBuffer(
+			//m_indexBuffer,
+			indexBuf,
+			DXGI_FORMAT_R32_UINT,
+			0
+		);
 
-	// ============================================================================================
+		context->IASetPrimitiveTopology(
+			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+		);
 
-	// Shader stuff
-	//
-	// Get the shader
-	SShader* pShader = pAssetMgr->GetShader("basic_shader");
+		// ============================================================================================
 
-	// Input layout set
-	context->IASetInputLayout(pShader->inputLayout.Get());
+		// Material
+		SMaterial mat = pAssetMgr->GetMaterial(pSubMesh->GetMaterialID());
+		
+		// Shader stuff
+		//
+		// Get the shader
+		/*SShader* pShader = pAssetMgr->GetShader("basic_shader");*/
+		SShader* pShader = pAssetMgr->GetShader(mat.shaderID);
 
-	// Set up the vertex shader stage.
-	context->VSSetShader(
-		pShader->vertexShader.Get(),
-		nullptr,
-		0
-	);
+		// Input layout set
+		context->IASetInputLayout(pShader->inputLayout.Get());
 
-	// Constant buffer/s
-	context->VSSetConstantBuffers(
-		0,
-		1,
-		pAssetMgr->GetCBuffer(cbufferID).GetAddressOf()
-	);
+		// Set up the vertex shader stage.
+		context->VSSetShader(
+			pShader->vertexShader.Get(),
+			nullptr,
+			0
+		);
 
-	// Set up the pixel shader stage.
-	context->PSSetShader(
-		pShader->pixelShader.Get(),
-		nullptr,
-		0
-	);
+		// Constant buffer/s
+		context->VSSetConstantBuffers(
+			0,
+			1,
+			pAssetMgr->GetCBuffer(cbufferID).GetAddressOf()
+		);
 
-	// Calling Draw tells Direct3D to start sending commands to the graphics device.
-	context->DrawIndexed(
-		m_indexCount,
-		0,
-		0
-	);
+		// Set up the pixel shader stage.
+		context->PSSetShader(
+			pShader->pixelShader.Get(),
+			nullptr,
+			0
+		);
+
+		// Calling Draw tells Direct3D to start sending commands to the graphics device.
+		context->DrawIndexed(
+			pSubMesh->GetIndexBuffer()->GetCount(),
+			0,
+			0
+		);
+	//}
 }
 
 void SDXEngine::SDXRenderer::EnableWireFrame(bool bEnable)

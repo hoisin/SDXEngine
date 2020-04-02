@@ -39,7 +39,6 @@ namespace SDXEngine
 		void RenderText(UINT x, UINT y, const std::string& text);
 
 		// Tester methods
-		SDXErrorId CreateCube();
 		SDXErrorId CreateViewAndPerspective();
 
 		void UpdateTest();

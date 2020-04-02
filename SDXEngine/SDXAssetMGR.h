@@ -16,6 +16,15 @@ namespace SDXEngine
 
 		SDXErrorId Initialise(SDXDirectX* pDx);
 
+		// Mesh generator
+		SDXMeshGenerator* GetMeshGenerator();
+
+		// Mesh mgr
+		SDXErrorId CreateMesh(const std::string& id, SDXMesh** outMesh = nullptr);
+
+		SDXMesh* GetMesh(const std::string& id);
+		int GetMeshCount();
+
 		// Shader stuff
 		SDXErrorId LoadShader(const std::string& vertexShaderFile, const std::string& pixelShaderFile,
 			D3D11_INPUT_ELEMENT_DESC* desc, int inputElements, const std::string& assignID);
@@ -24,6 +33,10 @@ namespace SDXEngine
 
 		SShader* GetShader(const std::string& shaderID);
 		ComPtr<ID3D11Buffer> GetCBuffer(const std::string& id);
+
+		// Material
+		SDXErrorId AddMaterial(const std::string& id, const SMaterial& material);
+		SMaterial GetMaterial(const std::string& id);
 
 		void Close();
 		static SDXAssetMGR* GetInstance();

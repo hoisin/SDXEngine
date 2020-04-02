@@ -54,7 +54,7 @@ SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXDirec
 	return SDX_ERROR_NONE;
 }
 
-ID3D11Buffer * SDXEngine::SDXVertexBuffer::GetBuffer() const
+ID3D11Buffer* SDXEngine::SDXVertexBuffer::GetBuffer()
 {
 	return m_buffer;
 }

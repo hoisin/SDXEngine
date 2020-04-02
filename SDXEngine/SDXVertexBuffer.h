@@ -18,7 +18,7 @@ namespace SDXEngine
 		~SDXVertexBuffer();
 
 		SDXErrorId LoadData(SDXMeshData* meshData, SDXDirectX* inDirectX);
-		ID3D11Buffer* GetBuffer() const;
+		ID3D11Buffer* GetBuffer();
 		int GetCount() const;
 		SDXVertexType GetType() const;
 

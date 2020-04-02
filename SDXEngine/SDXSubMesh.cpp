@@ -4,7 +4,7 @@
 using namespace SDXEngine;
 
 
-SDXSubMesh::SDXSubMesh()
+SDXSubMesh::SDXSubMesh() : m_materialID("")
 {
 }
 
