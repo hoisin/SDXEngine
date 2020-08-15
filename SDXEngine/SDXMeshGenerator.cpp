@@ -117,7 +117,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 	float pX = -(size / 2.f);
 	float pY = 0;
 	float pZ = (size / 2.f);
-	float stepSize = (float)(size / verticesOnEdge);
+	float stepSize = (float)(size / subdivision);
 	int vertexCounter = 0;
 	int indexCounter = 0;
 
@@ -316,6 +316,11 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 	}
 
 	return mesh;
+}
+
+SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height, SDXVertexType type, UINT subdivision, const XMFLOAT3& color)
+{
+	return nullptr;
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexType type, UINT subdivision,

@@ -90,7 +90,8 @@ void SDXEngine::SDXRenderer::Render(SDXDrawItem* drawItem)
 		XMConvertToRadians(drawItem->rotation.z)
 	);
 
-	auto world = trans * rot * scale;
+	//auto world = trans * rot * scale;
+	auto world = scale * rot * trans;
 	world = XMMatrixTranspose(world);
 	
 	DirectX::XMStoreFloat4x4(
@@ -205,7 +206,8 @@ void SDXEngine::SDXRenderer::Render(const std::list<SDXDrawItem*>& drawList)
 			XMConvertToRadians(pDrawItem->rotation.z)
 		);
 
-		auto world = trans * rot * scale;
+		//auto world = trans * rot * scale;
+		auto world = scale * rot * trans;
 		world = XMMatrixTranspose(world);
 
 		DirectX::XMStoreFloat4x4(
