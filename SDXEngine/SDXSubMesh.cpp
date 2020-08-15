@@ -62,3 +62,16 @@ SDXIndexBuffer* SDXEngine::SDXSubMesh::GetIndexBuffer()
 {
 	return &m_indices;
 }
+
+void SDXEngine::SDXSubMesh::Release()
+{
+	if (m_vertices.GetBuffer())
+	{
+		m_vertices.Release();
+	}
+
+	if (m_indices.GetBuffer())
+	{
+		m_indices.Release();
+	}
+}

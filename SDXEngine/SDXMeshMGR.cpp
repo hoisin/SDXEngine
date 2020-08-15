@@ -9,6 +9,10 @@ SDXEngine::SDXMeshMGR::SDXMeshMGR()
 
 SDXEngine::SDXMeshMGR::~SDXMeshMGR()
 {
+	for (int i = 0; i < static_cast<int>(m_vMeshes.size()); i++)
+	{
+		m_vMeshes[i].Release();
+	}
 }
 
 SDXMesh* SDXEngine::SDXMeshMGR::CreateMesh(const std::string& id)
@@ -19,7 +23,8 @@ SDXMesh* SDXEngine::SDXMeshMGR::CreateMesh(const std::string& id)
 	// If no existing,  create
 	if (find == m_meshMap.end())
 	{
-		m_vMeshes.push_back(SDXMesh());
+		SDXMesh mesh;
+		m_vMeshes.push_back(mesh);
 		m_meshMap.insert(std::pair<std::string, int>(id, static_cast<int>(m_vMeshes.size() - 1)));
 		pReturnMesh = &m_vMeshes.back();
 	}

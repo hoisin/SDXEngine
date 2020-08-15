@@ -38,6 +38,8 @@ namespace SDXEngine
 		SDXErrorId AddMaterial(const std::string& id, const SMaterial& material);
 		SMaterial GetMaterial(const std::string& id);
 
+		SDXDirectX* GetDirectX();
+
 		void Close();
 		static SDXAssetMGR* GetInstance();
 

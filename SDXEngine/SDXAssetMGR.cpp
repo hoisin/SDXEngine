@@ -98,6 +98,11 @@ SMaterial SDXEngine::SDXAssetMGR::GetMaterial(const std::string& id)
 	return m_materialMGR.GetMaterial(id);
 }
 
+SDXDirectX* SDXEngine::SDXAssetMGR::GetDirectX()
+{
+	return m_pDirectX;
+}
+
 void SDXEngine::SDXAssetMGR::Close()
 {
 	if (m_instance)

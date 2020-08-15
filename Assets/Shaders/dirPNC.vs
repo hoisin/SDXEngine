@@ -6,6 +6,7 @@ cbuffer MatrixBuffer
     matrix worldMatrix;
     matrix viewMatrix;
     matrix projectionMatrix;
+	matrix invWorldTrans;
 };
 
 //////////////
@@ -42,10 +43,8 @@ PixelInputType Main(VertexInputType input)
     output.position = mul(output.position, projectionMatrix);
 	
 	// Calculate normal
-	output.normal = mul(input.normal, worldMatrix);
-	output.normal = mul(output.normal, viewMatrix);
-	output.normal = mul(output.normal, projectionMatrix);
-	output.normal = normalize(input.normal);
+	output.normal = mul(input.normal, invWorldTrans);
+	output.normal = normalize(output.normal);
 	
     
     // Store the input color for the pixel shader to use.

@@ -230,7 +230,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 	float pX = -(size / 2.f);
 	float pY = (size / 2.f);
 	float pZ = 0;
-	float stepSize = (float)(size / verticesOnEdge);
+	float stepSize = (float)(size / subdivision);
 	int vertexCounter = 0;
 	int indexCounter = 0;
 
@@ -679,8 +679,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexTyp
 				pVertices[vertexCounter].position.x = pX;
 				pVertices[vertexCounter].position.y = pY;
 				pVertices[vertexCounter].position.z = pZ;
-				pVertices[vertexCounter].normal.x = 0;
-				pVertices[vertexCounter].normal.y = -1;
+				pVertices[vertexCounter].normal.x = -1;
+				pVertices[vertexCounter].normal.y = 0;
 				pVertices[vertexCounter].normal.z = 0;
 				pVertices[vertexCounter].color = color;
 

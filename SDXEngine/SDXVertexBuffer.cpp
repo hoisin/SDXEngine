@@ -9,7 +9,7 @@ SDXVertexBuffer::SDXVertexBuffer() : m_buffer(nullptr), m_count(0), m_type(SDXVE
 
 SDXVertexBuffer::~SDXVertexBuffer()
 {
-	Release();
+	//Release();
 }
 
 SDXErrorId SDXEngine::SDXVertexBuffer::LoadData(SDXMeshData * meshData, SDXDirectX* inDirectX)

@@ -12,6 +12,9 @@
     <Filter Include="App">
       <UniqueIdentifier>{5c9dc37e-0c60-4b30-b69a-88cdf1bd31cc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Maze">
+      <UniqueIdentifier>{65c70573-cf8f-4557-abe0-797b22299208}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -23,6 +26,15 @@
     <ClInclude Include="SDXApp.h">
       <Filter>App</Filter>
     </ClInclude>
+    <ClInclude Include="CMaze.h">
+      <Filter>Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="CMazeMap.h">
+      <Filter>Maze</Filter>
+    </ClInclude>
+    <ClInclude Include="CObject.h">
+      <Filter>Maze</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -33,6 +45,15 @@
     </ClCompile>
     <ClCompile Include="SDXApp.cpp">
       <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="CMaze.cpp">
+      <Filter>Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="CMazeMap.cpp">
+      <Filter>Maze</Filter>
+    </ClCompile>
+    <ClCompile Include="CObject.cpp">
+      <Filter>Maze</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

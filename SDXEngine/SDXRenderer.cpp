@@ -71,6 +71,234 @@ void SDXEngine::SDXRenderer::EndDraw()
 	m_directX.SwapChainPresent();
 }
 
+void SDXEngine::SDXRenderer::Render(SDXDrawItem* drawItem)
+{
+	// Use the Direct3D device context to draw.
+	ID3D11DeviceContext* context = m_directX.GetContext().Get();
+
+	ID3D11RenderTargetView* renderTarget = m_directX.GetRenderTargetView().Get();
+	ID3D11DepthStencilView* depthStencil = m_directX.GetDepthStencilView().Get();
+
+	SDXAssetMGR* pAssetMgr = ASSETMGR->GetInstance();
+	std::string cbufferID = "worldViewProj";
+
+	XMMATRIX scale = XMMatrixScaling(drawItem->scale.x, drawItem->scale.y, drawItem->scale.z);
+	XMMATRIX trans = XMMatrixTranslation(drawItem->worldPos.x, drawItem->worldPos.y, drawItem->worldPos.z);
+	XMMATRIX rot = XMMatrixRotationRollPitchYaw(
+		XMConvertToRadians(drawItem->rotation.x), 
+		XMConvertToRadians(drawItem->rotation.y), 
+		XMConvertToRadians(drawItem->rotation.z)
+	);
+
+	auto world = trans * rot * scale;
+	world = XMMatrixTranspose(world);
+	
+	DirectX::XMStoreFloat4x4(
+		&m_worldViewProj.world,
+		world
+	);
+
+	//DirectX::XMStoreFloat4x4(
+	//	&m_worldViewProj.invWorldTrans,
+	//	XMMatrixTranspose(XMMatrixInverse(nullptr, world))
+	//);
+
+	context->UpdateSubresource(
+		pAssetMgr->GetCBuffer(cbufferID).Get(),
+		0,
+		nullptr,
+		&m_worldViewProj,
+		0,
+		0
+	);
+
+	// Foreach submeshes in mesh
+	for (int mesh = 0; mesh < static_cast<int>(drawItem->mesh->GetTotalSubMeshes()); mesh++)
+	{
+		// Only 1 sub mesh (testing)
+		SDXSubMesh* pSubMesh = drawItem->mesh->GetSubMesh(mesh);
+
+		// Set up the IA stage by setting the input topology and layout.
+		UINT stride = GetSizeOfVertexType(pSubMesh->GetVertexBuffer()->GetType());
+		UINT offset = 0;
+
+		ID3D11Buffer* vertexBuf = pSubMesh->GetVertexBuffer()->GetBuffer();
+		context->IASetVertexBuffers(
+			0,
+			1,
+			&vertexBuf,
+			&stride,
+			&offset
+		);
+
+		ID3D11Buffer* indexBuf = pSubMesh->GetIndexBuffer()->GetBuffer();
+		context->IASetIndexBuffer(
+			indexBuf,
+			DXGI_FORMAT_R32_UINT,
+			0
+		);
+
+		context->IASetPrimitiveTopology(
+			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+		);
+
+		// Material
+		SMaterial mat = pAssetMgr->GetMaterial(pSubMesh->GetMaterialID());
+
+		// Shader stuff
+		//
+		// Get the shader
+		SShader* pShader = pAssetMgr->GetShader(mat.shaderID);
+
+		// Input layout set
+		context->IASetInputLayout(pShader->inputLayout.Get());
+
+		// Set up the vertex shader stage.
+		context->VSSetShader(
+			pShader->vertexShader.Get(),
+			nullptr,
+			0
+		);
+
+		// Constant buffer/s
+		context->VSSetConstantBuffers(
+			0,
+			1,
+			pAssetMgr->GetCBuffer(cbufferID).GetAddressOf()
+		);
+
+		// Set up the pixel shader stage.
+		context->PSSetShader(
+			pShader->pixelShader.Get(),
+			nullptr,
+			0
+		);
+
+		// Calling Draw tells Direct3D to start sending commands to the graphics device.
+		context->DrawIndexed(
+			pSubMesh->GetIndexBuffer()->GetCount(),
+			0,
+			0
+		);
+	}
+}
+
+void SDXEngine::SDXRenderer::Render(const std::list<SDXDrawItem*>& drawList)
+{
+	// Use the Direct3D device context to draw.
+	ID3D11DeviceContext* context = m_directX.GetContext().Get();
+
+	ID3D11RenderTargetView* renderTarget = m_directX.GetRenderTargetView().Get();
+	ID3D11DepthStencilView* depthStencil = m_directX.GetDepthStencilView().Get();
+
+	SDXAssetMGR* pAssetMgr = ASSETMGR->GetInstance();
+	std::string cbufferID = "worldViewProj";
+
+	for (auto item = drawList.begin(); item != drawList.end(); item++)
+	{
+		SDXDrawItem* pDrawItem = (*item);
+		XMMATRIX scale = XMMatrixScaling(pDrawItem->scale.x, pDrawItem->scale.y, pDrawItem->scale.z);
+		XMMATRIX trans = XMMatrixTranslation(pDrawItem->worldPos.x, pDrawItem->worldPos.y, pDrawItem->worldPos.z);
+		XMMATRIX rot = XMMatrixRotationRollPitchYaw(
+			XMConvertToRadians(pDrawItem->rotation.x),
+			XMConvertToRadians(pDrawItem->rotation.y),
+			XMConvertToRadians(pDrawItem->rotation.z)
+		);
+
+		auto world = trans * rot * scale;
+		world = XMMatrixTranspose(world);
+
+		DirectX::XMStoreFloat4x4(
+			&m_worldViewProj.world,
+			world
+		);
+
+		//DirectX::XMStoreFloat4x4(
+		//	&m_worldViewProj.invWorldTrans,
+		//	XMMatrixTranspose(XMMatrixInverse(nullptr, world))
+		//);
+
+		context->UpdateSubresource(
+			pAssetMgr->GetCBuffer(cbufferID).Get(),
+			0,
+			nullptr,
+			&m_worldViewProj,
+			0,
+			0
+		);
+
+		// Foreach submeshes in mesh
+		for (int mesh = 0; mesh < static_cast<int>(pDrawItem->mesh->GetTotalSubMeshes()); mesh++)
+		{
+			// Only 1 sub mesh (testing)
+			SDXSubMesh* pSubMesh = pDrawItem->mesh->GetSubMesh(mesh);
+
+			// Set up the IA stage by setting the input topology and layout.
+			UINT stride = GetSizeOfVertexType(pSubMesh->GetVertexBuffer()->GetType());
+			UINT offset = 0;
+
+			ID3D11Buffer* vertexBuf = pSubMesh->GetVertexBuffer()->GetBuffer();
+			context->IASetVertexBuffers(
+				0,
+				1,
+				&vertexBuf,
+				&stride,
+				&offset
+			);
+
+			ID3D11Buffer* indexBuf = pSubMesh->GetIndexBuffer()->GetBuffer();
+			context->IASetIndexBuffer(
+				indexBuf,
+				DXGI_FORMAT_R32_UINT,
+				0
+			);
+
+			context->IASetPrimitiveTopology(
+				D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+			);
+
+			// Material
+			SMaterial mat = pAssetMgr->GetMaterial(pSubMesh->GetMaterialID());
+
+			// Shader stuff
+			//
+			// Get the shader
+			SShader* pShader = pAssetMgr->GetShader(mat.shaderID);
+
+			// Input layout set
+			context->IASetInputLayout(pShader->inputLayout.Get());
+
+			// Set up the vertex shader stage.
+			context->VSSetShader(
+				pShader->vertexShader.Get(),
+				nullptr,
+				0
+			);
+
+			// Constant buffer/s
+			context->VSSetConstantBuffers(
+				0,
+				1,
+				pAssetMgr->GetCBuffer(cbufferID).GetAddressOf()
+			);
+
+			// Set up the pixel shader stage.
+			context->PSSetShader(
+				pShader->pixelShader.Get(),
+				nullptr,
+				0
+			);
+
+			// Calling Draw tells Direct3D to start sending commands to the graphics device.
+			context->DrawIndexed(
+				pSubMesh->GetIndexBuffer()->GetCount(),
+				0,
+				0
+			);
+		}
+	}
+}
+
 void SDXEngine::SDXRenderer::UpdateProjectionMatrix(const XMFLOAT4X4 & proj)
 {
 	m_worldViewProj.projection = proj;
@@ -167,7 +395,6 @@ void SDXEngine::SDXRenderer::RenderCube()
 		SDXSubMesh* pSubMesh = pMesh->GetSubMesh(0);
 
 		// Set up the IA stage by setting the input topology and layout.
-		//UINT stride = GetSizeOfVertexType(SDXVERTEX_TYPE_PNC);
 		UINT stride = GetSizeOfVertexType(pSubMesh->GetVertexBuffer()->GetType());
 		UINT offset = 0;
 
@@ -175,7 +402,6 @@ void SDXEngine::SDXRenderer::RenderCube()
 		context->IASetVertexBuffers(
 			0,
 			1,
-			//&m_vertexBuffer,
 			&vertexBuf,
 			&stride,
 			&offset
@@ -183,7 +409,6 @@ void SDXEngine::SDXRenderer::RenderCube()
 
 		ID3D11Buffer* indexBuf = pSubMesh->GetIndexBuffer()->GetBuffer();
 		context->IASetIndexBuffer(
-			//m_indexBuffer,
 			indexBuf,
 			DXGI_FORMAT_R32_UINT,
 			0
@@ -201,7 +426,6 @@ void SDXEngine::SDXRenderer::RenderCube()
 		// Shader stuff
 		//
 		// Get the shader
-		/*SShader* pShader = pAssetMgr->GetShader("basic_shader");*/
 		SShader* pShader = pAssetMgr->GetShader(mat.shaderID);
 
 		// Input layout set

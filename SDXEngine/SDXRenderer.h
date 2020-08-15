@@ -5,22 +5,22 @@
 //--------------------------------------------------------------------------
 #pragma once
 
+#include <list>
 #include "SDXDirectX.h"
 #include "SDXDirect2D.h"
 #include "SDXCameraFP.h"
-
 #include "SDXRasterState.h"
-
-#include "SDXSubMesh.h"
+#include "SDXMesh.h"
 
 namespace SDXEngine
 {
 	struct SDXDrawItem
 	{
-		XMFLOAT3 worldPos;
-		XMFLOAT3 rotation;
+		XMFLOAT3 worldPos = XMFLOAT3(0.f, 0.f, 0.f);
+		XMFLOAT3 rotation = XMFLOAT3(0.f, 0.f, 0.f);
+		XMFLOAT3 scale = XMFLOAT3(1.f, 1.f, 1.f);
 
-		SDXSubMesh* submesh;
+		SDXMesh* mesh = nullptr;
 	};
 
 	class SDXRenderer
@@ -32,6 +32,9 @@ namespace SDXEngine
 		SDXErrorId Initialise(const SDXDirectXInfo& info);
 		void BeginDraw();
 		void EndDraw();
+
+		void Render(SDXDrawItem* drawItem);
+		void Render(const std::list<SDXDrawItem*>& drawList);
 
 		void UpdateProjectionMatrix(const XMFLOAT4X4& proj);
 		void UpdateViewMatrix(const XMFLOAT4X4& view);

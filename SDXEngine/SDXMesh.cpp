@@ -45,3 +45,11 @@ int SDXEngine::SDXMesh::GetTotalSubMeshes() const
 {
 	return (int)m_subMeshes.size();
 }
+
+void SDXEngine::SDXMesh::Release()
+{
+	for (int i = 0; i < static_cast<int>(m_subMeshes.size()); i++)
+	{
+		m_subMeshes[i].Release();
+	}
+}

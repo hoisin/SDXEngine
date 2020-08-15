@@ -25,6 +25,8 @@ namespace SDXEngine
 		SDXVertexBuffer* GetVertexBuffer();
 		SDXIndexBuffer* GetIndexBuffer();
 
+		void Release();
+
 	private:
 		std::string m_materialID;
 

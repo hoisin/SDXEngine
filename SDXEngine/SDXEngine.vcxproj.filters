@@ -38,11 +38,17 @@
     <Filter Include="Gfx\DirectX\Shader">
       <UniqueIdentifier>{26369dec-2120-4dce-8886-84a12396880d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Gfx\Material">
-      <UniqueIdentifier>{e1aa9b6b-622a-4b17-b3b6-8eade9213d4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Asset">
       <UniqueIdentifier>{1bb4e66d-6017-4f3e-9425-d44baa870a46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Event">
+      <UniqueIdentifier>{0a200e95-fecf-44d8-b87b-caa04fc40176}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\Renderer\Material">
+      <UniqueIdentifier>{e1aa9b6b-622a-4b17-b3b6-8eade9213d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Gfx\Renderer\Scene">
+      <UniqueIdentifier>{e66e0f15-b486-4cdb-a66a-6b89fe5948ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -122,13 +128,16 @@
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClInclude>
     <ClInclude Include="SDXMaterialMGR.h">
-      <Filter>Gfx\Material</Filter>
+      <Filter>Gfx\Renderer\Material</Filter>
     </ClInclude>
     <ClInclude Include="SDXMeshMGR.h">
       <Filter>Gfx\DirectX\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="SDXAssetMGR.h">
       <Filter>Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="SDXSceneMGR.h">
+      <Filter>Gfx\Renderer\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -202,13 +211,16 @@
       <Filter>Gfx\DirectX\Shader</Filter>
     </ClCompile>
     <ClCompile Include="SDXMaterialMGR.cpp">
-      <Filter>Gfx\Material</Filter>
+      <Filter>Gfx\Renderer\Material</Filter>
     </ClCompile>
     <ClCompile Include="SDXMeshMGR.cpp">
       <Filter>Gfx\DirectX\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="SDXAssetMGR.cpp">
       <Filter>Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXSceneMGR.cpp">
+      <Filter>Gfx\Renderer\Scene</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

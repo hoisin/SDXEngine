@@ -14,8 +14,8 @@ SDXInputHandler::~SDXInputHandler()
 
 SDXErrorId SDXEngine::SDXInputHandler::Initialise()
 {
-	m_keyboard.SetHeldThreshold(0.100);
-	m_mouse.SetHeldThreshold(0.5);
+	m_keyboard.SetHeldThreshold(500);
+	m_mouse.SetHeldThreshold(500);
 	return SDX_ERROR_NONE;
 }
 
