@@ -8,9 +8,9 @@
 
 namespace SDXEngine
 {
-	enum SDXErrorId
+	enum class SDXErrorId
 	{
-		SDX_ERROR_NONE = 0,
+		SDX_ERROR_NONE,
 
 		// App errors
 		SDX_ERROR_APPCLASSREG_FAIL,

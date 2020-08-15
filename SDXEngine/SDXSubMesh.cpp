@@ -19,7 +19,7 @@ SDXSubMesh::~SDXSubMesh()
 //
 SDXErrorId SDXEngine::SDXSubMesh::LoadMeshData(SDXEngine::SDXMeshData* data, SDXDirectX* directX)
 {
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	// Clear vertex buffer if already existing data
 	if (m_vertices.GetBuffer())
@@ -27,7 +27,7 @@ SDXErrorId SDXEngine::SDXSubMesh::LoadMeshData(SDXEngine::SDXMeshData* data, SDX
 
 	// Load vertex data 
 	error = m_vertices.LoadData(data, directX);
-	if (error != SDX_ERROR_NONE)
+	if (error != SDXErrorId::SDX_ERROR_NONE)
 		return error;
 
 	// Clear index buffer if already existing data

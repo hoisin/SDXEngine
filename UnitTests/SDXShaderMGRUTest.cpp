@@ -65,17 +65,17 @@ TEST_F(SDXShaderMGRUTest, Initialise)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on directX initialise";
 
 	SDXShaderMGR mgr;
 
 	// Invalid initialise
 	error = mgr.Initialise(nullptr);
-	EXPECT_EQ(error, SDX_ERROR_PARMETER_DIRECTX_NULLPTR) << "Expected directX null ptr error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_PARMETER_DIRECTX_NULLPTR) << "Expected directX null ptr error";
 
 	// Valid 
 	error = mgr.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid initialise";
 }
 
 TEST_F(SDXShaderMGRUTest, LoadShader)
@@ -87,29 +87,29 @@ TEST_F(SDXShaderMGRUTest, LoadShader)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on directX initialise";
 
 	SDXShaderMGR mgr;
 
 	// Try loading without initialising
 	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
 		ARRAYSIZE(validDesc), "Test");
-	EXPECT_EQ(error, SDX_ERROR_SHADERMGR_DIRECTX_NOTSET) << "Expected directX not set error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_SHADERMGR_DIRECTX_NOTSET) << "Expected directX not set error";
 
 	// Init shader manager
 	error = mgr.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Failed to initialise shader manager";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Failed to initialise shader manager";
 
 	std::string validShader = "validShader";
 	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
 		ARRAYSIZE(validDesc), validShader);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid shader load";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid shader load";
 
 	// Invalid load using null file name strings
 	// Just testing not equal to no error.
 	// Actual error code tests checked via SDXShaderLoaderUTest
 	error = mgr.LoadShader("", "", nullptr, 0, "");
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected an error on invalid load";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected an error on invalid load";
 }
 
 TEST_F(SDXShaderMGRUTest, BindConstant)
@@ -121,7 +121,7 @@ TEST_F(SDXShaderMGRUTest, BindConstant)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on directX initialise";
 
 	// Try binding without initialise
 	std::string bufferID = "TestBuffer";
@@ -131,25 +131,25 @@ TEST_F(SDXShaderMGRUTest, BindConstant)
 		D3D11_BIND_CONSTANT_BUFFER
 	);
 	error = mgr.BindConstant(bufferID, &bufferDesc);
-	EXPECT_EQ(error, SDX_ERROR_SHADERMGR_DIRECTX_NOTSET) << "Expected directX not set error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_SHADERMGR_DIRECTX_NOTSET) << "Expected directX not set error";
 
 	error = mgr.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on initialise";
 
 	// NULL string
 	error = mgr.BindConstant("", &bufferDesc);
-	EXPECT_EQ(error, SDX_ERROR_SHADERMGR_NULL_ID) << "Expected null ID error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_SHADERMGR_NULL_ID) << "Expected null ID error";
 
 	error = mgr.BindConstant(bufferID, nullptr);
-	EXPECT_EQ(error, SDX_ERROR_SHADERMGR_BIND_CONSTANT_FAILED) << "Expected bind failure";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_SHADERMGR_BIND_CONSTANT_FAILED) << "Expected bind failure";
 
 	// Valid check
 	error = mgr.BindConstant(bufferID, &bufferDesc);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid bind";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid bind";
 
 	// Existing ID
 	error = mgr.BindConstant(bufferID, &bufferDesc);
-	EXPECT_EQ(error, SDX_ERROR_SHADERMGR_BIND_CONSTANT_ID_ALREADY_EXIST) << "Expected bind constant ID already exist error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_SHADERMGR_BIND_CONSTANT_ID_ALREADY_EXIST) << "Expected bind constant ID already exist error";
 }
 
 TEST_F(SDXShaderMGRUTest, GetTests)
@@ -161,13 +161,13 @@ TEST_F(SDXShaderMGRUTest, GetTests)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on directX initialise";
 
 	SDXShaderMGR mgr;
 
 	// Init shader manager
 	error = mgr.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Failed to initialise shader manager";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Failed to initialise shader manager";
 
 	std::string validShader = "validShader";
 	std::string validShader_2 = "validShader2";
@@ -182,11 +182,11 @@ TEST_F(SDXShaderMGRUTest, GetTests)
 	// Load test shaders in
 	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
 		ARRAYSIZE(validDesc), validShader);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid shader load";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid shader load";
 
 	error = mgr.LoadShader(validVertexShader, validPixelShader, validDesc,
 		ARRAYSIZE(validDesc), validShader_2);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid shader load";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid shader load";
 
 	// Valid get shader tests
 	pResult = mgr.GetShader(0);
@@ -224,10 +224,10 @@ TEST_F(SDXShaderMGRUTest, GetTests)
 
 	// Bind test constant buffers
 	error = mgr.BindConstant(bufferID_1, &bufferDesc1);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid bind";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid bind";
 
 	error = mgr.BindConstant(bufferID_2, &bufferDesc2);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid bind";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid bind";
 
 	// Valid tests
 	pReturn = mgr.GetCBuffer(0);

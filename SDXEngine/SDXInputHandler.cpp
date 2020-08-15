@@ -16,7 +16,7 @@ SDXErrorId SDXEngine::SDXInputHandler::Initialise()
 {
 	m_keyboard.SetHeldThreshold(500);
 	m_mouse.SetHeldThreshold(500);
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXEngine::SDXInputHandler::UpdateInput(double deltaT)

@@ -43,7 +43,7 @@ TEST_F(SDXShaderLoaderUTest, LoadVertexShader)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on directX initialise";
 
 	ComPtr<ID3D11VertexShader> vertexShader = nullptr;
 	ComPtr<ID3D11InputLayout> inputLayout = nullptr;
@@ -64,7 +64,7 @@ TEST_F(SDXShaderLoaderUTest, LoadVertexShader)
 	std::string target = "vs_5_0";
 
 	error = loadHelper.LoadVertexShader(&directX, validVertexShaderFile, validDesc, ARRAYSIZE(validDesc), entryPoint, target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid vertex shader compile";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid vertex shader compile";
 	EXPECT_NE(vertexShader.Get(), nullptr) << "Returned vertex shader should not be null";
 	EXPECT_NE(inputLayout.Get(), nullptr) << "Returned input layout should not be null";
 
@@ -72,33 +72,33 @@ TEST_F(SDXShaderLoaderUTest, LoadVertexShader)
 
 	// Null directX
 	error = loadHelper.LoadVertexShader(nullptr, validVertexShaderFile, validDesc, ARRAYSIZE(validDesc), entryPoint, target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_EQ(error, SDX_ERROR_PARMETER_DIRECTX_NULLPTR) << "Expected directX nullptr error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_PARMETER_DIRECTX_NULLPTR) << "Expected directX nullptr error";
 
 	// Uninitialised directX
 	SDXDirectX notLoaded;
 	error = loadHelper.LoadVertexShader(&notLoaded, validVertexShaderFile, validDesc, ARRAYSIZE(validDesc), entryPoint, target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
 
 	// Empty/wrong file name
 	std::string invalidFile = "";
 	error = loadHelper.LoadVertexShader(&directX, invalidFile, validDesc, ARRAYSIZE(validDesc), entryPoint, target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on invalid file name";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on invalid file name";
 
 	// Null shader desc
 	error = loadHelper.LoadVertexShader(&directX, validVertexShaderFile, nullptr, ARRAYSIZE(validDesc), entryPoint, target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on null vertex description";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on null vertex description";
 
 	// Null/invalid entry point
 	error = loadHelper.LoadVertexShader(&directX, validVertexShaderFile, validDesc, ARRAYSIZE(validDesc), "", target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on invalid entry point";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on invalid entry point";
 
 	// Null/invalid target
 	error = loadHelper.LoadVertexShader(&directX, validVertexShaderFile, validDesc, ARRAYSIZE(validDesc), entryPoint, "", vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on invalid target";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on invalid target";
 
 	// Load invalid file
 	error = loadHelper.LoadVertexShader(&directX, invalidVertexShaderFile, validDesc, ARRAYSIZE(validDesc), entryPoint, target, vertexShader.ReleaseAndGetAddressOf(), inputLayout.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on errors in shader file";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on errors in shader file";
 }
 
 
@@ -114,7 +114,7 @@ TEST_F(SDXShaderLoaderUTest, LoadPixelShader)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on directX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on directX initialise";
 
 	ComPtr<ID3D11PixelShader> pixelShader;
 	SDXShaderLoader loadHelper;
@@ -124,33 +124,33 @@ TEST_F(SDXShaderLoaderUTest, LoadPixelShader)
 
 	// Valid test
 	error = loadHelper.LoadPixelShader(&directX, validPixelShaderFile, entryPoint, target, pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid pixel shader load";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid pixel shader load";
 
 	// Invalid tests
 
 	// Null directX
 	error = loadHelper.LoadPixelShader(nullptr, validPixelShaderFile, entryPoint, target, pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_EQ(error, SDX_ERROR_PARMETER_DIRECTX_NULLPTR) << "Expected directX nullptr error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_PARMETER_DIRECTX_NULLPTR) << "Expected directX nullptr error";
 
 	// DirectX not loaded
 	SDXDirectX notLoaded;
 	error = loadHelper.LoadPixelShader(&notLoaded, validPixelShaderFile, entryPoint, target, pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
 
 	// Empty/wrong file name
 	std::string invalidFile = "";
 	error = loadHelper.LoadPixelShader(&directX, invalidFile, entryPoint, target, pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on invalid file name";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on invalid file name";
 
 	// Invalid entry point
 	error = loadHelper.LoadPixelShader(&directX, validPixelShaderFile, "", target, pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "EXpected error on invalid entry point";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "EXpected error on invalid entry point";
 
 	// Invalid target 
 	error = loadHelper.LoadPixelShader(&directX, validPixelShaderFile, entryPoint, "", pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on invalid target";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on invalid target";
 
 	// Invalid pixel shader file
 	error = loadHelper.LoadPixelShader(&directX, invalidPixelShaderFile, entryPoint, target, pixelShader.ReleaseAndGetAddressOf());
-	EXPECT_NE(error, SDX_ERROR_NONE) << "Expected error on errors in pixel shader";
+	EXPECT_NE(error, SDXErrorId::SDX_ERROR_NONE) << "Expected error on errors in pixel shader";
 }

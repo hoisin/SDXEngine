@@ -15,15 +15,15 @@ SDXMesh::~SDXMesh()
 SDXErrorId SDXEngine::SDXMesh::AddSubMesh(SDXMeshData* meshData, SDXDirectX* directX)
 {
 	if (meshData == nullptr)
-		return SDX_ERROR_MESH_MESHDATA_NULL;
+		return SDXErrorId::SDX_ERROR_MESH_MESHDATA_NULL;
 
 	if (directX == nullptr)
-		return SDX_ERROR_MESH_DIRECTX_NULL;
+		return SDXErrorId::SDX_ERROR_MESH_DIRECTX_NULL;
 
 	m_subMeshes.push_back(SDXSubMesh());
 	SDXSubMesh* mesh = &m_subMeshes[(int)m_subMeshes.size() - 1];
 
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	mesh->SetMaterialID(meshData->GetMaterialID());
 	error = mesh->GetVertexBuffer()->LoadData(meshData, directX);

@@ -37,11 +37,11 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 		return false;
 	}
 
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	// Attempt to register window class
 	error = RegisterAppClass();
-	if (error != SDX_ERROR_NONE)
+	if (error != SDXErrorId::SDX_ERROR_NONE)
 	{
 		// Error log
 		return false;
@@ -49,14 +49,14 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 
 	// Attempt to create the window
 	error = CreateAppWindow();
-	if (error != SDX_ERROR_NONE)
+	if (error != SDXErrorId::SDX_ERROR_NONE)
 	{
 		// Error log
 		return false;
 	}
 
 	// Run OnInitialise for derived behavior
-	if (OnInitialise() != SDX_ERROR_NONE)
+	if (OnInitialise() != SDXErrorId::SDX_ERROR_NONE)
 	{
 		// Do some error logging
 		return false;
@@ -70,7 +70,7 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 void SDXBaseApp::Run()
 {
 	MSG msg;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	m_timer.Reset();
 	m_timer.Start();
@@ -109,13 +109,13 @@ void SDXBaseApp::Run()
 SDXErrorId SDXBaseApp::OnUpdate(double deltaT)
 {
 	// Implement in derived
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXBaseApp::OnDraw(double deltaT)
 {
 	// Implement in derived
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 bool SDXBaseApp::OnEvent(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -212,9 +212,9 @@ SDXErrorId SDXBaseApp::RegisterAppClass()
 
 	// Register Class
 	if (!RegisterClassEx(&wcex))
-		return SDX_ERROR_APPCLASSREG_FAIL;
+		return SDXErrorId::SDX_ERROR_APPCLASSREG_FAIL;
 
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXBaseApp::CreateAppWindow()
@@ -243,7 +243,7 @@ SDXErrorId SDXBaseApp::CreateAppWindow()
 	MoveWindow(m_hWnd, rWindow.left, rWindow.top, m_windowWidth + ptDiff.x, m_windowHeight + ptDiff.y, TRUE);
 
 	if (m_hWnd == 0)
-		return SDX_ERROR_CREATEWINDOW_FAIL;
+		return SDXErrorId::SDX_ERROR_CREATEWINDOW_FAIL;
 
 	// Store a pointer to this object in the window, otherwise we can't grab it using
 	// GetWindowLongPtr(..) in the callback for messages
@@ -252,7 +252,7 @@ SDXErrorId SDXBaseApp::CreateAppWindow()
 	ShowWindow(m_hWnd, SW_SHOW);
 	UpdateWindow(m_hWnd);
 
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXBaseApp::CalculateFrameStats(double deltaT)

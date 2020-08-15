@@ -26,8 +26,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 	{
 	case SDXVERTEX_TYPE_PC:
 	{
-		if (pMesh->CreateVertexArray(type, 3) != SDX_ERROR_NONE ||
-			pMesh->CreateIndexArray(3) != SDX_ERROR_NONE)
+		if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
+			pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
 		{
 			delete pMesh;
 			pMesh = nullptr;
@@ -53,8 +53,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 
 	case SDXVERTEX_TYPE_PNC:
 	{
-		if (pMesh->CreateVertexArray(type, 3) != SDX_ERROR_NONE ||
-			pMesh->CreateIndexArray(3) != SDX_ERROR_NONE)
+		if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
+			pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
 		{
 			delete pMesh;
 			pMesh = nullptr;
@@ -106,8 +106,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 	// Find total indices
 	int totalIndices = 6 * (subdivision * subdivision);
 
-	if (mesh->CreateVertexArray(type, totalVertices) != SDX_ERROR_NONE ||
-		mesh->CreateIndexArray(totalIndices) != SDX_ERROR_NONE)
+	if (mesh->CreateVertexArray(type, totalVertices) != SDXErrorId::SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDXErrorId::SDX_ERROR_NONE)
 	{
 		delete mesh;
 		mesh = nullptr;
@@ -219,8 +219,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 	// Find total indices
 	int totalIndices = 6 * (subdivision * subdivision);
 
-	if (mesh->CreateVertexArray(type, totalVertices) != SDX_ERROR_NONE ||
-		mesh->CreateIndexArray(totalIndices) != SDX_ERROR_NONE)
+	if (mesh->CreateVertexArray(type, totalVertices) != SDXErrorId::SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDXErrorId::SDX_ERROR_NONE)
 	{
 		delete mesh;
 		mesh = nullptr;
@@ -334,8 +334,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexTyp
 	// Find total indices
 	int totalIndices = 6 * 6 * (subdivision * subdivision);
 
-	if (mesh->CreateVertexArray(type, totalVertices) != SDX_ERROR_NONE ||
-		mesh->CreateIndexArray(totalIndices) != SDX_ERROR_NONE)
+	if (mesh->CreateVertexArray(type, totalVertices) != SDXErrorId::SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDXErrorId::SDX_ERROR_NONE)
 	{
 		delete mesh;
 		mesh = nullptr;

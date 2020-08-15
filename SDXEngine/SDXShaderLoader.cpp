@@ -18,12 +18,12 @@ SDXErrorId SDXEngine::SDXShaderLoader::LoadVertexShader(SDXDirectX* pDX, const s
 	ID3D11VertexShader** outShader, ID3D11InputLayout** outLayout)
 {
 	if (pDX == nullptr)
-		return SDX_ERROR_PARMETER_DIRECTX_NULLPTR;
+		return SDXErrorId::SDX_ERROR_PARMETER_DIRECTX_NULLPTR;
 
 	if (pDX->GetDevice() == nullptr)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
+		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
 
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	
 	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -48,7 +48,7 @@ SDXErrorId SDXEngine::SDXShaderLoader::LoadVertexShader(SDXDirectX* pDX, const s
 		if (shaderBlob)
 			shaderBlob->Release();
 
-		return SDX_ERROR_SHADER_COMPILE_FAILED;
+		return SDXErrorId::SDX_ERROR_SHADER_COMPILE_FAILED;
 	}
 
 	// Create vertex shader
@@ -56,14 +56,14 @@ SDXErrorId SDXEngine::SDXShaderLoader::LoadVertexShader(SDXDirectX* pDX, const s
 	if (FAILED(result))
 	{
 		shaderBlob->Release();
-		return SDX_ERROR_VERTEXSHADER_CREATE_FAILED;
+		return SDXErrorId::SDX_ERROR_VERTEXSHADER_CREATE_FAILED;
 	}
 
 	result = pDX->GetDevice()->CreateInputLayout(desc, inputElements, shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), outLayout);
 	if (FAILED(result))
 	{
 		shaderBlob->Release();
-		return SDX_ERROR_INPUTLAYOUT_CREATE_FAILED;
+		return SDXErrorId::SDX_ERROR_INPUTLAYOUT_CREATE_FAILED;
 	}
 	shaderBlob->Release();
 
@@ -74,12 +74,12 @@ SDXErrorId SDXEngine::SDXShaderLoader::LoadPixelShader(SDXDirectX* pDX, const st
 	const std::string& entryPoint, const std::string& target, ID3D11PixelShader** outShader)
 {
 	if (pDX == nullptr)
-		return SDX_ERROR_PARMETER_DIRECTX_NULLPTR;
+		return SDXErrorId::SDX_ERROR_PARMETER_DIRECTX_NULLPTR;
 
 	if (pDX->GetDevice() == nullptr)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
+		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
 
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -104,14 +104,14 @@ SDXErrorId SDXEngine::SDXShaderLoader::LoadPixelShader(SDXDirectX* pDX, const st
 		if (shaderBlob)
 			shaderBlob->Release();
 
-		return SDX_ERROR_SHADER_COMPILE_FAILED;
+		return SDXErrorId::SDX_ERROR_SHADER_COMPILE_FAILED;
 	}
 
 	result = pDX->GetDevice()->CreatePixelShader(shaderBlob->GetBufferPointer(), shaderBlob->GetBufferSize(), nullptr, outShader);
 	if (FAILED(result))
 	{
 		shaderBlob->Release();
-		return SDX_ERROR_PIXELSHADER_CREATE_FAILED;
+		return SDXErrorId::SDX_ERROR_PIXELSHADER_CREATE_FAILED;
 	}
 
 	shaderBlob->Release();

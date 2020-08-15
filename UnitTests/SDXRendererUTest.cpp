@@ -38,18 +38,18 @@ TEST_F(SDXRendererUTest, Initialise)
 
 	// Blank info test
 	SDXErrorId error = renderer.Initialise(info);
-	EXPECT_EQ(error, SDX_ERROR_RENDERER_CLIENTAREA_NOT_SET) << "Unexpected error for initialise without client area set";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_RENDERER_CLIENTAREA_NOT_SET) << "Unexpected error for initialise without client area set";
 
 	info.clientWidth = m_width;
 	info.clientHeight = m_height;
 
 	// Test with setting only client area
 	error = renderer.Initialise(info);
-	EXPECT_EQ(error, SDX_ERROR_RENDERER_OUTPUTWINDOW_NOT_SET) << "Unexpected error for initialise without output window set";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_RENDERER_OUTPUTWINDOW_NOT_SET) << "Unexpected error for initialise without output window set";
 
 	info.hwnd = m_testApp.GetHwndTest();
 
 	// Valid test
 	error = renderer.Initialise(info);
-	EXPECT_EQ(error, SDX_ERROR_NONE);
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE);
 }

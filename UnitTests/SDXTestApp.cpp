@@ -17,19 +17,19 @@ HWND SDXTestApp::GetHwndTest() const
 
 SDXErrorId SDXTestApp::OnInitialise()
 {
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXTestApp::OnUpdate(double deltaT)
 {
 	// Set to quit for testing
 	StopRun();
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXTestApp::OnDraw(double deltaT)
 {
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXTestApp::OnShutDown()

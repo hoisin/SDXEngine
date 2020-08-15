@@ -16,7 +16,7 @@ SDXDirectXShaderCompiler::~SDXDirectXShaderCompiler()
 SDXErrorId SDXEngine::SDXDirectXShaderCompiler::CompileShader(const std::string & shaderFile, const std::string & entryPoint, const std::string & profile, ID3DBlob ** _outShader)
 {
 	if (shaderFile.empty() || entryPoint.empty() || profile.empty() || !_outShader)
-		return SDX_ERROR_DXCOMPILER_COMPILE_INVALID_ARGS;
+		return SDXErrorId::SDX_ERROR_DXCOMPILER_COMPILE_INVALID_ARGS;
 
 	UINT flags = D3DCOMPILE_ENABLE_STRICTNESS;
 #if defined(DEBUG) || defined(_DEBUG)
@@ -40,10 +40,10 @@ SDXErrorId SDXEngine::SDXDirectXShaderCompiler::CompileShader(const std::string 
 		if (shaderBlob)
 			shaderBlob->Release();
 
-		return SDX_ERROR_DXCOMPILER_COMPILE_FAILED;
+		return SDXErrorId::SDX_ERROR_DXCOMPILER_COMPILE_FAILED;
 	}
 
 	*_outShader = shaderBlob;
 
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }

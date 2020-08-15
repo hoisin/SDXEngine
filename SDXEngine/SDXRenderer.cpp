@@ -39,12 +39,12 @@ SDXErrorId SDXEngine::SDXRenderer::Initialise(const SDXDirectXInfo & info)
 {
 	// Info check
 	if (info.clientHeight == 0 || info.clientWidth == 0)
-		return SDX_ERROR_RENDERER_CLIENTAREA_NOT_SET;
+		return SDXErrorId::SDX_ERROR_RENDERER_CLIENTAREA_NOT_SET;
 
 	if (info.hwnd == nullptr)
-		return SDX_ERROR_RENDERER_OUTPUTWINDOW_NOT_SET;
+		return SDXErrorId::SDX_ERROR_RENDERER_OUTPUTWINDOW_NOT_SET;
 		
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	error = m_directX.Initialise(info);
 
 	// Setup direct2D stuff
@@ -54,7 +54,7 @@ SDXErrorId SDXEngine::SDXRenderer::Initialise(const SDXDirectXInfo & info)
 
 	m_wireFrame.SetWireFrame(true);
 
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXEngine::SDXRenderer::BeginDraw()
@@ -333,7 +333,7 @@ SDXErrorId SDXEngine::SDXRenderer::CreateViewAndPerspective()
 
 	XMStoreFloat4x4(&m_worldViewProj.world, XMMatrixIdentity());
 
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXEngine::SDXRenderer::UpdateTest()

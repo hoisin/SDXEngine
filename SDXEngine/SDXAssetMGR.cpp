@@ -15,12 +15,12 @@ SDXEngine::SDXAssetMGR::~SDXAssetMGR()
 
 SDXErrorId SDXEngine::SDXAssetMGR::Initialise(SDXDirectX* pDx)
 {
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	m_pDirectX = pDx;
 
 	error = m_shaderMGR.Initialise(m_pDirectX);
-	if (error != SDX_ERROR_NONE)
+	if (error != SDXErrorId::SDX_ERROR_NONE)
 	{
 		return error;
 	}
@@ -40,15 +40,15 @@ SDXErrorId SDXEngine::SDXAssetMGR::CreateMesh(const std::string& id, SDXMesh** o
 		*outMesh = m_meshMGR.CreateMesh(id);
 		if (outMesh == nullptr)
 		{
-			return SDX_ERROR_ASSETMGR_DUPLICATE_MESHID;
+			return SDXErrorId::SDX_ERROR_ASSETMGR_DUPLICATE_MESHID;
 		}
 		else
 		{
-			return SDX_ERROR_NONE;
+			return SDXErrorId::SDX_ERROR_NONE;
 		}
 	}
 
-	return SDX_ERROR_ASSETMGR_NOT_INITIALISED;
+	return SDXErrorId::SDX_ERROR_ASSETMGR_NOT_INITIALISED;
 }
 
 SDXMesh* SDXEngine::SDXAssetMGR::GetMesh(const std::string& id)
@@ -63,7 +63,7 @@ int SDXEngine::SDXAssetMGR::GetMeshCount()
 
 SDXErrorId SDXEngine::SDXAssetMGR::LoadShader(const std::string& vertexShaderFile, const std::string& pixelShaderFile, D3D11_INPUT_ELEMENT_DESC* desc, int inputElements, const std::string& assignID)
 {
-	SDXErrorId error = SDX_ERROR_ASSETMGR_NOT_INITIALISED;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_ASSETMGR_NOT_INITIALISED;
 
 	if (m_pDirectX)
 	{

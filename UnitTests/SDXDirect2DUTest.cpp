@@ -34,7 +34,7 @@ TEST_F(SDXDirect2DUTest, SetupSDXDirectX)
 	// Test nullptr init
 	SDXDirect2D direct2D;
 	SDXErrorId error = direct2D.Initialise(nullptr);
-	EXPECT_EQ(error, SDX_ERROR_DIRECT2D_NULLPTR_SET) << "Expected error on null initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DIRECT2D_NULLPTR_SET) << "Expected error on null initialise";
 
 	// Valid set 
 	SDXDirectX directX;
@@ -43,10 +43,10 @@ TEST_F(SDXDirect2DUTest, SetupSDXDirectX)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on initialise";
 
 	error = direct2D.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid set";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid set";
 
 	direct2D.ShutDown();
 	directX.ShutDown();
@@ -61,13 +61,13 @@ TEST_F(SDXDirect2DUTest, RenderText)
 
 	// Test without creating device 
 	SDXErrorId error = direct2D.RenderText(pX, pY, text);
-	EXPECT_EQ(error, SDX_ERROR_DIRECT2D_NOT_INITIALISED) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DIRECT2D_NOT_INITIALISED) << "Unexpected error";
 
 	error = direct2D.SetRenderText(text);
-	EXPECT_EQ(error, SDX_ERROR_DIRECT2D_NOT_INITIALISED) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DIRECT2D_NOT_INITIALISED) << "Unexpected error";
 
 	error = direct2D.RenderText(pX, pY);
-	EXPECT_EQ(error, SDX_ERROR_DIRECT2D_NOT_INITIALISED) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DIRECT2D_NOT_INITIALISED) << "Unexpected error";
 
 	// Setup DirectX/2D
 	SDXDirectX testDirectX;
@@ -77,18 +77,18 @@ TEST_F(SDXDirect2DUTest, RenderText)
 	validSetup.hwnd = m_testApp.GetHwndTest();
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexepected error on valid SDXDirectX device create";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexepected error on valid SDXDirectX device create";
 
 	// Set SDXDirectX to SDXDirect2D and create device
 	error = direct2D.Initialise(&testDirectX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on direct2D initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on direct2D initialise";
 
 	// Valid setup
 	error = direct2D.RenderText(pX, pY, text);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error";
 
 	error = direct2D.RenderText(pX, pY, text);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error";
 
 	direct2D.ShutDown();
 	testDirectX.ShutDown();
@@ -103,14 +103,14 @@ TEST_F(SDXDirect2DUTest, ShutDown)
 	validSetup.clientHeight = 600;
 	validSetup.hwnd = m_testApp.GetHwndTest();
 	SDXErrorId error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initalise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initalise";
 
 	SDXDirect2D direct2D;
 	error = direct2D.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on Direct2D initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on Direct2D initialise";
 
 	direct2D.ShutDown();
 
 	error = direct2D.Initialise(&directX);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on Direct2D initialise after shutdown";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on Direct2D initialise after shutdown";
 }

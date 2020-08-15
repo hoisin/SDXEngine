@@ -17,15 +17,15 @@ SDXIndexBuffer::~SDXIndexBuffer()
 SDXErrorId SDXIndexBuffer::LoadData(SDXMeshData* meshData, SDXDirectX* inDirectX)
 {
 	if (meshData == nullptr)
-		return SDX_ERROR_INDEXBUFFER_MESHDATA_NULL;
+		return SDXErrorId::SDX_ERROR_INDEXBUFFER_MESHDATA_NULL;
 
 	if (inDirectX == nullptr)
-		return SDX_ERROR_INDEXBUFFER_DIRECTX_NULL;
+		return SDXErrorId::SDX_ERROR_INDEXBUFFER_DIRECTX_NULL;
 
 	ID3D11Device* device = inDirectX->GetDevice().Get();
 
 	if (device == nullptr)
-		return SDX_ERROR_DEVICE_NOT_CREATED;
+		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
 
 	// Create and load index buffer
 	CD3D11_BUFFER_DESC iDesc(meshData->GetIndexCount() * sizeof(int), D3D11_BIND_INDEX_BUFFER);
@@ -38,10 +38,10 @@ SDXErrorId SDXIndexBuffer::LoadData(SDXMeshData* meshData, SDXDirectX* inDirectX
 
 	HRESULT result = device->CreateBuffer(&iDesc, &iData, &m_buffer);
 	if (FAILED(result))
-		return SDX_ERROR_INDEXBUFFER_CREATE_FAILED;
+		return SDXErrorId::SDX_ERROR_INDEXBUFFER_CREATE_FAILED;
 
 	m_count = meshData->GetIndexCount();
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 ID3D11Buffer * SDXEngine::SDXIndexBuffer::GetBuffer() const
