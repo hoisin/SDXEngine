@@ -18,6 +18,7 @@ SDXErrorId SDXEngine::SDXShaderMGR::Initialise(SDXDirectX* pDX)
 		return SDX_ERROR_PARMETER_DIRECTX_NULLPTR;
 
 	m_pDX = pDX;
+
 	return SDX_ERROR_NONE;
 }
 

@@ -11,7 +11,7 @@ SDXIndexBuffer::SDXIndexBuffer() : m_buffer(nullptr), m_count(0)
 
 SDXIndexBuffer::~SDXIndexBuffer()
 {
-	Release();
+	//Release();
 }
 
 SDXErrorId SDXIndexBuffer::LoadData(SDXMeshData* meshData, SDXDirectX* inDirectX)

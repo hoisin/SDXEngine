@@ -22,6 +22,8 @@ namespace SDXEngine
 
 		int GetTotalSubMeshes() const;
 
+		void Release();
+
 	private:
 		std::vector<SDXSubMesh> m_subMeshes;
 	};

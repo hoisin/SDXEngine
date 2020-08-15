@@ -31,10 +31,8 @@ struct PixelInputType
 PixelInputType Main(VertexInputType input)
 {
     PixelInputType output;
-    
-
+	
     // Change the position vector to be 4 units for proper matrix calculations.
-    //input.position.w = 1.0f;
 	float4 pos = float4(input.position.xyz, 1);
 
     // Calculate the position of the vertex against the world, view, and projection matrices.
@@ -43,7 +41,7 @@ PixelInputType Main(VertexInputType input)
     output.position = mul(output.position, projectionMatrix);
     
     // Store the input color for the pixel shader to use.
-    output.color = float4(input.color.xyz, 0);
+    output.color = float4(input.color.xyz, 1);
     
     return output;
 }

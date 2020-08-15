@@ -9,6 +9,10 @@
 #include "..\SDXEngine\SDXBaseApp.h"
 #include "..\SDXEngine\SDXInputHandler.h"
 
+#include "..\SDXEngine\SDXAssetMGR.h"
+
+#include "CMaze.h"
+
 // Testing
 #include "..\SDXEngine\SDXRenderer.h"
 #include "..\SDXEngine\SDXCameraFP.h"
@@ -22,6 +26,7 @@ public:
 	~SDXApp();
 
 protected:
+	// Overrides
 	SDXErrorId OnInitialise() override;
 	SDXErrorId OnUpdate(double deltaT) override;
 	SDXErrorId OnDraw(double deltaT) override;
@@ -29,15 +34,27 @@ protected:
 	void OnShutDown() override;
 	bool OnEvent(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
 
+	// Class methods
 	void HandleCamera(double deltaT);
 	void DrawDebugText();
 
+	SDXErrorId InitialiseResources();
+
+	bool TestInit();
+
 private:
+	SDXAssetMGR* m_pAssetMgr;
+
 	SDXRenderer m_renderer;
 	SDXCameraFP m_camera;
 
 	SDXInputHandler m_inputHDLR;
 
+	CMaze m_maze;
+
 	bool m_bDebugText;
+
+	float testRot = 0;
+	float testTrans = 0;
 };
 

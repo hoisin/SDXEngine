@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -170,6 +170,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="SDXAssetMGR.h" />
     <ClInclude Include="SDXBaseApp.h" />
     <ClInclude Include="CTimer.h" />
     <ClInclude Include="SDXErrors.h" />
@@ -186,9 +187,11 @@
     <ClInclude Include="SDXMesh.h" />
     <ClInclude Include="SDXMeshData.h" />
     <ClInclude Include="SDXMeshGenerator.h" />
+    <ClInclude Include="SDXMeshMGR.h" />
     <ClInclude Include="SDXMouse.h" />
     <ClInclude Include="SDXRenderer.h" />
     <ClInclude Include="SDXRasterState.h" />
+    <ClInclude Include="SDXSceneMGR.h" />
     <ClInclude Include="SDXShaderLoader.h" />
     <ClInclude Include="SDXShaderMGR.h" />
     <ClInclude Include="SDXSubMesh.h" />
@@ -198,6 +201,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="SDXAssetMGR.cpp" />
     <ClCompile Include="SDXBaseApp.cpp" />
     <ClCompile Include="CTimer.cpp" />
     <ClCompile Include="SDXCameraFP.cpp" />
@@ -213,9 +217,11 @@
     <ClCompile Include="SDXMesh.cpp" />
     <ClCompile Include="SDXMeshData.cpp" />
     <ClCompile Include="SDXMeshGenerator.cpp" />
+    <ClCompile Include="SDXMeshMGR.cpp" />
     <ClCompile Include="SDXMouse.cpp" />
     <ClCompile Include="SDXRenderer.cpp" />
     <ClCompile Include="SDXRasterState.cpp" />
+    <ClCompile Include="SDXSceneMGR.cpp" />
     <ClCompile Include="SDXShaderLoader.cpp" />
     <ClCompile Include="SDXShaderMGR.cpp" />
     <ClCompile Include="SDXSubMesh.cpp" />

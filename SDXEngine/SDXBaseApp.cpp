@@ -91,9 +91,9 @@ void SDXBaseApp::Run()
 			// Run loop only when the app is active
 			if (m_bAppActive)
 			{
-				OnUpdate(m_timer.DeltaTimeSecs());
-				OnDraw(m_timer.DeltaTimeSecs());
-				CalculateFrameStats(m_timer.DeltaTimeSecs());
+				OnUpdate(m_timer.DeltaTimeMilli());
+				OnDraw(m_timer.DeltaTimeMilli());
+				CalculateFrameStats(m_timer.DeltaTimeMilli());
 			}
 			else
 			{
@@ -265,7 +265,7 @@ void SDXBaseApp::CalculateFrameStats(double deltaT)
 	timeElapsed += deltaT;
 
 	// If exceed over a second
-	if ((timeElapsed) >= 1.0f) {
+	if ((timeElapsed) >= 1000.0f) {
 		float fps = (float)frameCount;
 		float mspf = 1000.0f / fps;
 

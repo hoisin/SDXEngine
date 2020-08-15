@@ -106,8 +106,8 @@ namespace SDXEngine
 
 	struct SMaterial
 	{
-		std::string diffuseTextureID;
-		std::string shaderID;
+		std::string diffuseTextureID = "";
+		std::string shaderID = "";
 		
 		// Could include rasterstate but not required yet.
 		// Probably shift rasterstate to a MGR and refer to as ID when needed.
@@ -122,5 +122,24 @@ namespace SDXEngine
 		// - shadowmap?
 		// - cubemap?
 		// - ambient??
+
+		SMaterial()
+		{
+		}
+
+		void operator=(const SMaterial& other)
+		{
+			diffuseTextureID = other.diffuseTextureID;
+			shaderID = other.shaderID;
+		}
 	};
+
+	// CBuffer definitions
+	// Testing for vertex shader uniform
+	typedef struct _constantBufferStruct {
+		DirectX::XMFLOAT4X4 world;
+		DirectX::XMFLOAT4X4 view;
+		DirectX::XMFLOAT4X4 projection;
+		//DirectX::XMFLOAT4X4 invWorldTrans;
+	} ConstantBufferStruct;
 }       

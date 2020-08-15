@@ -154,8 +154,8 @@ DirectX::XMFLOAT4X4 SDXEngine::SDXCameraFP::GetProjectionMatrix() const
 		DirectX::XMMatrixPerspectiveFovLH(
 			DirectX::XMConvertToRadians(m_fov),
 			m_aspectRatio,
-			0.01f,
-			100.0f
+			m_zNear,
+			m_zFar
 			)
 		)
 	);
@@ -166,6 +166,8 @@ DirectX::XMFLOAT4X4 SDXEngine::SDXCameraFP::GetProjectionMatrix() const
 DirectX::XMFLOAT4X4 SDXEngine::SDXCameraFP::GetViewMatrix() const
 {
 	// Generate view matrix
+	// 'LH' generates a row major matrix.
+	// For the shader we require a column major matrix so transpose
 	XMFLOAT4X4 proj;
 	DirectX::XMStoreFloat4x4(&proj,
 		DirectX::XMMatrixTranspose(

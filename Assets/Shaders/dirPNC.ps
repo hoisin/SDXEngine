@@ -22,9 +22,9 @@ float4 Main(PSInput input) : SV_TARGET
 {
 	float3 normal = normalize(input.normal);
 	
-	float3 lightDir = float3(0, 0.6, -0.2);
+	float3 lightDir = float3(0.6804, 0.27217, 0.6804);
 	float len = length(lightDir);
-	lightDir = normalize(lightDir);
+	lightDir = -normalize(lightDir);
 	
 	float lamb = max(dot(normal, lightDir), 0);
 	

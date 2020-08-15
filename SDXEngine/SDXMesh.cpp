@@ -21,7 +21,7 @@ SDXErrorId SDXEngine::SDXMesh::AddSubMesh(SDXMeshData* meshData, SDXDirectX* dir
 		return SDX_ERROR_MESH_DIRECTX_NULL;
 
 	m_subMeshes.push_back(SDXSubMesh());
-	SDXSubMesh* mesh = &m_subMeshes[(int)m_subMeshes.size()];
+	SDXSubMesh* mesh = &m_subMeshes[(int)m_subMeshes.size() - 1];
 
 	SDXErrorId error = SDX_ERROR_NONE;
 
@@ -44,4 +44,12 @@ SDXSubMesh * SDXEngine::SDXMesh::GetSubMesh(int index)
 int SDXEngine::SDXMesh::GetTotalSubMeshes() const
 {
 	return (int)m_subMeshes.size();
+}
+
+void SDXEngine::SDXMesh::Release()
+{
+	for (int i = 0; i < static_cast<int>(m_subMeshes.size()); i++)
+	{
+		m_subMeshes[i].Release();
+	}
 }
