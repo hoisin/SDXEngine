@@ -40,7 +40,7 @@ protected:
 
 	SDXErrorId InitialiseResources();
 
-	bool TestInit();
+	SDXErrorId TestInit();
 
 private:
 	SDXAssetMGR* m_pAssetMgr;

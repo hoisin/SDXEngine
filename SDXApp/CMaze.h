@@ -46,6 +46,8 @@ private:
 	int m_tilesInX;
 	int m_tilesInZ;
 
+
+
 	double m_updateTimer = 0.0;
 	double m_frameTimer = 0.0;
 	double m_tick = 50.0;

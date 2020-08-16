@@ -17,10 +17,10 @@ SDXErrorId SDXEngine::SDXMaterialMGR::AddMaterial(const std::string& id, SMateri
 	if (find == m_materialMap.end())
 	{
 		m_materialMap.insert(std::pair<std::string, SMaterial>(id, material));
-		return SDX_ERROR_NONE;
+		return SDXErrorId::SDX_ERROR_NONE;
 	}
 
-	return SDX_ERROR_MATERIALMGR_ID_ALREADY_EXIST;
+	return SDXErrorId::SDX_ERROR_MATERIALMGR_ID_ALREADY_EXIST;
 }
 
 SMaterial SDXEngine::SDXMaterialMGR::GetMaterial(const std::string& id)

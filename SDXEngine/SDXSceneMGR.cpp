@@ -18,7 +18,7 @@ SDXErrorId SDXEngine::SDXSceneMGR::Initialise(SDXRenderer* pRenderer)
 	m_drawItemCache.resize(maxCap);
 
 	m_pRenderer = pRenderer;
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXEngine::SDXSceneMGR::AddRenderItem(const XMFLOAT3 position, const XMFLOAT3 orientation, SDXMesh* pMesh, XMFLOAT3 scale)

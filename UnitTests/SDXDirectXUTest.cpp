@@ -34,7 +34,7 @@ void SDXDirectXUTest::TearDown()
 TEST_F(SDXDirectXUTest, Initialise)
 {
 	SDXDirectX directX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -46,36 +46,36 @@ TEST_F(SDXDirectXUTest, Initialise)
 
 	wrongSetup.clientWidth = 0;
 	error = directX.Initialise(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	wrongSetup = validSetup;
 	wrongSetup.clientHeight = 0;
 	error = directX.Initialise(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	wrongSetup = validSetup;
 	wrongSetup.hwnd = nullptr;
 	error = directX.Initialise(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	wrongSetup = validSetup;
 	wrongSetup.refreshRate = 0;
 	error = directX.Initialise(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	// Valid test
 	error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error from valid setup info";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error from valid setup info";
 
 	// Try Reinitialsing
 	error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_ALREADY_EXIST) << "Expected device already exist error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DEVICE_ALREADY_EXIST) << "Expected device already exist error";
 }
 
 TEST_F(SDXDirectXUTest, ReInitWindowDependentResources)
 {
 	SDXDirectX directX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -85,11 +85,11 @@ TEST_F(SDXDirectXUTest, ReInitWindowDependentResources)
 
 	// Reinit without first running intialise
 	error = directX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
 
 	// Initialise
 	error = directX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error";
 
 	// Invalid input
 	SDXDirectXInfo wrongSetup;
@@ -97,36 +97,36 @@ TEST_F(SDXDirectXUTest, ReInitWindowDependentResources)
 
 	wrongSetup.clientWidth = 0;
 	error = directX.ReInitWindowDependentResources(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	wrongSetup = validSetup;
 	wrongSetup.clientHeight = 0;
 	error = directX.ReInitWindowDependentResources(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	wrongSetup = validSetup;
 	wrongSetup.hwnd = nullptr;
 	error = directX.ReInitWindowDependentResources(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	wrongSetup = validSetup;
 	wrongSetup.refreshRate = 0;
 	error = directX.ReInitWindowDependentResources(wrongSetup);
-	EXPECT_EQ(error, SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO) << "Expected invalid directX setupinfo error";
 
 	// Valid test
 	error = directX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error from valid setup info";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error from valid setup info";
 
 	// Run again
 	error = directX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error from running Reinit again";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error from running Reinit again";
 }
 
 TEST_F(SDXDirectXUTest, SwapChainPresent)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -136,30 +136,30 @@ TEST_F(SDXDirectXUTest, SwapChainPresent)
 
 	// Test running without initialising 
 	error = testDirectX.SwapChainPresent();
-	EXPECT_EQ(error, SDX_ERROR_SWAPCHAIN_NOT_CREATED) << "Expected swap chain not created error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_SWAPCHAIN_NOT_CREATED) << "Expected swap chain not created error";
 
 	// Initialise device and context
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error when initialising DirectX";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error when initialising DirectX";
 
 	// Test swapchain present
 	error = testDirectX.SwapChainPresent();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Valid swap chain present failed";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Valid swap chain present failed";
 
 	// Run Reinit
 	error = testDirectX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error running Reinit";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error running Reinit";
 
 	// Test swapchain again
 	error = testDirectX.SwapChainPresent();
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error";
 }
 
 
 TEST_F(SDXDirectXUTest, GetDevice)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -173,7 +173,7 @@ TEST_F(SDXDirectXUTest, GetDevice)
 
 	// Test after created
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on initialise DirectX";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on initialise DirectX";
 
 	device = testDirectX.GetDevice().Get();
 	EXPECT_NE(device, nullptr) << "Device ptr should not be nullptr after create";
@@ -183,7 +183,7 @@ TEST_F(SDXDirectXUTest, GetDevice)
 TEST_F(SDXDirectXUTest, GetContext)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -197,7 +197,7 @@ TEST_F(SDXDirectXUTest, GetContext)
 
 	// Test after created
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on initialise DirectX";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on initialise DirectX";
 
 	context = testDirectX.GetContext().Get();
 	EXPECT_NE(context, nullptr) << "Context ptr should not be nullptr after create";
@@ -207,7 +207,7 @@ TEST_F(SDXDirectXUTest, GetContext)
 TEST_F(SDXDirectXUTest, GetAspectRatio)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -235,7 +235,7 @@ TEST_F(SDXDirectXUTest, GetAspectRatio)
 
 	// Setup directX
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Check aspect ratio
 	testRatio = testDirectX.GetAspectRatio();
@@ -246,7 +246,7 @@ TEST_F(SDXDirectXUTest, GetAspectRatio)
 TEST_F(SDXDirectXUTest, GetRenderTargetView)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -259,7 +259,7 @@ TEST_F(SDXDirectXUTest, GetRenderTargetView)
 	EXPECT_EQ(target, nullptr) << "Expected null when not created render target view";
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Test valid get
 	target = testDirectX.GetRenderTargetView().Get();
@@ -267,7 +267,7 @@ TEST_F(SDXDirectXUTest, GetRenderTargetView)
 
 	// Test with Re-init
 	error = testDirectX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on reinit";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on reinit";
 
 	target = testDirectX.GetRenderTargetView().Get();
 	EXPECT_NE(target, nullptr) << "Failed on valid get";
@@ -278,7 +278,7 @@ TEST_F(SDXDirectXUTest, GetDepthStencilView)
 {
 	// nullptr tests
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -290,7 +290,7 @@ TEST_F(SDXDirectXUTest, GetDepthStencilView)
 	EXPECT_EQ(depthStencil, nullptr) << "Expected nullptr when not created depth stencil view";
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Valid get test
 	depthStencil = testDirectX.GetDepthStencilView().Get();
@@ -298,7 +298,7 @@ TEST_F(SDXDirectXUTest, GetDepthStencilView)
 
 	// Test with Re-init
 	error = testDirectX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on reinit";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on reinit";
 
 	depthStencil = testDirectX.GetDepthStencilView().Get();
 	EXPECT_NE(depthStencil, nullptr) << "Failed on valid get test";
@@ -309,7 +309,7 @@ TEST_F(SDXDirectXUTest, GetSwapChain)
 {
 	// null check
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -321,7 +321,7 @@ TEST_F(SDXDirectXUTest, GetSwapChain)
 	EXPECT_EQ(swapChain, nullptr) << "Expected nullptr when not created swap chain";
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	// Test get
 	swapChain = testDirectX.GetSwapChain().Get();
@@ -329,7 +329,7 @@ TEST_F(SDXDirectXUTest, GetSwapChain)
 
 	// Test with Re-init
 	error = testDirectX.ReInitWindowDependentResources(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on reinit";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on reinit";
 
 	swapChain = testDirectX.GetSwapChain().Get();
 	EXPECT_NE(swapChain, nullptr) << "Unexpected nullptr on swap chain get";
@@ -339,7 +339,7 @@ TEST_F(SDXDirectXUTest, GetSwapChain)
 TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -358,7 +358,7 @@ TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 	validSetup.clientHeight = height;
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	EXPECT_EQ(width, testDirectX.GetClientAreaWidth()) << "Unexpected returned client area width after set";
 	EXPECT_EQ(height, testDirectX.GetClientAreaHeight()) << "Unexpected returned client area height after set";
@@ -368,7 +368,7 @@ TEST_F(SDXDirectXUTest, GetClientAreaDimensions)
 TEST_F(SDXDirectXUTest, SetRasterTest)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -380,21 +380,21 @@ TEST_F(SDXDirectXUTest, SetRasterTest)
 
 	// Test without device
 	error = testDirectX.SetRasterState(state);
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error on raster state set without device";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED) << "Unexpected error on raster state set without device";
 
 	// Valid call
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	error = testDirectX.SetRasterState(state);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on valid raster state set";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid raster state set";
 }
 
 
 TEST_F(SDXDirectXUTest, SetDepthStencilState)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -428,21 +428,21 @@ TEST_F(SDXDirectXUTest, SetDepthStencilState)
 
 	// Try set without initialising
 	error = testDirectX.SetDepthStencilState(depthStencilDesc);
-	EXPECT_EQ(error, SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED) << "Expected device not created error";
 
 	// Valid test
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	error = testDirectX.SetDepthStencilState(depthStencilDesc);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Failed to set valid depth stencil state";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Failed to set valid depth stencil state";
 }
 
 
 TEST_F(SDXDirectXUTest, ShutDown)
 {
 	SDXDirectX testDirectX;
-	SDXErrorId error = SDX_ERROR_NONE;
+	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 	SDXDirectXInfo validSetup;
 	validSetup.clientWidth = 800;
 	validSetup.clientHeight = 600;
@@ -451,10 +451,10 @@ TEST_F(SDXDirectXUTest, ShutDown)
 	validSetup.refreshRate = 60;
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 
 	testDirectX.ShutDown();
 
 	error = testDirectX.Initialise(validSetup);
-	EXPECT_EQ(error, SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
+	EXPECT_EQ(error, SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on DirectX initialise";
 }

@@ -17,10 +17,10 @@ SDXErrorId SDXEngine::SDXMeshData::CreateVertexArray(SDXVertexType type, UINT co
 {
 	// Should not run this again if already created. Create another mesh data instance.
 	if (m_vertexData)
-		return SDX_ERROR_MESHDATA_VERTEXARRAY_ALREADY_CREATED;
+		return SDXErrorId::SDX_ERROR_MESHDATA_VERTEXARRAY_ALREADY_CREATED;
 
 	if (count == 0)
-		return SDX_ERROR_MESHDATA_CREATE_VERTEXARRAY_COUNT_ZERO;
+		return SDXErrorId::SDX_ERROR_MESHDATA_CREATE_VERTEXARRAY_COUNT_ZERO;
 
 	switch (type)
 	{
@@ -37,26 +37,26 @@ SDXErrorId SDXEngine::SDXMeshData::CreateVertexArray(SDXVertexType type, UINT co
 		break;
 
 	default:
-		return SDX_ERROR_MESHDATA_UNKNOWN_VERTEXTYPE;
+		return SDXErrorId::SDX_ERROR_MESHDATA_UNKNOWN_VERTEXTYPE;
 	}
 
 	m_vertexCount = count;
 	m_vertexType = type;
 
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXErrorId SDXEngine::SDXMeshData::CreateIndexArray(UINT count)
 {
 	if (m_indexData)
-		return SDX_ERROR_MESHDATA_INDEXARRAY_ALREADY_CREATED;
+		return SDXErrorId::SDX_ERROR_MESHDATA_INDEXARRAY_ALREADY_CREATED;
 
 	if (count == 0)
-		return SDX_ERROR_MESHDATA_CREATE_INDEXARRAY_COUNT_ZERO;
+		return SDXErrorId::SDX_ERROR_MESHDATA_CREATE_INDEXARRAY_COUNT_ZERO;
 
 	m_indexCount = count;
 	m_indexData = new unsigned int[m_indexCount];
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXVertex * SDXEngine::SDXMeshData::GetVertexData() const

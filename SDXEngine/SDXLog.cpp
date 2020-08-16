@@ -21,16 +21,16 @@ SDXErrorId SDXEngine::SDXLog::Setup(const std::string& fileName)
 {
 	// Existing open file check
 	if (m_log.is_open())
-		return SDX_ERROR_LOG_FILE_ALREADY_OPEN;
+		return SDXErrorId::SDX_ERROR_LOG_FILE_ALREADY_OPEN;
 
 	// Attempt to open the file
 	m_log.open(fileName, std::ofstream::out | std::ofstream::app);
 	// File open failure check
 	if (!m_log.is_open())
-		return SDX_ERROR_LOG_OPEN_FAILED;
+		return SDXErrorId::SDX_ERROR_LOG_OPEN_FAILED;
 
 	WriteLogHeader();
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXEngine::SDXLog::SetUseTimeStamp(bool use)
@@ -41,7 +41,7 @@ void SDXEngine::SDXLog::SetUseTimeStamp(bool use)
 SDXErrorId SDXEngine::SDXLog::WriteLog(const std::string & text)
 {
 	if (!m_log.is_open())
-		return SDX_ERROR_LOG_NO_FILE_OPEN;
+		return SDXErrorId::SDX_ERROR_LOG_NO_FILE_OPEN;
 
 	if (m_useTimeStamp)
 	{
@@ -52,7 +52,7 @@ SDXErrorId SDXEngine::SDXLog::WriteLog(const std::string & text)
 		m_log <<GetLogLineNumber() << ":-  " << text << "\n";
 	}
 	m_log.flush();
-	return SDX_ERROR_NONE;
+	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 SDXLog * SDXEngine::SDXLog::GetInstance()

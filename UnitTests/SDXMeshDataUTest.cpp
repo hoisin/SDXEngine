@@ -51,25 +51,25 @@ TEST_F(SDXMeshDataUTest, VertexCreateTest)
 	SDXVertexType testType = SDXVERTEX_TYPE_PC;
 
 	// Invalid vertex type test
-	EXPECT_EQ(testData.CreateVertexArray(SDXVERTEX_TYPE_UNKNOWN, vertexCount), SDX_ERROR_MESHDATA_UNKNOWN_VERTEXTYPE) << "Unexpected error on creating with unknown vertex type";
+	EXPECT_EQ(testData.CreateVertexArray(SDXVERTEX_TYPE_UNKNOWN, vertexCount), SDXErrorId::SDX_ERROR_MESHDATA_UNKNOWN_VERTEXTYPE) << "Unexpected error on creating with unknown vertex type";
 	EXPECT_EQ(testData.GetVertexData(), nullptr) << "Should be no data on invalid vertex type create";
 	EXPECT_EQ(testData.GetVertexCount(), 0) << "Count should be 0 on invalid vertex type create";
 	EXPECT_EQ(testData.GetVertexType(), SDXVERTEX_TYPE_UNKNOWN) << "Type should be unknown on invalid vertex create";
 
 	// 0 Vertex Count test
-	EXPECT_EQ(testData.CreateVertexArray(testType, 0), SDX_ERROR_MESHDATA_CREATE_VERTEXARRAY_COUNT_ZERO) << "Unexpected error on vertex array create with 0 vertex count";
+	EXPECT_EQ(testData.CreateVertexArray(testType, 0), SDXErrorId::SDX_ERROR_MESHDATA_CREATE_VERTEXARRAY_COUNT_ZERO) << "Unexpected error on vertex array create with 0 vertex count";
 	EXPECT_EQ(testData.GetVertexData(), nullptr) << "Should be not data on 0 vertex count create";
 	EXPECT_EQ(testData.GetVertexCount(), 0) << "Count should be 0 on 0 vertex count create";
 	EXPECT_EQ(testData.GetVertexType(), SDXVERTEX_TYPE_UNKNOWN) << "Type should be unknown on 0 vertex create";
 
 	// Valid create
-	EXPECT_EQ(testData.CreateVertexArray(testType, vertexCount), SDX_ERROR_NONE) << "Unexpected error on valid create";
+	EXPECT_EQ(testData.CreateVertexArray(testType, vertexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid create";
 	EXPECT_NE(testData.GetVertexData(), nullptr) << "Should contain data on valid create";
 	EXPECT_EQ(testData.GetVertexCount(), vertexCount) << "Unexpected vertex count after valid create";
 	EXPECT_EQ(testData.GetVertexType(), testType) << "Unexpected vertex type after valid create";
 
 	// Attempt to create with existing vertex data
-	EXPECT_EQ(testData.CreateVertexArray(testType, vertexCount), SDX_ERROR_MESHDATA_VERTEXARRAY_ALREADY_CREATED) << "Unexpected on creating vertex array with existing data";
+	EXPECT_EQ(testData.CreateVertexArray(testType, vertexCount), SDXErrorId::SDX_ERROR_MESHDATA_VERTEXARRAY_ALREADY_CREATED) << "Unexpected on creating vertex array with existing data";
 	EXPECT_NE(testData.GetVertexData(), nullptr) << "Should still contain data";
 	EXPECT_EQ(testData.GetVertexCount(), vertexCount) << "Should still be the same count";
 	EXPECT_EQ(testData.GetVertexType(), testType) << "Should still be the same vertex type";
@@ -104,17 +104,17 @@ TEST_F(SDXMeshDataUTest, IndexCreateTest)
 	UINT indexCount = 100;
 
 	// 0 index 
-	EXPECT_EQ(testData.CreateIndexArray(0), SDX_ERROR_MESHDATA_CREATE_INDEXARRAY_COUNT_ZERO) << "Unexpected error for 0 index count creation";
+	EXPECT_EQ(testData.CreateIndexArray(0), SDXErrorId::SDX_ERROR_MESHDATA_CREATE_INDEXARRAY_COUNT_ZERO) << "Unexpected error for 0 index count creation";
 	EXPECT_EQ(testData.GetIndexData(), nullptr) << "Should not be any data on create fail";
 	EXPECT_EQ(testData.GetIndexCount(), 0) << "Index count should be 0 on fail create";
 
 	// Valid create
-	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDX_ERROR_NONE) << "Unexpected error on valid create";
+	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid create";
 	EXPECT_NE(testData.GetIndexData(), nullptr) << "Should be data after valid create";
 	EXPECT_EQ(testData.GetIndexCount(), indexCount) << "Index count does not match create";
 
 	// Create on existing data
-	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDX_ERROR_MESHDATA_INDEXARRAY_ALREADY_CREATED) << "Unexpected error on create with existing index data";
+	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDXErrorId::SDX_ERROR_MESHDATA_INDEXARRAY_ALREADY_CREATED) << "Unexpected error on create with existing index data";
 	EXPECT_NE(testData.GetIndexData(), nullptr) << "Should still contain the data from initial create";
 	EXPECT_EQ(testData.GetIndexCount(), indexCount) << "Index count should still be the same on initial create";
 }
@@ -126,8 +126,8 @@ TEST_F(SDXMeshDataUTest, DestroyTest)
 	UINT indexCount = 200;
 	SDXVertexType type = SDXVERTEX_TYPE_PC;
 
-	EXPECT_EQ(testData.CreateVertexArray(type, vertexCount), SDX_ERROR_NONE) << "Unexpected error on vertex array create";
-	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDX_ERROR_NONE) << "Unexpected error on index array create";
+	EXPECT_EQ(testData.CreateVertexArray(type, vertexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on vertex array create";
+	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on index array create";
 
 	// Test destroy
 	testData.Destroy();
