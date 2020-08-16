@@ -318,9 +318,119 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 	return mesh;
 }
 
-SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height, SDXVertexType type, UINT subdivision, const XMFLOAT3& color)
+SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height, SDXVertexType type, UINT subDivisionW, UINT subDivisionH, const XMFLOAT3& color)
 {
-	return nullptr;
+	if (type == SDXVERTEX_TYPE_UNKNOWN)
+		return nullptr;
+
+	SDXMeshData* mesh = new SDXMeshData;
+
+	// Find total vertices
+	int verticesOnEdgeW = 2 + (subDivisionW - 1);
+	int verticesOnEdgeH = 2 + (subDivisionH - 1);
+	int totalVertices = verticesOnEdgeW * verticesOnEdgeH;
+
+	// Find total indices
+	int totalIndices = 6 * (subDivisionW * subDivisionH);
+
+	if (mesh->CreateVertexArray(type, totalVertices) != SDXErrorId::SDX_ERROR_NONE ||
+		mesh->CreateIndexArray(totalIndices) != SDXErrorId::SDX_ERROR_NONE)
+	{
+		delete mesh;
+		mesh = nullptr;
+		return nullptr;
+	}
+
+	float pX = -(width / 2.f);
+	float pY = (height / 2.f);
+	float pZ = 0;
+	float stepSizeX = (float)(width / subDivisionW);
+	float stepSizeY = (float)(height / subDivisionH);
+	int vertexCounter = 0;
+	int indexCounter = 0;
+
+	switch (type)
+	{
+	case SDXVERTEX_TYPE_PC:
+	{
+		SDXVertexPC* pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+		// Generate vertex data & index data
+		for (int y = 0; y < verticesOnEdgeH; y++)
+		{
+			for (int x = 0; x < verticesOnEdgeW; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdgeW - 1) && y < (verticesOnEdgeH - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdgeW + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdgeW + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdgeW;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSizeX;
+				vertexCounter++;
+			}
+			pY -= stepSizeY;
+			pX = -(width / 2.f);
+		}
+		break;
+	}
+	case SDXVERTEX_TYPE_PNC:
+	{
+		SDXVertexPNC* pVertices = static_cast<SDXVertexPNC*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+		// Generate vertex data & index data
+		for (int y = 0; y < verticesOnEdgeH; y++)
+		{
+			for (int x = 0; x < verticesOnEdgeW; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = -1;
+				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdgeW - 1) && y < (verticesOnEdgeH - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdgeW + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdgeW + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdgeW;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSizeX;
+				vertexCounter++;
+			}
+			pY -= stepSizeY;
+			pX = -(width / 2.f);
+		}
+		break;
+	}
+	default:
+		delete mesh;
+		mesh = nullptr;
+		break;
+	}
+
+	return mesh;
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexType type, UINT subdivision,

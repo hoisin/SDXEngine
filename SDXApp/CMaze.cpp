@@ -73,7 +73,7 @@ void CMaze::LoadCrap()
 	pFloorPlane->SetMaterialID("basicMaterial");
 	SDXMeshData* pCeilingPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PC, 20, XMFLOAT3(0.3, 0.3, 0.1));
 	pCeilingPlane->SetMaterialID("basicMaterial");
-	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_tilesSize, SDXVERTEX_TYPE_PC, 2, XMFLOAT3(0.1, 0.3, 0.5));
+	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_mapSizeXYZ.x, 128.f, SDXVERTEX_TYPE_PC, 20, 2, XMFLOAT3(0.1, 0.3, 0.5));
 	pWallQuad->SetMaterialID("basicMaterial");
 
 	std::string floorPlaneID = "floor_plane";
@@ -101,5 +101,9 @@ void CMaze::DrawEnvironment()
 	m_pSceneMGR.AddRenderItem(XMFLOAT3(0, 64, 0), XMFLOAT3(180, 0, 0), ASSETMGR->GetMesh("ceiling_plane"));
 	m_pSceneMGR.AddRenderItem(XMFLOAT3(0, -64, 0), XMFLOAT3(0, 0, 0), ASSETMGR->GetMesh("floor_plane"));
 
-	//m_pSceneMGR.AddRenderItem(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), ASSETMGR->GetMesh("wall_quad"));
+	m_pSceneMGR.AddRenderItem(XMFLOAT3(0, 0, m_map.m_mapSizeXYZ.x/2), XMFLOAT3(0, 0, 0), ASSETMGR->GetMesh("wall_quad"));
+	m_pSceneMGR.AddRenderItem(XMFLOAT3(0, 0, -m_map.m_mapSizeXYZ.x / 2), XMFLOAT3(0, 180, 0), ASSETMGR->GetMesh("wall_quad"));
+	m_pSceneMGR.AddRenderItem(XMFLOAT3(m_map.m_mapSizeXYZ.x / 2, 0, 0), XMFLOAT3(0, 90, 0), ASSETMGR->GetMesh("wall_quad"));
+	m_pSceneMGR.AddRenderItem(XMFLOAT3(-m_map.m_mapSizeXYZ.x / 2, 0, 0), XMFLOAT3(0, -90, 0), ASSETMGR->GetMesh("wall_quad"));
 }
+	
