@@ -50,6 +50,9 @@
     <Filter Include="Gfx\Renderer\Scene">
       <UniqueIdentifier>{e66e0f15-b486-4cdb-a66a-6b89fe5948ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Gfx\DirectX\Texture">
+      <UniqueIdentifier>{b2c54922-88ab-4e0b-abcc-b2f5cbf15946}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -139,6 +142,12 @@
     <ClInclude Include="SDXSceneMGR.h">
       <Filter>Gfx\Renderer\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="SDXTextureManager.h">
+      <Filter>Gfx\DirectX\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="WICTextureLoader.h">
+      <Filter>Gfx\DirectX\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CTimer.cpp">
@@ -221,6 +230,12 @@
     </ClCompile>
     <ClCompile Include="SDXSceneMGR.cpp">
       <Filter>Gfx\Renderer\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SDXTextureManager.cpp">
+      <Filter>Gfx\DirectX\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="WICTextureLoader.cpp">
+      <Filter>Gfx\DirectX\Texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

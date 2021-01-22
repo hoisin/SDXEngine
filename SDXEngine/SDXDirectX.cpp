@@ -601,7 +601,7 @@ SDXErrorId SDXEngine::SDXDirectX::SetTextureSamplerState(D3D11_SAMPLER_DESC* des
 			return SDXErrorId::SDX_ERROR_SAMPLERSTATECREATE_FAILED;
 	}
 
-	m_d3d11Context->PSSetSamplers(0, numSamplers, &states.front());
+	m_d3d11Context->PSSetSamplers(0, numSamplers, states.front().GetAddressOf());
 
 	return SDXErrorId::SDX_ERROR_NONE;
 }

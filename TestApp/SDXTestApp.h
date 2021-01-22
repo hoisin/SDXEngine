@@ -11,19 +11,17 @@
 
 #include "..\SDXEngine\SDXAssetMGR.h"
 
-#include "CMaze.h"
-
-// Testing
 #include "..\SDXEngine\SDXRenderer.h"
 #include "..\SDXEngine\SDXCameraFP.h"
+#include "..\SDXEngine\SDXSceneMGR.h"
 
 using namespace SDXEngine;
 
-class SDXApp : public SDXEngine::SDXBaseApp
+class SDXTestApp : public SDXEngine::SDXBaseApp
 {
 public:
-	SDXApp();
-	~SDXApp();
+	SDXTestApp();
+	~SDXTestApp();
 
 protected:
 	// Overrides
@@ -40,27 +38,25 @@ protected:
 
 	SDXErrorId InitialiseResources();
 
-	SDXErrorId TestInit();
-
 private:
 	// Helper load methods
 	SDXErrorId LoadShaders();
 	SDXErrorId LoadTextures();
 	SDXErrorId LoadMaterials();
+	SDXErrorId LoadMeshes();
+
+private:
+	void DrawMyStuff();
 
 private:
 	SDXAssetMGR* m_pAssetMgr;
 
 	SDXRenderer m_renderer;
+	SDXSceneMGR m_sceneMGR;
 	SDXCameraFP m_camera;
 
 	SDXInputHandler m_inputHDLR;
 
-	CMaze m_maze;
-
 	bool m_bDebugText;
-
-	float testRot = 0;
-	float testTrans = 0;
 };
 

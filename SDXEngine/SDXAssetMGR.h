@@ -5,6 +5,9 @@
 #include "SDXMaterialMGR.h"
 #include "SDXMeshGenerator.h"
 #include "SDXShaderMGR.h"
+#include "SDXTextureManager.h"
+
+#include <memory>
 
 namespace SDXEngine
 {
@@ -38,6 +41,10 @@ namespace SDXEngine
 		SDXErrorId AddMaterial(const std::string& id, const SMaterial& material);
 		SMaterial GetMaterial(const std::string& id);
 
+		// Texture
+		SDXErrorId LoadTexture(const std::string& fileDir, const std::string& assignId);
+		ComPtr<ID3D11ShaderResourceView> GetTexture(const std::string& textureId);
+
 		SDXDirectX* GetDirectX();
 
 		void Close();
@@ -52,6 +59,8 @@ namespace SDXEngine
 		SDXMeshMGR			m_meshMGR;
 		SDXShaderMGR		m_shaderMGR;
 		SDXMaterialMGR		m_materialMGR;
+
+		std::unique_ptr<SDXTextureManager> m_textureMGR;
 	};
 
 #define ASSETMGR SDXAssetMGR::GetInstance()

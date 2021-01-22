@@ -50,7 +50,6 @@ void CMaze::Draw(double deltaT)
 
 	// Draw environment
 	DrawEnvironment();
-	//m_pSceneMGR.AddRenderItem(XMFLOAT3(20, 0, 0), XMFLOAT3(0, 0, 0), ASSETMGR->GetMesh("cube_1"));
 
 	// Draw Dynamic objects
 	// Should be nothing though since only the player and can't see its avatar.
@@ -69,12 +68,12 @@ void CMaze::Draw(double deltaT)
 void CMaze::LoadCrap()
 {
 	// Create floor plane (quad)
-	SDXMeshData* pFloorPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PC, 20, XMFLOAT3(0, 1, 0));
-	pFloorPlane->SetMaterialID("basicMaterial");
-	SDXMeshData* pCeilingPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PC, 20, XMFLOAT3(0.3, 0.3, 0.1));
-	pCeilingPlane->SetMaterialID("basicMaterial");
-	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_mapSizeXYZ.x, 128.f, SDXVERTEX_TYPE_PC, 20, 2, XMFLOAT3(0.1, 0.3, 0.5));
-	pWallQuad->SetMaterialID("basicMaterial");
+	SDXMeshData* pFloorPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PNT, 20, XMFLOAT3(0, 1, 0), 32, 32);
+	pFloorPlane->SetMaterialID("basicFloorMaterial");
+	SDXMeshData* pCeilingPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PNT, 20, XMFLOAT3(0.3, 0.3, 0.1), 4, 4);
+	pCeilingPlane->SetMaterialID("basicCeilingMaterial");
+	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_mapSizeXYZ.x, 128.f, SDXVERTEX_TYPE_PNT, 20, 1, XMFLOAT3(0.1, 0.3, 0.5), 20);
+	pWallQuad->SetMaterialID("basicWallMaterial");
 
 	std::string floorPlaneID = "floor_plane";
 	SDXMesh* pFloorMesh;
