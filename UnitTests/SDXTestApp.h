@@ -20,8 +20,8 @@ public:
 
 protected:
 	SDXErrorId OnInitialise() override;
-	SDXErrorId OnUpdate(double deltaT) override;
-	SDXErrorId OnDraw(double deltaT) override;
+	void OnUpdate(double deltaT) override;
+	void OnDraw(double deltaT) override;
 
 	void OnShutDown() override;
 

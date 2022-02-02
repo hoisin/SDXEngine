@@ -61,7 +61,7 @@ SDXErrorId SDXTestApp::OnInitialise()
 	return error;
 }
 
-SDXErrorId SDXTestApp::OnUpdate(double deltaT)
+void SDXTestApp::OnUpdate(double deltaT)
 {
 	// Update input
 	m_inputHDLR.UpdateInput(deltaT);
@@ -76,11 +76,9 @@ SDXErrorId SDXTestApp::OnUpdate(double deltaT)
 		StopRun();
 
 	HandleCamera(deltaT);
-
-	return SDXErrorId::SDX_ERROR_NONE;
 }
 
-SDXErrorId SDXTestApp::OnDraw(double deltaT)
+void SDXTestApp::OnDraw(double deltaT)
 {
 	m_renderer.BeginDraw();
 
@@ -89,8 +87,6 @@ SDXErrorId SDXTestApp::OnDraw(double deltaT)
 	DrawDebugText();
 
 	m_renderer.EndDraw();
-
-	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXTestApp::OnShutDown()
