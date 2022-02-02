@@ -20,16 +20,14 @@ SDXErrorId SDXTestApp::OnInitialise()
 	return SDXErrorId::SDX_ERROR_NONE;
 }
 
-SDXErrorId SDXTestApp::OnUpdate(double deltaT)
+void SDXTestApp::OnUpdate(double deltaT)
 {
 	// Set to quit for testing
 	StopRun();
-	return SDXErrorId::SDX_ERROR_NONE;
 }
 
-SDXErrorId SDXTestApp::OnDraw(double deltaT)
+void SDXTestApp::OnDraw(double deltaT)
 {
-	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 void SDXTestApp::OnShutDown()

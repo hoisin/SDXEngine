@@ -28,8 +28,8 @@ public:
 protected:
 	// Overrides
 	SDXErrorId OnInitialise() override;
-	SDXErrorId OnUpdate(double deltaT) override;
-	SDXErrorId OnDraw(double deltaT) override;
+	void OnUpdate(double deltaT) override;
+	void OnDraw(double deltaT) override;
 
 	void OnShutDown() override;
 	bool OnEvent(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
@@ -41,6 +41,12 @@ protected:
 	SDXErrorId InitialiseResources();
 
 	SDXErrorId TestInit();
+
+private:
+	// Helper load methods
+	SDXErrorId LoadShaders();
+	SDXErrorId LoadTextures();
+	SDXErrorId LoadMaterials();
 
 private:
 	SDXAssetMGR* m_pAssetMgr;

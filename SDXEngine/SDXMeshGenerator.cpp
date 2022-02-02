@@ -92,7 +92,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexType type, UINT subdivision,
-	const XMFLOAT3& color)
+	const XMFLOAT3& color, float texScaleX, float texScaleY)
 {
 	if (type == SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
@@ -195,6 +195,44 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 		}
 		break;
 	}
+	case SDXVERTEX_TYPE_PNT:
+	{
+		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+		// Generate vertex data & index data
+		for (int z = 0; z < verticesOnEdge; z++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 1;
+				pVertices[vertexCounter].normal.z = 0;
+				pVertices[vertexCounter].textureCoord.x = ((float)x / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1) - (float)z) / (float)(verticesOnEdge - 1)) * texScaleY;
+
+				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pZ -= stepSize;
+			pX = -(size / 2.f);
+		}
+		break;
+	}
 	default:
 		delete mesh;
 		mesh = nullptr;
@@ -205,7 +243,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexType type, UINT subdivision,
-	const XMFLOAT3& color)
+	const XMFLOAT3& color, float texScaleX, float texScaleY)
 {
 	if (type == SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
@@ -309,6 +347,50 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 		}
 		break;
 	}
+	case SDXVERTEX_TYPE_PNT:
+	{
+		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+
+		float tU = 0.f;
+		float tV = 1.f;
+		float incrementsU = 1.f / static_cast<float>(verticesOnEdge - 1);
+		float incrementsV = 1.f / static_cast<float>(verticesOnEdge - 1);
+		// Generate vertex data & index data
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = -1;
+				pVertices[vertexCounter].textureCoord.x = ((float)x / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1) - (float)y) / (float)(verticesOnEdge - 1)) * texScaleY;
+
+				if (x < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pX = -(size / 2.f);
+		}
+		break;
+	}
 	default:
 		delete mesh;
 		mesh = nullptr;
@@ -318,7 +400,8 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 	return mesh;
 }
 
-SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height, SDXVertexType type, UINT subDivisionW, UINT subDivisionH, const XMFLOAT3& color)
+SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height, SDXVertexType type, UINT subDivisionW, UINT subDivisionH, const XMFLOAT3& color,
+	float texScaleX, float texScaleY)
 {
 	if (type == SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
@@ -402,6 +485,50 @@ SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height
 				pVertices[vertexCounter].normal.y = 0;
 				pVertices[vertexCounter].normal.z = -1;
 				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdgeW - 1) && y < (verticesOnEdgeH - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdgeW + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdgeW + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdgeW;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSizeX;
+				vertexCounter++;
+			}
+			pY -= stepSizeY;
+			pX = -(width / 2.f);
+		}
+		break;
+	}
+	case SDXVERTEX_TYPE_PNT:
+	{
+		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+
+		float tU = 0.f;
+		float tV = 1.f;
+		float incrementsU = 1.f / static_cast<float>(verticesOnEdgeW - 1);
+		float incrementsV = 1.f / static_cast<float>(verticesOnEdgeH - 1);
+		// Generate vertex data & index data
+		for (int y = 0; y < verticesOnEdgeH; y++)
+		{
+			for (int x = 0; x < verticesOnEdgeW; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = -1;
+				pVertices[vertexCounter].textureCoord.x = ((float)x / (float)(verticesOnEdgeW - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdgeH - 1) - (float)y) / (float)(verticesOnEdgeH - 1)) * texScaleY;
 
 				if (x < (verticesOnEdgeW - 1) && y < (verticesOnEdgeH - 1))
 				{

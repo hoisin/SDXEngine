@@ -175,6 +175,12 @@ void SDXEngine::SDXRenderer::Render(SDXDrawItem* drawItem)
 			0
 		);
 
+		if (!mat.diffuseTextureID.empty())
+		{
+			auto texRes = pAssetMgr->GetTexture(mat.diffuseTextureID);
+			context->PSSetShaderResources(0, 1, texRes.GetAddressOf());
+		}
+
 		// Calling Draw tells Direct3D to start sending commands to the graphics device.
 		context->DrawIndexed(
 			pSubMesh->GetIndexBuffer()->GetCount(),
@@ -290,6 +296,12 @@ void SDXEngine::SDXRenderer::Render(const std::list<SDXDrawItem*>& drawList)
 				nullptr,
 				0
 			);
+
+			if (!mat.diffuseTextureID.empty())
+			{
+				auto texRes = pAssetMgr->GetTexture(mat.diffuseTextureID);
+				context->PSSetShaderResources(0, 1, texRes.GetAddressOf());
+			}
 
 			// Calling Draw tells Direct3D to start sending commands to the graphics device.
 			context->DrawIndexed(

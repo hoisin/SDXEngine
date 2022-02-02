@@ -26,8 +26,8 @@ namespace SDXEngine
 	protected:
 		// Virtual methods
 		virtual SDXErrorId OnInitialise() = 0;
-		virtual SDXErrorId OnUpdate(double deltaT);
-		virtual SDXErrorId OnDraw(double deltaT);
+		virtual void OnUpdate(double deltaT) = 0;
+		virtual void OnDraw(double deltaT) = 0;
 
 		virtual void OnShutDown() = 0;
 
@@ -43,8 +43,8 @@ namespace SDXEngine
 		static LRESULT CALLBACK MsgHandlerMain(HWND hWnd, UINT uiMsg,
 			WPARAM wParam, LPARAM lParam);
 
-		SDXErrorId RegisterAppClass();
-		SDXErrorId CreateAppWindow();
+		bool RegisterAppClass();
+		bool CreateAppWindow();
 
 		void CalculateFrameStats(double deltaT);
 		void ShutDown();

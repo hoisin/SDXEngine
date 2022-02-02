@@ -8,7 +8,7 @@ using namespace SDXEngine;
 bool SDXBaseApp::m_bAppActive = false;
 CTimer SDXBaseApp::m_timer = CTimer();
 
-SDXBaseApp::SDXBaseApp() : m_hInstance(nullptr), m_hMutex(nullptr), m_windowName(""), m_appClassName(""),
+SDXBaseApp::SDXBaseApp() : m_hWnd(nullptr), m_hInstance(nullptr), m_hMutex(nullptr), m_windowName(""), m_appClassName(""),
 	m_windowWidth(0), m_windowHeight(0), m_bRun(false)
 {
 }
@@ -37,21 +37,17 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 		return false;
 	}
 
-	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
-
 	// Attempt to register window class
-	error = RegisterAppClass();
-	if (error != SDXErrorId::SDX_ERROR_NONE)
+	if (!RegisterAppClass())
 	{
-		// Error log
+		OutputDebugString("Failed to register app class");
 		return false;
 	}
 
 	// Attempt to create the window
-	error = CreateAppWindow();
-	if (error != SDXErrorId::SDX_ERROR_NONE)
+	if (!CreateAppWindow())
 	{
-		// Error log
+		OutputDebugString("Failed to create the window");
 		return false;
 	}
 
@@ -59,11 +55,12 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 	if (OnInitialise() != SDXErrorId::SDX_ERROR_NONE)
 	{
 		// Do some error logging
+		OutputDebugString("Failed on function OnInitialise()");
 		return false;
 	}
 
 	// Flag to run
-	m_bRun = true;;
+	m_bRun = true;
 	return true;
 }
 
@@ -104,18 +101,6 @@ void SDXBaseApp::Run()
 	}
 
 	ShutDown();
-}
-
-SDXErrorId SDXBaseApp::OnUpdate(double deltaT)
-{
-	// Implement in derived
-	return SDXErrorId::SDX_ERROR_NONE;
-}
-
-SDXErrorId SDXBaseApp::OnDraw(double deltaT)
-{
-	// Implement in derived
-	return SDXErrorId::SDX_ERROR_NONE;
 }
 
 bool SDXBaseApp::OnEvent(HWND wnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -198,7 +183,7 @@ LRESULT SDXBaseApp::MsgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM 
 	return 0;
 }
 
-SDXErrorId SDXBaseApp::RegisterAppClass()
+bool SDXBaseApp::RegisterAppClass()
 {
 	WNDCLASSEX wcex;
 	memset(&wcex, 0, sizeof(WNDCLASSEX));
@@ -212,12 +197,12 @@ SDXErrorId SDXBaseApp::RegisterAppClass()
 
 	// Register Class
 	if (!RegisterClassEx(&wcex))
-		return SDXErrorId::SDX_ERROR_APPCLASSREG_FAIL;
+		return false;
 
-	return SDXErrorId::SDX_ERROR_NONE;
+	return true;
 }
 
-SDXErrorId SDXBaseApp::CreateAppWindow()
+bool SDXBaseApp::CreateAppWindow()
 {
 	// Create and determine window size
 	RECT windowSize;
@@ -233,6 +218,11 @@ SDXErrorId SDXBaseApp::CreateAppWindow()
 		0, 0, (windowSize.right - windowSize.left), (windowSize.bottom - windowSize.top), NULL,
 		NULL, m_hInstance, NULL);
 
+	if (m_hWnd == 0)
+	{
+		return false;
+	}
+
 	// Recalculate window to get client area to correct size
 	RECT rClient, rWindow;
 	POINT ptDiff;
@@ -242,9 +232,6 @@ SDXErrorId SDXBaseApp::CreateAppWindow()
 	ptDiff.y = (rWindow.bottom - rWindow.top) - rClient.bottom;
 	MoveWindow(m_hWnd, rWindow.left, rWindow.top, m_windowWidth + ptDiff.x, m_windowHeight + ptDiff.y, TRUE);
 
-	if (m_hWnd == 0)
-		return SDXErrorId::SDX_ERROR_CREATEWINDOW_FAIL;
-
 	// Store a pointer to this object in the window, otherwise we can't grab it using
 	// GetWindowLongPtr(..) in the callback for messages
 	SetWindowLongPtr(m_hWnd, GWLP_USERDATA, (INT_PTR)this);
@@ -252,7 +239,7 @@ SDXErrorId SDXBaseApp::CreateAppWindow()
 	ShowWindow(m_hWnd, SW_SHOW);
 	UpdateWindow(m_hWnd);
 
-	return SDXErrorId::SDX_ERROR_NONE;
+	return true;
 }
 
 void SDXBaseApp::CalculateFrameStats(double deltaT)

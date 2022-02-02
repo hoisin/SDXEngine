@@ -52,3 +52,66 @@ CTile* CMazeMap::GetTileFromCoordinate(float x, float z)
 
 	return nullptr;
 }
+
+void CMazeMap::CalculateWallsToRender()
+{
+	// Testing
+	m_map[0][0].bAcess = false;
+	m_map[0][49].bAcess = false;
+	m_map[49][0].bAcess = false;
+	m_map[49][49].bAcess = false;
+
+	for (int z = 0; z < static_cast<int>(m_map.size()); z++)
+	{
+		for (int x = 0; x < static_cast<int>(m_map[z].size()); x++)
+		{
+			// If blocking tile
+			if (m_map[z][x].bAcess == false)
+			{
+				// Check 'left' of current tile
+				if (x > 0)
+				{
+					if (m_map[z][x - 1].bAcess == true)
+					{
+						m_renderWalls.push_back(CDrawWall{
+							XMFLOAT3((m_tileSize * x) - (m_mapSizeXYZ.x / 2), 0, (m_tileSize * z) + (m_tileSize / 2) - (m_mapSizeXYZ.x / 2)),
+							XMFLOAT3(0, 90, 0) });
+					}
+				}
+
+				// Check 'right' of current tile
+				if (x < (static_cast<int>(m_map[z].size() - 1)))
+				{
+					if (m_map[z][x + 1].bAcess == true)
+					{
+						m_renderWalls.push_back(CDrawWall{
+							XMFLOAT3((m_tileSize * x) + m_tileSize - (m_mapSizeXYZ.x / 2), 0, (m_tileSize * z) + (m_tileSize / 2) - (m_mapSizeXYZ.x / 2)),
+							XMFLOAT3(0, -90, 0) });
+					}
+				}
+
+				// Check 'top' of current tile
+				if (z > 0)
+				{
+					if (m_map[z - 1][x].bAcess == true)
+					{
+						m_renderWalls.push_back(CDrawWall{
+							XMFLOAT3((m_tileSize * x) + (m_tileSize / 2) - (m_mapSizeXYZ.x / 2), 0, (m_tileSize * z) - (m_mapSizeXYZ.x / 2)),
+							XMFLOAT3(0, 0, 0) });
+					}
+				}
+
+				// Check 'bottom' of current tile
+				if (z < static_cast<int>(m_map.size()) - 1)
+				{
+					if (m_map[z + 1][x].bAcess == true)
+					{
+						m_renderWalls.push_back(CDrawWall{
+							XMFLOAT3((m_tileSize * x) + (m_tileSize / 2)  - (m_mapSizeXYZ.x / 2), 0, (m_tileSize * z) + m_tileSize - (m_mapSizeXYZ.x / 2)),
+							XMFLOAT3(0, 180, 0) });
+					}
+				}
+			}
+		}
+	}
+}
