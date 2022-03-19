@@ -219,7 +219,7 @@ SDXErrorId SDXEngine::SDXDirect2D::CreateBitmapRenderTarget()
 
 	if (pImage != nullptr)
 	{
-		// Release! We're deferencing the counter and not deleting the it.
+		// Release! We're deferencing the counter and not deleting it.
 		// Else check against m_targetBitmap and not bother with the GetTarget().
 		pImage->Release();
 		return SDXErrorId::SDX_ERROR_DIRECT2D_BITMAPRENDERTARGET_ALREADY_CREATED;

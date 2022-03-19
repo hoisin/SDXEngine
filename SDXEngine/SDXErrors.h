@@ -5,16 +5,13 @@
 //--------------------------------------------------------------------------
 
 #pragma once
+#include <map>
 
 namespace SDXEngine
 {
 	enum class SDXErrorId
 	{
 		SDX_ERROR_NONE,
-
-		// App errors
-		SDX_ERROR_APPCLASSREG_FAIL,
-		SDX_ERROR_CREATEWINDOW_FAIL,
 
 		// DirectX errors
 		SDX_ERROR_DEVICE_CREATE_FAILED,
@@ -140,4 +137,22 @@ namespace SDXEngine
 	};
 
 	bool IsError(SDXErrorId error);
+
+	class SDXErrorHelper
+	{
+	public:
+		SDXErrorHelper();
+		~SDXErrorHelper();
+
+		static SDXErrorHelper* GetInstance();
+		void Release();
+
+		std::string ErrorToString(SDXErrorId error);
+		
+	private:
+		static SDXErrorHelper* _instance;
+		std::map<SDXErrorId, std::string> m_errorMap;
+	};
 }
+
+#define ERRORHELPER SDXErrorHelper::GetInstance()

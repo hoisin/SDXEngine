@@ -69,13 +69,13 @@ void CMaze::Draw(double deltaT)
 void CMaze::LoadCrap()
 {
 	// Create floor plane (quad)
-	SDXMeshData* pFloorPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PNT, m_map.m_mapSizeXYZ.x / m_tilesSize, XMFLOAT3(0, 1, 0), 32, 32);
+	SDXMeshData* pFloorPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVertexType::SDXVERTEX_TYPE_PNT, m_map.m_mapSizeXYZ.x / m_tilesSize, XMFLOAT3(0, 1, 0), 32, 32);
 	pFloorPlane->SetMaterialID("basicFloorMaterial");
-	SDXMeshData* pCeilingPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVERTEX_TYPE_PNT, m_map.m_mapSizeXYZ.x / m_tilesSize, XMFLOAT3(0.3, 0.3, 0.1), 4, 4);
+	SDXMeshData* pCeilingPlane = ASSETMGR->GetMeshGenerator()->GeneratePlane(m_map.m_mapSizeXYZ.x, SDXVertexType::SDXVERTEX_TYPE_PNT, m_map.m_mapSizeXYZ.x / m_tilesSize, XMFLOAT3(0.3, 0.3, 0.1), 4, 4);
 	pCeilingPlane->SetMaterialID("basicCeilingMaterial");
-	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_mapSizeXYZ.x, 128.f, SDXVERTEX_TYPE_PNT, m_map.m_mapSizeXYZ.x / m_tilesSize, 1, XMFLOAT3(0.1, 0.3, 0.5), 4);
+	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_mapSizeXYZ.x, 128.f, SDXVertexType::SDXVERTEX_TYPE_PNT, m_map.m_mapSizeXYZ.x / m_tilesSize, 1, XMFLOAT3(0.1, 0.3, 0.5), 4);
 	pWallQuad->SetMaterialID("basicWallMaterial");
-	SDXMeshData* pInteriorWall = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_tileSize, 128.f, SDXVERTEX_TYPE_PNT, 1, 1, XMFLOAT3(0.1, 0.3, 0.5), 0.5);
+	SDXMeshData* pInteriorWall = ASSETMGR->GetMeshGenerator()->GenerateQuad(m_map.m_tileSize, 128.f, SDXVertexType::SDXVERTEX_TYPE_PNT, 1, 1, XMFLOAT3(0.1, 0.3, 0.5), 0.5);
 	pInteriorWall->SetMaterialID("basicWallInteriorMaterial");
 
 	std::string floorPlaneID = "floor_plane";

@@ -4,7 +4,7 @@
 using namespace SDXEngine;
 
 SDXMeshData::SDXMeshData() : m_vertexData(nullptr), m_indexData(nullptr), m_vertexCount(0), m_indexCount(0),
-	m_vertexType(SDXVERTEX_TYPE_UNKNOWN), m_materialID(""), m_minVertexPos(XMFLOAT3(0,0,0)), m_maxVertexPos(XMFLOAT3(0,0,0))
+	m_vertexType(SDXVertexType::SDXVERTEX_TYPE_UNKNOWN), m_materialID(""), m_minVertexPos(XMFLOAT3(0,0,0)), m_maxVertexPos(XMFLOAT3(0,0,0))
 {
 }
 
@@ -24,15 +24,15 @@ SDXErrorId SDXEngine::SDXMeshData::CreateVertexArray(SDXVertexType type, UINT co
 
 	switch (type)
 	{
-	case SDXVERTEX_TYPE_PC:
+	case SDXVertexType::SDXVERTEX_TYPE_PC:
 		m_vertexData = new SDXVertexPC[count];
 		break;
 
-	case SDXVERTEX_TYPE_PNC:
+	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 		m_vertexData = new SDXVertexPNC[count];
 		break;
 
-	case SDXVERTEX_TYPE_PNT:
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
 		m_vertexData = new SDXVertexPNT[count];
 		break;
 
@@ -118,7 +118,7 @@ void SDXEngine::SDXMeshData::Destroy()
 {
 	m_vertexCount = 0;
 	m_indexCount = 0;
-	m_vertexType = SDXVERTEX_TYPE_UNKNOWN;
+	m_vertexType = SDXVertexType::SDXVERTEX_TYPE_UNKNOWN;
 	m_materialID = "";
 	m_minVertexPos = XMFLOAT3(0, 0, 0);
 	m_maxVertexPos = XMFLOAT3(0, 0, 0);

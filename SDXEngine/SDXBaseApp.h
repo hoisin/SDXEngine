@@ -19,7 +19,7 @@ namespace SDXEngine
 		virtual ~SDXBaseApp();
 
 		bool Initialise(const std::string& windowTitle, UINT windowWidth,
-			UINT windowHeight, HINSTANCE hInstance = nullptr);
+			UINT windowHeight);
 
 		void Run();
 
@@ -64,6 +64,8 @@ namespace SDXEngine
 		bool			m_bRun;
 
 		static CTimer   m_timer;
+
+		SDXErrorHelper* m_errorHelperInst;
 	};
 
 }
