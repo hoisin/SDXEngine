@@ -66,3 +66,6 @@ SDXEngine/x64/
 UnitTests/Debug/
 UnitTests/Release/
 UnitTests/x64/
+TestApp/Debug/
+TestApp/Release/
+TestApp/x64/

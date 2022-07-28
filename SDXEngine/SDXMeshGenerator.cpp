@@ -22,20 +22,19 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 	XMFLOAT3 p2(0, (size / 2), 0);
 	XMFLOAT3 p3((size / 2), -(size / 2), 0);
 
+	if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
+		pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
+	{
+		delete pMesh;
+		pMesh = nullptr;
+		return nullptr;
+	}
+
 	switch (type)
 	{
 	case SDXVertexType::SDXVERTEX_TYPE_PC:
 	{
-		if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
-			pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
-		{
-			delete pMesh;
-			pMesh = nullptr;
-			return nullptr;
-		}
-
 		SDXVertexPC* pVertices = static_cast<SDXVertexPC*>(pMesh->GetVertexData());
-		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
 
 		pVertices[0].position = p1;
 		pVertices[1].position = p2;
@@ -44,25 +43,12 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 		pVertices[0].color = color;
 		pVertices[1].color = color;
 		pVertices[2].color = color;
-
-		pIndices[0] = 0;
-		pIndices[1] = 1;
-		pIndices[2] = 2;
 		break;
 	}
 
 	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 	{
-		if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
-			pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
-		{
-			delete pMesh;
-			pMesh = nullptr;
-			return pMesh;
-		}
-
 		SDXVertexPNC* pVertices = static_cast<SDXVertexPNC*>(pMesh->GetVertexData());
-		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
 
 		pVertices[0].position = p1;
 		pVertices[1].position = p2;
@@ -75,17 +61,39 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 		pVertices[0].color = color;
 		pVertices[1].color = color;
 		pVertices[2].color = color;
-
-		pIndices[0] = 0;
-		pIndices[1] = 1;
-		pIndices[2] = 2;
-
 		break;
 	}
+
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
+	{
+		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(pMesh->GetVertexData());
+
+		pVertices[0].position = p1;
+		pVertices[1].position = p2;
+		pVertices[2].position = p3;
+
+		pVertices[0].normal = XMFLOAT3(0, 0, -1);
+		pVertices[1].normal = XMFLOAT3(0, 0, -1);
+		pVertices[2].normal = XMFLOAT3(0, 0, -1);
+
+		pVertices[0].textureCoord = XMFLOAT2(0, 0);
+		pVertices[1].textureCoord = XMFLOAT2(0.5, 0);
+		pVertices[2].textureCoord = XMFLOAT2(1, 0);
+		break;
+	}
+
 	default:
 		delete pMesh;
 		pMesh = nullptr;
 		break;
+	}
+
+	if (pMesh)
+	{
+		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
+		pIndices[0] = 0;
+		pIndices[1] = 1;
+		pIndices[2] = 2;
 	}
 
 	return pMesh;
