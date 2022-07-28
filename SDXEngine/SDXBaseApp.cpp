@@ -8,19 +8,40 @@ using namespace SDXEngine;
 bool SDXBaseApp::m_bAppActive = false;
 CTimer SDXBaseApp::m_timer = CTimer();
 
-SDXBaseApp::SDXBaseApp() : m_hWnd(nullptr), m_hInstance(nullptr), m_hMutex(nullptr), m_windowName(""), m_appClassName(""),
-	m_windowWidth(0), m_windowHeight(0), m_bRun(false)
+SDXBaseApp::SDXBaseApp() : 
+	m_hWnd(nullptr), 
+	m_hInstance(nullptr), 
+	m_hMutex(nullptr), 
+	m_windowName(""),
+	m_appClassName(""),
+	m_windowWidth(0), 
+	m_windowHeight(0), 
+	m_bRun(false),
+	m_errorHelperInst(nullptr)
 {
 }
-
 
 SDXBaseApp::~SDXBaseApp()
 {
+	m_errorHelperInst->Release();
+	m_errorHelperInst = nullptr;
 }
 
-bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
-	UINT windowHeight, HINSTANCE hInstance)
+/// <summary>
+/// Initiailises the window.
+/// Registers the window, creates the window and runs code in OnInitialise() last.
+/// </summary>
+/// <param name="windowTitle">The title of the window</param>
+/// <param name="windowWidth">Width of the window</param>
+/// <param name="windowHeight">Height of the window</param>
+/// <returns>True if successful</returns>
+bool SDXBaseApp::Initialise(
+	const std::string& windowTitle, 
+	UINT windowWidth,
+	UINT windowHeight)
 {
+	m_errorHelperInst = ERRORHELPER->GetInstance();
+
 	m_windowName = windowTitle;
 	if (m_windowName == "")
 		m_windowName = "undefined_name";
@@ -29,6 +50,7 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 	m_windowWidth = windowWidth;
 	m_windowHeight = windowHeight;
 
+	// Prevent multiple instances running
 	m_hMutex = CreateMutex(NULL, true, m_appClassName.c_str());
 	if (GetLastError() == ERROR_ALREADY_EXISTS)
 	{
@@ -37,25 +59,27 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 		return false;
 	}
 
-	// Attempt to register window class
 	if (!RegisterAppClass())
 	{
-		OutputDebugString("Failed to register app class");
+		MessageBox(NULL, "Register window class failed!", "Initialisation Error",
+			MB_ICONINFORMATION | MB_OK);
 		return false;
 	}
 
-	// Attempt to create the window
 	if (!CreateAppWindow())
 	{
-		OutputDebugString("Failed to create the window");
+		MessageBox(NULL, "Create window failed!", "Initialisation Error",
+			MB_ICONINFORMATION | MB_OK);
 		return false;
 	}
 
 	// Run OnInitialise for derived behavior
-	if (OnInitialise() != SDXErrorId::SDX_ERROR_NONE)
+	SDXErrorId error = OnInitialise();
+	if (error != SDXErrorId::SDX_ERROR_NONE)
 	{
-		// Do some error logging
-		OutputDebugString("Failed on function OnInitialise()");
+		std::string errorMsg = "Initialise failed with " + ERRORHELPER->ErrorToString(error);
+		MessageBox(NULL, errorMsg.c_str(), "Initialisation Error",
+			MB_ICONINFORMATION | MB_OK);
 		return false;
 	}
 
@@ -64,6 +88,9 @@ bool SDXBaseApp::Initialise(const std::string& windowTitle, UINT windowWidth,
 	return true;
 }
 
+/// <summary>
+/// Main loop
+/// </summary>
 void SDXBaseApp::Run()
 {
 	MSG msg;
@@ -129,7 +156,11 @@ void SDXEngine::SDXBaseApp::StopRun()
 	m_bRun = false;
 }
 
-LRESULT SDXBaseApp::MsgHandlerMain(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
+LRESULT SDXBaseApp::MsgHandlerMain(
+	HWND hWnd, 
+	UINT uiMsg, 
+	WPARAM wParam, 
+	LPARAM lParam)
 {
 	if (hWnd == NULL)
 		throw std::runtime_error("Invalid window handle");

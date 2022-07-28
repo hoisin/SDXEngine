@@ -33,7 +33,7 @@ TEST_F(SDXMeshDataUTest, ConstructorTest)
 	EXPECT_EQ(testData.GetIndexData(), nullptr) << "Should not have any index data";
 	EXPECT_EQ(testData.GetVertexCount(), 0) << "Unexpected count for default";
 	EXPECT_EQ(testData.GetIndexCount(), 0) << "Unexpected count for default";
-	EXPECT_EQ(testData.GetVertexType(), SDXVERTEX_TYPE_UNKNOWN) << "Unexpected vertex type on default";
+	EXPECT_EQ(testData.GetVertexType(), SDXVertexType::SDXVERTEX_TYPE_UNKNOWN) << "Unexpected vertex type on default";
 	EXPECT_EQ(testData.GetMaterialID(), "") << "Unexpected material ID on default";
 	EXPECT_EQ(testData.GetMinVertexPos().x, 0) << "Unexpected min position X on default";
 	EXPECT_EQ(testData.GetMinVertexPos().y, 0) << "Unexpected min position y on default";
@@ -48,19 +48,19 @@ TEST_F(SDXMeshDataUTest, VertexCreateTest)
 {
 	SDXMeshData testData;
 	UINT vertexCount = 100;
-	SDXVertexType testType = SDXVERTEX_TYPE_PC;
+	SDXVertexType testType = SDXVertexType::SDXVERTEX_TYPE_PC;
 
 	// Invalid vertex type test
-	EXPECT_EQ(testData.CreateVertexArray(SDXVERTEX_TYPE_UNKNOWN, vertexCount), SDXErrorId::SDX_ERROR_MESHDATA_UNKNOWN_VERTEXTYPE) << "Unexpected error on creating with unknown vertex type";
+	EXPECT_EQ(testData.CreateVertexArray(SDXVertexType::SDXVERTEX_TYPE_UNKNOWN, vertexCount), SDXErrorId::SDX_ERROR_MESHDATA_UNKNOWN_VERTEXTYPE) << "Unexpected error on creating with unknown vertex type";
 	EXPECT_EQ(testData.GetVertexData(), nullptr) << "Should be no data on invalid vertex type create";
 	EXPECT_EQ(testData.GetVertexCount(), 0) << "Count should be 0 on invalid vertex type create";
-	EXPECT_EQ(testData.GetVertexType(), SDXVERTEX_TYPE_UNKNOWN) << "Type should be unknown on invalid vertex create";
+	EXPECT_EQ(testData.GetVertexType(), SDXVertexType::SDXVERTEX_TYPE_UNKNOWN) << "Type should be unknown on invalid vertex create";
 
 	// 0 Vertex Count test
 	EXPECT_EQ(testData.CreateVertexArray(testType, 0), SDXErrorId::SDX_ERROR_MESHDATA_CREATE_VERTEXARRAY_COUNT_ZERO) << "Unexpected error on vertex array create with 0 vertex count";
 	EXPECT_EQ(testData.GetVertexData(), nullptr) << "Should be not data on 0 vertex count create";
 	EXPECT_EQ(testData.GetVertexCount(), 0) << "Count should be 0 on 0 vertex count create";
-	EXPECT_EQ(testData.GetVertexType(), SDXVERTEX_TYPE_UNKNOWN) << "Type should be unknown on 0 vertex create";
+	EXPECT_EQ(testData.GetVertexType(), SDXVertexType::SDXVERTEX_TYPE_UNKNOWN) << "Type should be unknown on 0 vertex create";
 
 	// Valid create
 	EXPECT_EQ(testData.CreateVertexArray(testType, vertexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on valid create";
@@ -124,7 +124,7 @@ TEST_F(SDXMeshDataUTest, DestroyTest)
 	SDXMeshData testData;
 	UINT vertexCount = 100;
 	UINT indexCount = 200;
-	SDXVertexType type = SDXVERTEX_TYPE_PC;
+	SDXVertexType type = SDXVertexType::SDXVERTEX_TYPE_PC;
 
 	EXPECT_EQ(testData.CreateVertexArray(type, vertexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on vertex array create";
 	EXPECT_EQ(testData.CreateIndexArray(indexCount), SDXErrorId::SDX_ERROR_NONE) << "Unexpected error on index array create";
@@ -135,7 +135,7 @@ TEST_F(SDXMeshDataUTest, DestroyTest)
 	EXPECT_EQ(testData.GetVertexCount(), 0) << "Vertex count should be 0 after destroy";
 	EXPECT_EQ(testData.GetIndexData(), nullptr) << "Should be no index data after destroy";
 	EXPECT_EQ(testData.GetIndexCount(), 0) << "Index count should be 0 after destroy";
-	EXPECT_EQ(testData.GetVertexType(), SDXVERTEX_TYPE_UNKNOWN) << "Vertex type should be unknown after destroy";
+	EXPECT_EQ(testData.GetVertexType(), SDXVertexType::SDXVERTEX_TYPE_UNKNOWN) << "Vertex type should be unknown after destroy";
 	EXPECT_EQ(testData.GetMaterialID(), "") << "Material id should be empty";
 	EXPECT_EQ(testData.GetMinVertexPos().x, 0) << "Unexpected min position x after destroy";
 	EXPECT_EQ(testData.GetMinVertexPos().y, 0) << "Unexpected min position y after destroy";

@@ -22,20 +22,19 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 	XMFLOAT3 p2(0, (size / 2), 0);
 	XMFLOAT3 p3((size / 2), -(size / 2), 0);
 
+	if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
+		pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
+	{
+		delete pMesh;
+		pMesh = nullptr;
+		return nullptr;
+	}
+
 	switch (type)
 	{
-	case SDXVERTEX_TYPE_PC:
+	case SDXVertexType::SDXVERTEX_TYPE_PC:
 	{
-		if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
-			pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
-		{
-			delete pMesh;
-			pMesh = nullptr;
-			return nullptr;
-		}
-
 		SDXVertexPC* pVertices = static_cast<SDXVertexPC*>(pMesh->GetVertexData());
-		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
 
 		pVertices[0].position = p1;
 		pVertices[1].position = p2;
@@ -44,25 +43,12 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 		pVertices[0].color = color;
 		pVertices[1].color = color;
 		pVertices[2].color = color;
-
-		pIndices[0] = 0;
-		pIndices[1] = 1;
-		pIndices[2] = 2;
 		break;
 	}
 
-	case SDXVERTEX_TYPE_PNC:
+	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 	{
-		if (pMesh->CreateVertexArray(type, 3) != SDXErrorId::SDX_ERROR_NONE ||
-			pMesh->CreateIndexArray(3) != SDXErrorId::SDX_ERROR_NONE)
-		{
-			delete pMesh;
-			pMesh = nullptr;
-			return pMesh;
-		}
-
 		SDXVertexPNC* pVertices = static_cast<SDXVertexPNC*>(pMesh->GetVertexData());
-		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
 
 		pVertices[0].position = p1;
 		pVertices[1].position = p2;
@@ -75,17 +61,39 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 		pVertices[0].color = color;
 		pVertices[1].color = color;
 		pVertices[2].color = color;
-
-		pIndices[0] = 0;
-		pIndices[1] = 1;
-		pIndices[2] = 2;
-
 		break;
 	}
+
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
+	{
+		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(pMesh->GetVertexData());
+
+		pVertices[0].position = p1;
+		pVertices[1].position = p2;
+		pVertices[2].position = p3;
+
+		pVertices[0].normal = XMFLOAT3(0, 0, -1);
+		pVertices[1].normal = XMFLOAT3(0, 0, -1);
+		pVertices[2].normal = XMFLOAT3(0, 0, -1);
+
+		pVertices[0].textureCoord = XMFLOAT2(0, 0);
+		pVertices[1].textureCoord = XMFLOAT2(0.5, 0);
+		pVertices[2].textureCoord = XMFLOAT2(1, 0);
+		break;
+	}
+
 	default:
 		delete pMesh;
 		pMesh = nullptr;
 		break;
+	}
+
+	if (pMesh)
+	{
+		unsigned int* pIndices = static_cast<unsigned int*>(pMesh->GetIndexData());
+		pIndices[0] = 0;
+		pIndices[1] = 1;
+		pIndices[2] = 2;
 	}
 
 	return pMesh;
@@ -94,7 +102,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateTriangle(float size, SDXVerte
 SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color, float texScaleX, float texScaleY)
 {
-	if (type == SDXVERTEX_TYPE_UNKNOWN)
+	if (type == SDXVertexType::SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
 
 	SDXMeshData* mesh = new SDXMeshData;
@@ -123,7 +131,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 
 	switch (type)
 	{
-	case SDXVERTEX_TYPE_PC:
+	case SDXVertexType::SDXVERTEX_TYPE_PC:
 	{
 		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -158,7 +166,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 
 		break;
 	}
-	case SDXVERTEX_TYPE_PNC:
+	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 	{
 		SDXVertexPNC * pVertices = static_cast<SDXVertexPNC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -195,7 +203,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 		}
 		break;
 	}
-	case SDXVERTEX_TYPE_PNT:
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
 	{
 		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -245,7 +253,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GeneratePlane(float size, SDXVertexTy
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color, float texScaleX, float texScaleY)
 {
-	if (type == SDXVERTEX_TYPE_UNKNOWN)
+	if (type == SDXVertexType::SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
 
 	SDXMeshData* mesh = new SDXMeshData;
@@ -274,7 +282,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 
 	switch (type)
 	{
-	case SDXVERTEX_TYPE_PC:
+	case SDXVertexType::SDXVERTEX_TYPE_PC:
 	{
 		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -309,7 +317,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 		}
 		break;
 	}
-	case SDXVERTEX_TYPE_PNC:
+	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 	{
 		SDXVertexPNC * pVertices = static_cast<SDXVertexPNC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -347,7 +355,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 		}
 		break;
 	}
-	case SDXVERTEX_TYPE_PNT:
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
 	{
 		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -403,7 +411,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateQuad(float size, SDXVertexTyp
 SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height, SDXVertexType type, UINT subDivisionW, UINT subDivisionH, const XMFLOAT3& color,
 	float texScaleX, float texScaleY)
 {
-	if (type == SDXVERTEX_TYPE_UNKNOWN)
+	if (type == SDXVertexType::SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
 
 	SDXMeshData* mesh = new SDXMeshData;
@@ -434,7 +442,7 @@ SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height
 
 	switch (type)
 	{
-	case SDXVERTEX_TYPE_PC:
+	case SDXVertexType::SDXVERTEX_TYPE_PC:
 	{
 		SDXVertexPC* pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -469,7 +477,7 @@ SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height
 		}
 		break;
 	}
-	case SDXVERTEX_TYPE_PNC:
+	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 	{
 		SDXVertexPNC* pVertices = static_cast<SDXVertexPNC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -507,7 +515,7 @@ SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height
 		}
 		break;
 	}
-	case SDXVERTEX_TYPE_PNT:
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
 	{
 		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -563,7 +571,7 @@ SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexType type, UINT subdivision,
 	const XMFLOAT3& color)
 {
-	if (type == SDXVERTEX_TYPE_UNKNOWN)
+	if (type == SDXVertexType::SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
 
 	SDXMeshData* mesh = new SDXMeshData;
@@ -593,7 +601,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexTyp
 
 	switch (type)
 	{
-	case SDXVERTEX_TYPE_PC:
+	case SDXVertexType::SDXVERTEX_TYPE_PC:
 	{
 		SDXVertexPC * pVertices = static_cast<SDXVertexPC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();
@@ -797,7 +805,7 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexTyp
 		}
 		break;
 	}
-	case SDXVERTEX_TYPE_PNC:
+	case SDXVertexType::SDXVERTEX_TYPE_PNC:
 	{
 		SDXVertexPNC * pVertices = static_cast<SDXVertexPNC*>(mesh->GetVertexData());
 		unsigned int* pIndices = mesh->GetIndexData();

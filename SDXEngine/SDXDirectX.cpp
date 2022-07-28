@@ -250,6 +250,14 @@ void SDXEngine::SDXDirectX::ShutDown()
 	m_d3d11Device = nullptr;
 }
 
+/// <summary>
+/// Initialises window independent resources such as:
+///		- Device
+///		- Context
+///		- Raster state
+///		- Sampler state
+/// </summary>
+/// <returns>SDXError</returns>
 SDXErrorId SDXEngine::SDXDirectX::InitWindowIndependentResources()
 {
 	SDXErrorId error = CreateDevice();
@@ -399,21 +407,19 @@ SDXErrorId SDXEngine::SDXDirectX::CreateSwapChain()
 	// Get the COM factory to create our swapchain
 	HRESULT result;
 	ComPtr<IDXGIFactory1> dxgiFactory;
-	{
-		ComPtr<IDXGIDevice> dxgiDevice;
-		result = m_d3d11Device.As(&dxgiDevice);
-		if (FAILED(result))
-			return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+	ComPtr<IDXGIDevice> dxgiDevice;
+	result = m_d3d11Device.As(&dxgiDevice);
+	if (FAILED(result))
+		return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
 
-		ComPtr<IDXGIAdapter> adapter;
-		result = dxgiDevice->GetAdapter(&adapter);
-		if (FAILED(result))
-			return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
-		
-		result = adapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
-		if (FAILED(result))
-			return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
-	}
+	ComPtr<IDXGIAdapter> adapter;
+	result = dxgiDevice->GetAdapter(&adapter);
+	if (FAILED(result))
+		return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+
+	result = adapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
+	if (FAILED(result))
+		return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
 
 	// Try to get dxgiFactory2
 	ComPtr<IDXGIFactory2> dxgiFactory2;

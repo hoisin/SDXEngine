@@ -294,14 +294,14 @@ SDXErrorId SDXTestApp::LoadMeshes()
 	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
 
 	// Triangle
-	auto triGeo = ASSETMGR->GetMeshGenerator()->GenerateTriangle(10, SDXVERTEX_TYPE_PC, XMFLOAT3(0.4, 0.2, 0.5));
+	auto triGeo = ASSETMGR->GetMeshGenerator()->GenerateTriangle(10, SDXVertexType::SDXVERTEX_TYPE_PC, XMFLOAT3(0.4, 0.2, 0.5));
 	triGeo->SetMaterialID("basicMaterial");
 
 	// Quad
-	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(32, 32, SDXVERTEX_TYPE_PNT, 2, 2, XMFLOAT3(0.1, 0.3, 0.5));
+	SDXMeshData* pWallQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(32, 32, SDXVertexType::SDXVERTEX_TYPE_PNT, 2, 2, XMFLOAT3(0.1, 0.3, 0.5));
 	pWallQuad->SetMaterialID("basicWallMaterial");
 
-	SDXMeshData* pColorQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(32, 32, SDXVERTEX_TYPE_PC, 2, 2, XMFLOAT3(0.1, 0.5, 0.4));
+	SDXMeshData* pColorQuad = ASSETMGR->GetMeshGenerator()->GenerateQuad(32, 32, SDXVertexType::SDXVERTEX_TYPE_PC, 2, 2, XMFLOAT3(0.1, 0.5, 0.4));
 	pColorQuad->SetMaterialID("basicMaterial");
 
 	// Mesh generation

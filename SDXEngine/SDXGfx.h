@@ -12,7 +12,7 @@ namespace SDXEngine
 {
 	using namespace DirectX;
 
-	enum SDXVertexType
+	enum class SDXVertexType
 	{
 		SDXVERTEX_TYPE_UNKNOWN,
 		SDXVERTEX_TYPE_PC,				// Position, color
@@ -84,15 +84,15 @@ namespace SDXEngine
 
 		switch (type)
 		{
-		case SDXVERTEX_TYPE_PC:
+		case SDXVertexType::SDXVERTEX_TYPE_PC:
 			size = sizeof(SDXVertexPC);
 			break;
 
-		case SDXVERTEX_TYPE_PNC:
+		case SDXVertexType::SDXVERTEX_TYPE_PNC:
 			size = sizeof(SDXVertexPNC);
 			break;
 
-		case SDXVERTEX_TYPE_PNT:
+		case SDXVertexType::SDXVERTEX_TYPE_PNT:
 			size = sizeof(SDXVertexPNT);
 			break;
 
