@@ -32,7 +32,7 @@ namespace SDXEngine
 		void SetSlopeScaledDepthBias(float value);
 
 		bool IsWireFrame() const;
-		bool IsFronCounterClockwise() const;
+		bool IsFrontCounterClockwise() const;
 		bool IsDepthClip() const;
 		bool IsScissor() const;
 		bool IsMultiSample() const;

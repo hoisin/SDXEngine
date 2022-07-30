@@ -41,7 +41,7 @@ TEST_F(SDXRasterStateUTest, GetSetTests)
 	float defSlopeScaledDepthBias = 0.f;
 
 	EXPECT_EQ(testState.IsWireFrame(), defWireFrame) << "Unexpected default";
-	EXPECT_EQ(testState.IsFronCounterClockwise(), defFrontCounterClockwise) << "Unexpected default";
+	EXPECT_EQ(testState.IsFrontCounterClockwise(), defFrontCounterClockwise) << "Unexpected default";
 	EXPECT_EQ(testState.IsDepthClip(), defDepthClip) << "Unexpected default";
 	EXPECT_EQ(testState.IsScissor(), defScissor) << "Unexpected default";
 	EXPECT_EQ(testState.IsMultiSample(), defMultiSample) << "Unxpected default";
@@ -72,7 +72,7 @@ TEST_F(SDXRasterStateUTest, GetSetTests)
 	testState.SetSlopeScaledDepthBias(slopeScaledDepthBias);
 
 	EXPECT_EQ(testState.IsWireFrame(), wireFrame) << "Unexpected get after set";
-	EXPECT_EQ(testState.IsFronCounterClockwise(), frontCounterClockwise) << "Unexpected get after set";
+	EXPECT_EQ(testState.IsFrontCounterClockwise(), frontCounterClockwise) << "Unexpected get after set";
 	EXPECT_EQ(testState.IsDepthClip(), depthClip) << "Unexpected get after set";
 	EXPECT_EQ(testState.IsScissor(), scissor) << "Unexpected get after set";
 	EXPECT_EQ(testState.IsMultiSample(), multiSample) << "Unexpected get after set";

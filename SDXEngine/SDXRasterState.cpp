@@ -65,7 +65,7 @@ bool SDXEngine::SDXRasterState::IsWireFrame() const
 	return m_bWireFrame;
 }
 
-bool SDXEngine::SDXRasterState::IsFronCounterClockwise() const
+bool SDXEngine::SDXRasterState::IsFrontCounterClockwise() const
 {
 	return m_bFrontCounterClockwise;;
 }
