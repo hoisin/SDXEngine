@@ -71,7 +71,7 @@ namespace SDXEngine
 		bool GetIsWindowed() const;
 		bool GetUseMSAA() const;
 
-		SDXErrorId SetRasterState(const SDXRasterState& state);		// <--- Probably just pass in D3D11_RASTERIZER_DESC
+		SDXErrorId SetRasterState(const SDXRasterState& state);		
 		SDXErrorId SetDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& state);
 
 		const D3D11_RASTERIZER_DESC& GetRasterState() const;
@@ -83,7 +83,6 @@ namespace SDXEngine
 		SDXErrorId InitWindowIndependentResources();
 		SDXErrorId InitWindowDependentResources(HWND hWnd);
 
-		//  Call methods in order
 		SDXErrorId CreateDevice();
 		SDXErrorId CreateSwapChain();
 		SDXErrorId CreateRenderTargetView();
