@@ -28,7 +28,9 @@ SDXErrorId SDXEngine::SDXDirectX::Initialise(const SDXDirectXInfo& setupInfo)
 
 	if (setupInfo.clientWidth == 0 || setupInfo.clientHeight == 0 ||
 		setupInfo.hwnd == nullptr || setupInfo.refreshRate == 0)
+	{
 		return SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO;
+	}
 
 	m_width = setupInfo.clientWidth;
 	m_height = setupInfo.clientHeight;
@@ -40,10 +42,11 @@ SDXErrorId SDXEngine::SDXDirectX::Initialise(const SDXDirectXInfo& setupInfo)
 
 	error = InitWindowIndependentResources();
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	error = InitWindowDependentResources(m_hWnd);
-
 	return error;
 }
 
@@ -53,7 +56,9 @@ SDXErrorId SDXEngine::SDXDirectX::ReInitWindowDependentResources(const SDXDirect
 	
 	if (setupInfo.clientWidth == 0 || setupInfo.clientHeight == 0 ||
 		setupInfo.hwnd == nullptr || setupInfo.refreshRate == 0)
+	{
 		return SDXErrorId::SDX_ERROR_INVALIDDIRECTX_SETUPINFO;
+	}
 
 	m_dxSwapChain.Reset();
 	m_dxSwapChain1.Reset();
@@ -64,7 +69,9 @@ SDXErrorId SDXEngine::SDXDirectX::ReInitWindowDependentResources(const SDXDirect
 	// Unbind otherwise cannot re-create the swap chain due to lock
 	error = UnbindOutputMerger();
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	m_width = setupInfo.clientWidth;
 	m_height = setupInfo.clientHeight;
@@ -103,7 +110,9 @@ void SDXEngine::SDXDirectX::ClearDepthStencilView()
 SDXErrorId SDXEngine::SDXDirectX::SwapChainPresent()
 {
 	if (!m_dxSwapChain)
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_NOT_CREATED;
+	}
 
 	if (SUCCEEDED(m_dxSwapChain->Present(0, 0)))
 	{
@@ -182,14 +191,16 @@ bool SDXEngine::SDXDirectX::GetUseMSAA() const
 SDXErrorId SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState& state)
 {
 	if (m_d3d11Device.Get() == nullptr || m_d3d11Context.Get() == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
+	}
 
 	ComPtr<ID3D11RasterizerState> rasterState;
 
 	D3D11_RASTERIZER_DESC rasterizerState;
 	rasterizerState.FillMode = state.IsWireFrame() ? D3D11_FILL_WIREFRAME : D3D11_FILL_SOLID;
 	rasterizerState.CullMode = state.GetCullMode() == SDX_CULL_BACK ? D3D11_CULL_BACK : D3D11_CULL_NONE;
-	rasterizerState.FrontCounterClockwise = state.IsFronCounterClockwise();
+	rasterizerState.FrontCounterClockwise = state.IsFrontCounterClockwise();
 	rasterizerState.DepthBias = state.IsDepthClip();
 	rasterizerState.DepthBiasClamp = state.GetDepthBiasClamp();
 	rasterizerState.SlopeScaledDepthBias = state.GetSlopeScaledDepthBias();
@@ -198,8 +209,10 @@ SDXErrorId SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState& state)
 	rasterizerState.MultisampleEnable = state.IsMultiSample();
 	rasterizerState.AntialiasedLineEnable = state.IsAntialisedLine();
 
-	if(FAILED(m_d3d11Device->CreateRasterizerState(&rasterizerState, rasterState.ReleaseAndGetAddressOf())))
+	if (FAILED(m_d3d11Device->CreateRasterizerState(&rasterizerState, rasterState.ReleaseAndGetAddressOf())))
+	{
 		return SDXErrorId::SDX_ERROR_RASTERSTATECREATE_FAILED;
+	}
 
 	// Copy
 	m_rasterState = rasterizerState;
@@ -212,13 +225,17 @@ SDXErrorId SDXEngine::SDXDirectX::SetRasterState(const SDXRasterState& state)
 SDXErrorId SDXEngine::SDXDirectX::SetDepthStencilState(const D3D11_DEPTH_STENCIL_DESC& state)
 {
 	if (m_d3d11Device == nullptr || m_d3d11Context == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
-		
+	}
+
 	HRESULT result;
 	ComPtr<ID3D11DepthStencilState> depthStencil;
 	result = m_d3d11Device->CreateDepthStencilState(&state, depthStencil.ReleaseAndGetAddressOf());
 	if (FAILED(result))
+	{
 		return SDXErrorId::SDX_ERROR_DEPTHSTENCILCREATE_FAILED;
+	}
 
 	// Copy
 	m_depthStencilState = state;
@@ -262,12 +279,16 @@ SDXErrorId SDXEngine::SDXDirectX::InitWindowIndependentResources()
 {
 	SDXErrorId error = CreateDevice();
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	SDXRasterState defaultState;
 	error = SetRasterState(defaultState);
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	D3D11_SAMPLER_DESC samplerDesc;
 	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
@@ -286,7 +307,9 @@ SDXErrorId SDXEngine::SDXDirectX::InitWindowIndependentResources()
 
 	error = SetTextureSamplerState(&samplerDesc, 1);
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	return error;
 }
@@ -297,15 +320,21 @@ SDXErrorId SDXEngine::SDXDirectX::InitWindowDependentResources(HWND hWnd)
 
 	error = CreateSwapChain();
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	error = CreateRenderTargetView();
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	error = CreateDepthStencilBufferView();
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -333,7 +362,9 @@ SDXErrorId SDXEngine::SDXDirectX::InitWindowDependentResources(HWND hWnd)
 
 	error = SetDepthStencilState(depthStencilDesc);
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	error = BindOutputMerger();
 
@@ -344,7 +375,9 @@ SDXErrorId SDXEngine::SDXDirectX::CreateDevice()
 {
 	// If device created already
 	if (m_d3d11Device.Get() || m_d3d11Context.Get())
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_ALREADY_EXIST;
+	}
 
 	// For direct2D support
 	UINT createDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT;
@@ -370,11 +403,15 @@ SDXErrorId SDXEngine::SDXDirectX::CreateDevice()
 		m_d3d11Context.ReleaseAndGetAddressOf());
 
 	if (FAILED(result))
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_CREATE_FAILED;
+	}
 
 	// Support only directX 11 at the moment
 	if (m_featureLevel < D3D_FEATURE_LEVEL_11_0)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_DIRECTX11_NOTSUPPORTED;
+	}
 
 	// Check if DirectX 11.1 is supported
 	if (SUCCEEDED(m_d3d11Device.As(&m_d3d11Device1)))
@@ -388,21 +425,31 @@ SDXErrorId SDXEngine::SDXDirectX::CreateDevice()
 SDXErrorId SDXEngine::SDXDirectX::CreateSwapChain()
 {
 	if (m_d3d11Device.Get() == nullptr || m_d3d11Context.Get() == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
+	}
 
 	if (!m_hWnd)
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_NO_SET_OUTPUTWINDOW;
+	}
 
 	if (m_dxSwapChain.Get())
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_ALREADY_EXIST;
+	}
 
 	UINT quality;
 	SDXErrorId error = Check4XMSAAQuality(quality);
 	if (IsError(error))
+	{
 		return error;
+	}
 
 	if (m_msaaQuality > quality)
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_INVALID_MSAAQUALITY;
+	}
 
 	// Get the COM factory to create our swapchain
 	HRESULT result;
@@ -410,16 +457,22 @@ SDXErrorId SDXEngine::SDXDirectX::CreateSwapChain()
 	ComPtr<IDXGIDevice> dxgiDevice;
 	result = m_d3d11Device.As(&dxgiDevice);
 	if (FAILED(result))
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+	}
 
 	ComPtr<IDXGIAdapter> adapter;
 	result = dxgiDevice->GetAdapter(&adapter);
 	if (FAILED(result))
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+	}
 
 	result = adapter->GetParent(IID_PPV_ARGS(&dxgiFactory));
 	if (FAILED(result))
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+	}
 
 	// Try to get dxgiFactory2
 	ComPtr<IDXGIFactory2> dxgiFactory2;
@@ -450,11 +503,15 @@ SDXErrorId SDXEngine::SDXDirectX::CreateSwapChain()
 	
 		result = dxgiFactory2->CreateSwapChainForHwnd(m_d3d11Device.Get(), m_hWnd, &sd, NULL, NULL, m_dxSwapChain1.ReleaseAndGetAddressOf());
 		if (FAILED(result))
+		{
 			return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+		}
 
 		result = m_dxSwapChain1.As(&m_dxSwapChain);
 		if (FAILED(result))
+		{
 			return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+		}
 	}
 	else
 	{
@@ -489,7 +546,9 @@ SDXErrorId SDXEngine::SDXDirectX::CreateSwapChain()
 
 		result = dxgiFactory->CreateSwapChain(m_d3d11Device.Get(), &sd, m_dxSwapChain.ReleaseAndGetAddressOf());
 		if (FAILED(result))
+		{
 			return SDXErrorId::SDX_ERROR_SWAPCHAIN_CREATE_FAILED;
+		}
 	}
 
 	return SDXErrorId::SDX_ERROR_NONE;
@@ -498,10 +557,14 @@ SDXErrorId SDXEngine::SDXDirectX::CreateSwapChain()
 SDXErrorId SDXEngine::SDXDirectX::CreateRenderTargetView()
 {
 	if (m_dxSwapChain.Get() == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_SWAPCHAIN_NOT_CREATED;
+	}
 
 	if (m_renderTargetView.Get())
+	{
 		return SDXErrorId::SDX_ERROR_RENDERTARGETVIEW_ALREADY_EXIST;
+	}
 
 	ComPtr<ID3D11Texture2D> backBuffer = nullptr;
 	HRESULT result = m_dxSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D),
@@ -513,7 +576,9 @@ SDXErrorId SDXEngine::SDXDirectX::CreateRenderTargetView()
 			&m_renderTargetView);
 
 		if (SUCCEEDED(result))
+		{
 			return SDXErrorId::SDX_ERROR_NONE;
+		}
 	}
 
 	return SDXErrorId::SDX_ERROR_RENDERTARGETVIEW_CREATE_FAILED;
@@ -522,10 +587,14 @@ SDXErrorId SDXEngine::SDXDirectX::CreateRenderTargetView()
 SDXErrorId SDXEngine::SDXDirectX::CreateDepthStencilBufferView()
 {
 	if (m_d3d11Device.Get() == nullptr || m_d3d11Context.Get() == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
+	}
 
 	if (m_depthStencilBuffer.Get() || m_depthStencilView.Get())
+	{
 		return SDXErrorId::SDX_ERROR_DEPTHSTENCIL_ALREADY_EXIST;
+	}
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -562,7 +631,9 @@ SDXErrorId SDXEngine::SDXDirectX::CreateDepthStencilBufferView()
 			0, m_depthStencilView.ReleaseAndGetAddressOf());
 
 		if (SUCCEEDED(result))
+		{
 			return SDXErrorId::SDX_ERROR_NONE;
+		}
 	}
 
 	return SDXErrorId::SDX_ERROR_DEPTHSTENCIL_NOT_CREATED;
@@ -571,13 +642,19 @@ SDXErrorId SDXEngine::SDXDirectX::CreateDepthStencilBufferView()
 SDXErrorId SDXEngine::SDXDirectX::BindOutputMerger()
 {
 	if (m_d3d11Device == nullptr || m_d3d11Context == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
+	}
 
 	if (m_renderTargetView.Get() == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_RENDERTARGETVIEW_NOT_CREATED;
+	}
 
 	if (m_depthStencilView == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEPTHSTENCIL_NOT_CREATED;
+	}
 
 	m_d3d11Context->OMSetRenderTargets(1,
 		m_renderTargetView.GetAddressOf(), m_depthStencilView.Get());
@@ -615,13 +692,17 @@ SDXErrorId SDXEngine::SDXDirectX::SetTextureSamplerState(D3D11_SAMPLER_DESC* des
 SDXErrorId SDXEngine::SDXDirectX::Check4XMSAAQuality(UINT& quality) const
 {
 	if (m_d3d11Device.Get() == nullptr || m_d3d11Context.Get() == nullptr)
+	{
 		return SDXErrorId::SDX_ERROR_DEVICE_NOT_CREATED;
+	}
 
 	HRESULT error = m_d3d11Device->CheckMultisampleQualityLevels(
 		DXGI_FORMAT_R8G8B8A8_UNORM, 4, &quality);
 
 	if (SUCCEEDED(error))
+	{
 		return SDXErrorId::SDX_ERROR_NONE;
+	}
 
 	return SDXErrorId::SDX_ERROR_CHECKMSAA_FAILED;
 }

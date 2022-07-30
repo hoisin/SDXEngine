@@ -83,6 +83,30 @@ bool SDXBaseApp::Initialise(
 		return false;
 	}
 
+	std::vector<int*> testVec = std::vector<int*>();
+
+	int maxVal = 1000000;
+	CTimer timer = CTimer();
+	timer.Reset();
+	timer.Start();
+	timer.Tick();
+
+	for (int i = 0; i < maxVal; i++)
+	{
+		testVec.push_back(new int(i));
+	}
+
+	for (int i = 0; i < maxVal; i++)
+	{
+		delete testVec[i];
+	}
+
+	timer.Tick();
+	std::string output = std::format("Time elapsed ms: {}", timer.DeltaTimeMilli());
+	MessageBox(nullptr, output.c_str(), "Test", 0);
+
+	
+
 	// Flag to run
 	m_bRun = true;
 	return true;
