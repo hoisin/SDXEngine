@@ -53,12 +53,6 @@
     <Filter Include="Gfx\DirectX\Texture">
       <UniqueIdentifier>{b2c54922-88ab-4e0b-abcc-b2f5cbf15946}</UniqueIdentifier>
     </Filter>
-    <Filter Include="System">
-      <UniqueIdentifier>{fea22a73-d98d-409a-94e1-295693c56a4f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="System\Memory">
-      <UniqueIdentifier>{daef5cfe-7181-4415-bac1-5672e6306b2c}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="targetver.h">
@@ -151,8 +145,8 @@
     <ClInclude Include="SDXTextureManager.h">
       <Filter>Gfx\DirectX\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="WICTextureLoader.h">
-      <Filter>Gfx\DirectX\Texture</Filter>
+    <ClInclude Include="SDXAssetImporter.h">
+      <Filter>Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -240,8 +234,11 @@
     <ClCompile Include="SDXTextureManager.cpp">
       <Filter>Gfx\DirectX\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="WICTextureLoader.cpp">
-      <Filter>Gfx\DirectX\Texture</Filter>
+    <ClCompile Include="SDXAssertImporter.cpp">
+      <Filter>Asset</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

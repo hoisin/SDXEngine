@@ -76,8 +76,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Dev\SDXEngine\External Libs\assimp\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Dev\SDXEngine\External Libs\assimp\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External Libs\assimp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\directxtk_desktop_win10.2022.7.30.1\native\lib\x64\Debug;$(SolutionDir)External Libs\assimp\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -85,8 +85,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Dev\SDXEngine\External Libs\assimp\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Dev\SDXEngine\External Libs\assimp\lib\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)External Libs\assimp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)packages\directxtk_desktop_win10.2022.7.30.1\native\lib\x64\Release;$(SolutionDir)External Libs\assimp\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -211,9 +211,6 @@ SDXErrorId SDXTestApp::InitialiseResources()
 		return error;
 	}
 
-	std::string sceneFile = "C:\\Dev\\SDXEngine\\Assets\\Main\\NewSponza_Main_FBX_YUp.fbx";
-	m_pAssetMgr->LoadSceneData(sceneFile);
-
 	// Define the CBuffer for the shader input
 	// Map the constant buffer uniform
 	CD3D11_BUFFER_DESC cbDesc(
