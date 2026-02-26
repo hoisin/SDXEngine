@@ -24,7 +24,7 @@ namespace SDXEngine
 			float texScaleX = 1, float texScaleY = 1);
 		SDXMeshData* GenerateQuad(float width, float height, SDXVertexType type, UINT subdivisionW, UINT subDivisionH, const XMFLOAT3& color = XMFLOAT3(0, 0, 0),
 			float texScaleX = 1, float texScaleY = 1);
-		SDXMeshData* GenerateCube(float size, SDXVertexType type, UINT subdivision = 1, const XMFLOAT3& color = XMFLOAT3(0,0,0));
+		SDXMeshData* GenerateCube(float size, SDXVertexType type, UINT subdivision = 1, const XMFLOAT3& color = XMFLOAT3(0,0,0), float texScaleX = 1, float texScaleY = 1);
 	};
 }
 

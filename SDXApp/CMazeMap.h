@@ -7,7 +7,7 @@ using namespace DirectX;
 
 struct CTile
 {
-	bool bAcess = true;
+	bool bAccess = true;
 };
 
 struct CDrawWall
@@ -27,6 +27,12 @@ public:
 	CTile* GetTileFromCoordinate(float x, float z);
 
 	void CalculateWallsToRender();
+
+	bool SaveMap(const std::string& path) const;
+
+	bool LoadMap(const std::string& path);
+
+	bool RestrictCoordinate(float prevX, float prevZ, float& x, float& z, float radius) const;
 
 public:
 	std::vector<std::vector<CTile>> m_map;

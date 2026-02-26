@@ -25,6 +25,9 @@ namespace SDXEngine
 		SDXVertexBuffer* GetVertexBuffer();
 		SDXIndexBuffer* GetIndexBuffer();
 
+		const XMFLOAT3& GetMinVertexPos() const;
+		const XMFLOAT3& GetMaxVertexPos() const;
+
 		void Release();
 
 	private:
@@ -32,6 +35,9 @@ namespace SDXEngine
 
 		SDXVertexBuffer m_vertices;
 		SDXIndexBuffer m_indices;
+
+		XMFLOAT3 m_minVertexPos;
+		XMFLOAT3 m_maxVertexPos;
 	};
 
 }

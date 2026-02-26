@@ -12,6 +12,7 @@
 
 #include "..\SDXEngine\SDXSceneMGR.h"
 #include "..\SDXEngine\SDXRenderer.h"
+#include "..\SDXEngine\SDXCameraFP.h"
 
 using namespace SDXEngine;
 
@@ -27,11 +28,15 @@ public:
 
 	void Draw(double deltaT);
 
-	//CObject* GetPlayer();
+	const CObject* const GetPlayer();
+
+	const CMazeMap& GetMap() const { return m_map; }
+
+	SDXCameraFP& GetPlayerCamera() { return m_playerCamera; }
+
+	void UpdatePlayerPosition(const XMFLOAT3& newPos);
 
 private:
-	void LoadCrap();
-
 	void DrawEnvironment();
 
 private:
@@ -39,14 +44,8 @@ private:
 
 	CMazeMap m_map;
 	
-	// Probably change to array of objects if multiple dynamic objects
-	//CObject m_player;
-
-	int m_tilesSize;
-	int m_tilesInX;
-	int m_tilesInZ;
-
-
+	SDXCameraFP m_playerCamera;
+	CObject m_player;
 
 	double m_updateTimer = 0.0;
 	double m_frameTimer = 0.0;

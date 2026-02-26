@@ -1,0 +1,46 @@
+﻿<Window x:Class="MapEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MapEditor"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="1024" Width="1024">
+    <Grid>
+        <TextBox HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="58" x:Name="MapSizeX1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="68,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65"><Run Language="en-gb" Text=": "/><Run Text="Map Size X"/></TextBlock>
+        <TextBox HorizontalAlignment="Left" Margin="171,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="58" x:Name="MapSizeZ1"/>
+        <TextBlock HorizontalAlignment="Left" Margin="229,11,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="65"><Run Language="en-gb" Text=": "/><Run Text="Map Size Z"/></TextBlock>
+
+        <!-- Scrollable cell area -->
+        <ScrollViewer HorizontalAlignment="Center" Height="935" Margin="0,44,0,0" VerticalAlignment="Top" Width="1004" x:Name="CellScrollViewer1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="CellItemsControl1" Height="955">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="True" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ToggleButton Width="28" Height="28" Margin="1"
+                            IsChecked="{Binding IsOn, Mode=TwoWay}"
+                            Background="{Binding Background}"
+                            Click="CellToggle_Click">
+                            <TextBlock Text="{Binding Display}" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+                        </ToggleButton>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Button Content="Update Size" HorizontalAlignment="Left" Margin="464,9,0,0" VerticalAlignment="Top" Width="82" x:Name="UpdateSizeButton1" Click="UpdateSizeButton_Click"/>
+        <Button Content="Save Map Data" HorizontalAlignment="Left" Margin="570,8,0,0" VerticalAlignment="Top" Width="85" x:Name="SaveMapDataButton1" Click="SaveMapDataButton_Click"/>
+        <Button Content="Load Map Data" HorizontalAlignment="Left" Margin="670,7,0,0" VerticalAlignment="Top" Width="126" x:Name="LoadMapDataButton1" Click="LoadMapDataButton_Click"/>
+        <TextBox HorizontalAlignment="Left" Margin="314,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="73" x:Name="TileSize"/>
+        <TextBlock HorizontalAlignment="Left" Height="21" Margin="387,7,0,0" TextWrapping="Wrap" Text=": Tile Size" VerticalAlignment="Top" Width="62"/>
+        <Button Content="Reset Map" HorizontalAlignment="Left" Margin="815,8,0,0" VerticalAlignment="Top" Width="109" x:Name="ResetMapButton1" Click="ResetMapButton_Click"/>
+        <Button Content="Set All Access" HorizontalAlignment="Left" Margin="929,9,0,0" VerticalAlignment="Top" Width="85" x:Name="ButtonSetAllAccess1" Click="ButtonSetAllAccess_Click"/>
+
+    </Grid>
+</Window>

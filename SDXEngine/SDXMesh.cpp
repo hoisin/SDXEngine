@@ -23,11 +23,21 @@ SDXErrorId SDXEngine::SDXMesh::AddSubMesh(SDXMeshData* meshData, SDXDirectX* dir
 	m_subMeshes.push_back(SDXSubMesh());
 	SDXSubMesh* mesh = &m_subMeshes[(int)m_subMeshes.size() - 1];
 
-	SDXErrorId error = SDXErrorId::SDX_ERROR_NONE;
+	SDXErrorId error = mesh->LoadMeshData(meshData, directX);
 
-	mesh->SetMaterialID(meshData->GetMaterialID());
-	error = mesh->GetVertexBuffer()->LoadData(meshData, directX);
-	error = mesh->GetIndexBuffer()->LoadData(meshData, directX);
+	if (error == SDXErrorId::SDX_ERROR_NONE)
+	{
+		auto subMeshMin = mesh->GetMinVertexPos();
+		auto subMeshMax = mesh->GetMaxVertexPos();
+
+		if (subMeshMax.x > m_maxVertexPos.x) m_maxVertexPos.x = subMeshMax.x;
+		if (subMeshMax.y > m_maxVertexPos.y) m_maxVertexPos.y = subMeshMax.y;
+		if (subMeshMax.z > m_maxVertexPos.z) m_maxVertexPos.z = subMeshMax.z;
+
+		if (subMeshMin.x < m_minVertexPos.x) m_minVertexPos.x = subMeshMin.x;
+		if (subMeshMin.y < m_minVertexPos.y) m_minVertexPos.y = subMeshMin.y;
+		if (subMeshMin.z < m_minVertexPos.z) m_minVertexPos.z = subMeshMin.z;
+	}
 
 	return error;
 }

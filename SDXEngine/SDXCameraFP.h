@@ -47,9 +47,20 @@ namespace SDXEngine
 		// Reason is that depending on what commmands has been actioned,
 		// they need to be executed in a particular order.
 		void Update();
+		void UpdatePreviousFrameData();
+
+		void SetYMovementDisabled(bool disable);
+
+		void SetPosition(const DirectX::XMVECTOR& position);
+		void SetLookAt(const DirectX::XMVECTOR& lookAt);
 
 		DirectX::XMFLOAT4X4 GetProjectionMatrix() const;
 		DirectX::XMFLOAT4X4 GetViewMatrix() const;
+
+		DirectX::XMVECTOR GetPosition() const;
+		DirectX::XMVECTOR GetPrevPosition() const;
+		DirectX::XMVECTOR GetLook() const;
+		DirectX::XMVECTOR GetPrevLook() const;
 
 	private:
 		float ResetAngle180(float angle);
@@ -77,6 +88,8 @@ namespace SDXEngine
 
 		bool m_direction[SDXCAMERA_TOTAL_DIR];
 		float m_directionAmt[SDXCAMERA_TOTAL_DIR];
+
+		bool m_disableYMovement;
 	};
 
 }

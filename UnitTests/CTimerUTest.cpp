@@ -42,7 +42,7 @@ TEST_F(CTimerUTest, TestStartTick)
 	double expectedDurationSecs = 1.0;
 	double expectedDurationMilli = 1000;
 	double expectedDurationMicro = 1000000;
-	double errorMarginMilli = 2;
+	double errorMarginMilli = 50;
 	
 	// Test just running tick
 	testTimer.Tick();

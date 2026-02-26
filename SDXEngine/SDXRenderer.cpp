@@ -92,7 +92,7 @@ void SDXEngine::SDXRenderer::Render(SDXDrawItem* drawItem)
 
 	//auto world = trans * rot * scale;
 	auto world = scale * rot * trans;
-	world = XMMatrixTranspose(world);
+	/*world = XMMatrixTranspose(world);*/
 	
 	DirectX::XMStoreFloat4x4(
 		&m_worldViewProj.world,

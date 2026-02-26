@@ -665,8 +665,8 @@ SDXErrorId SDXEngine::SDXDirectX::BindOutputMerger()
 	vp.TopLeftY = 0.0f;
 	vp.Width = static_cast<float>(m_width);
 	vp.Height = static_cast<float>(m_height);
-	vp.MinDepth = 0.0f;
-	vp.MaxDepth = 0.0f;
+    vp.MinDepth = 0.0f;
+    vp.MaxDepth = 1.0f;
 
 	m_d3d11Context->RSSetViewports(1, &vp);
 

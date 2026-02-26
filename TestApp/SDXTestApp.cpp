@@ -186,6 +186,10 @@ SDXErrorId SDXTestApp::InitialiseResources()
 		return error;
 	}
 
+	SDXAssetImporter importer = SDXAssetImporter();
+	importer.Initialise();
+	importer.LoadScene("../Assets/Main/NewSponza_Main_FBX_YUp.fbx");
+
 	// Create our shaders
 	error = LoadShaders();
 	if (error != SDXErrorId::SDX_ERROR_NONE)

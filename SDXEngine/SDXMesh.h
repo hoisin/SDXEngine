@@ -26,5 +26,8 @@ namespace SDXEngine
 
 	private:
 		std::vector<SDXSubMesh> m_subMeshes;
+
+		XMFLOAT3 m_minVertexPos;
+		XMFLOAT3 m_maxVertexPos;
 	};
 }

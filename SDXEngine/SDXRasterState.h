@@ -50,7 +50,7 @@ namespace SDXEngine
 		bool m_bAntialisedLine = false;
 
 		SDXCullMode m_cullMode = SDX_CULL_BACK;
-		float m_depthBiasClamp = 0.f;
+		float m_depthBiasClamp = 0.2f;
 		float m_slopeScaledDepthBias = 0.f;
 	};
 

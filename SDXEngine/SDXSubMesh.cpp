@@ -40,6 +40,9 @@ SDXErrorId SDXEngine::SDXSubMesh::LoadMeshData(SDXEngine::SDXMeshData* data, SDX
 	// Get material ID for mesh
 	m_materialID = data->GetMaterialID();
 
+	m_minVertexPos = data->GetMinVertexPos();
+	m_maxVertexPos = data->GetMaxVertexPos();
+
 	return error;
 }
 
@@ -61,6 +64,16 @@ SDXVertexBuffer* SDXEngine::SDXSubMesh::GetVertexBuffer()
 SDXIndexBuffer* SDXEngine::SDXSubMesh::GetIndexBuffer()
 {
 	return &m_indices;
+}
+
+const XMFLOAT3& SDXEngine::SDXSubMesh::GetMinVertexPos() const
+{
+	return m_minVertexPos;
+}
+
+const XMFLOAT3& SDXEngine::SDXSubMesh::GetMaxVertexPos() const
+{
+	return m_maxVertexPos;
 }
 
 void SDXEngine::SDXSubMesh::Release()

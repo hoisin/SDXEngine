@@ -15,6 +15,8 @@
 #include "..\SDXEngine\SDXCameraFP.h"
 #include "..\SDXEngine\SDXSceneMGR.h"
 
+#include "..\SDXEngine\SDXAssetImporter.h"
+
 using namespace SDXEngine;
 
 class SDXTestApp : public SDXEngine::SDXBaseApp

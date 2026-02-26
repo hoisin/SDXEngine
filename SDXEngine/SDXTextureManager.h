@@ -13,6 +13,8 @@
 #include "SDXDirectX.h"
 #include "SDXErrors.h"
 
+#pragma comment (lib, "DirectXTK.lib")
+
 using namespace Microsoft::WRL;
 
 namespace SDXEngine

@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "SDXTextureManager.h"
-#include "WICTextureLoader.h"
+#include <WICTextureLoader.h>
 
 using namespace SDXEngine;
 

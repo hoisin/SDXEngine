@@ -40,19 +40,18 @@ protected:
 
 	SDXErrorId InitialiseResources();
 
-	SDXErrorId TestInit();
-
 private:
 	// Helper load methods
 	SDXErrorId LoadShaders();
 	SDXErrorId LoadTextures();
 	SDXErrorId LoadMaterials();
+	SDXErrorId LoadMeshes();
 
 private:
 	SDXAssetMGR* m_pAssetMgr;
 
 	SDXRenderer m_renderer;
-	SDXCameraFP m_camera;
+	SDXCameraFP* m_camera;
 
 	SDXInputHandler m_inputHDLR;
 

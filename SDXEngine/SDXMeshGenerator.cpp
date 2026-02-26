@@ -569,7 +569,7 @@ SDXMeshData* SDXEngine::SDXMeshGenerator::GenerateQuad(float width, float height
 }
 
 SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexType type, UINT subdivision,
-	const XMFLOAT3& color)
+	const XMFLOAT3& color, float texScaleX, float texScaleY)
 {
 	if (type == SDXVertexType::SDXVERTEX_TYPE_UNKNOWN)
 		return nullptr;
@@ -1005,6 +1005,234 @@ SDXMeshData * SDXEngine::SDXMeshGenerator::GenerateCube(float size, SDXVertexTyp
 				pVertices[vertexCounter].normal.y = -1;
 				pVertices[vertexCounter].normal.z = 0;
 				pVertices[vertexCounter].color = color;
+
+				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pZ += stepSize;
+			pX = -(size / 2.f);
+		}
+		break;
+	}
+	case SDXVertexType::SDXVERTEX_TYPE_PNT:
+	{
+		SDXVertexPNT* pVertices = static_cast<SDXVertexPNT*>(mesh->GetVertexData());
+		unsigned int* pIndices = mesh->GetIndexData();
+
+		// Front face 
+		pX = -(size / 2.f);
+		pY = (size / 2.f);
+		pZ = -(size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = -1;
+				pVertices[vertexCounter].textureCoord.x = ((float)x / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1) - (float)y) / (float)(verticesOnEdge - 1)) * texScaleY;
+
+				if (x < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pX = -(size / 2.f);
+		}
+
+		// Right face
+		pX = (size / 2.f);
+		pY = (size / 2.f);
+		pZ = -(size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int z = 0; z < verticesOnEdge; z++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 1;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = 0;
+				pVertices[vertexCounter].textureCoord.x = ((float)z / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1) - (float)y) / (float)(verticesOnEdge - 1)) * texScaleY;
+
+				if (z < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pZ += stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pZ = -(size / 2.f);
+		}
+
+		// Back face 
+		pX = (size / 2.f);
+		pY = (size / 2.f);
+		pZ = (size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = 1;
+				pVertices[vertexCounter].textureCoord.x = ((float)(verticesOnEdge - 1 - x) / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1 - y) / (float)(verticesOnEdge - 1))) * texScaleY;
+
+				if (x < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX -= stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pX = (size / 2.f);
+		}
+
+		// Left face
+		pX = -(size / 2.f);
+		pY = (size / 2.f);
+		pZ = (size / 2.f);
+		for (int y = 0; y < verticesOnEdge; y++)
+		{
+			for (int z = 0; z < verticesOnEdge; z++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = -1;
+				pVertices[vertexCounter].normal.y = 0;
+				pVertices[vertexCounter].normal.z = 0;
+				pVertices[vertexCounter].textureCoord.x = ((float)(verticesOnEdge - 1 - z) / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1 - y) / (float)(verticesOnEdge - 1))) * texScaleY;
+
+				if (z < (verticesOnEdge - 1) && y < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pZ -= stepSize;
+				vertexCounter++;
+			}
+			pY -= stepSize;
+			pZ = (size / 2.f);
+		}
+
+		// Top face
+		pX = -(size / 2.f);
+		pY = (size / 2.f);
+		pZ = (size / 2.f);
+		for (int z = 0; z < verticesOnEdge; z++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = 1;
+				pVertices[vertexCounter].normal.z = 0;
+				pVertices[vertexCounter].textureCoord.x = ((float)x / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1 - z) / (float)(verticesOnEdge - 1))) * texScaleY;
+
+				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
+				{
+					pIndices[indexCounter] = vertexCounter;
+					pIndices[indexCounter + 1] = vertexCounter + 1;
+					pIndices[indexCounter + 2] = vertexCounter + verticesOnEdge + 1;
+
+					pIndices[indexCounter + 3] = vertexCounter;
+					pIndices[indexCounter + 4] = vertexCounter + verticesOnEdge + 1;
+					pIndices[indexCounter + 5] = vertexCounter + verticesOnEdge;
+					indexCounter += 6;
+
+				}
+
+				pX += stepSize;
+				vertexCounter++;
+			}
+			pZ -= stepSize;
+			pX = -(size / 2.f);
+		}
+
+		// Bottom face
+		pX = -(size / 2.f);
+		pY = -(size / 2.f);
+		pZ = -(size / 2.f);
+		for (int z = 0; z < verticesOnEdge; z++)
+		{
+			for (int x = 0; x < verticesOnEdge; x++)
+			{
+				pVertices[vertexCounter].position.x = pX;
+				pVertices[vertexCounter].position.y = pY;
+				pVertices[vertexCounter].position.z = pZ;
+				pVertices[vertexCounter].normal.x = 0;
+				pVertices[vertexCounter].normal.y = -1;
+				pVertices[vertexCounter].normal.z = 0;
+				pVertices[vertexCounter].textureCoord.x = ((float)x / (float)(verticesOnEdge - 1)) * texScaleX;
+				pVertices[vertexCounter].textureCoord.y = (1.f - ((float)(verticesOnEdge - 1 - z) / (float)(verticesOnEdge - 1))) * texScaleY;
 
 				if (x < (verticesOnEdge - 1) && z < (verticesOnEdge - 1))
 				{

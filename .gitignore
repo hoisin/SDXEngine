@@ -53,6 +53,8 @@ Temporary Items
 *.log
 *.pch
 *.tlog
+*.lib
+*.pdb
 .vs/
 /Debug/
 /Release/
@@ -70,3 +72,5 @@ Temporary Items
 /TestApp/Release/
 /TestApp/x64/
 /Assets/Main/
+/Tools/MapEditor/MapEditor/obj
+/packages/
